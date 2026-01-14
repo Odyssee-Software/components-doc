@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button Component Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    .demo-section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #f9fafb;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+    .demo-section h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+    .demo-output {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      font-family: monospace;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body class="p-8 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2 text-gray-900">Button Component</h1>
+    <p class="text-gray-600 mb-8">Interactive examples of the Odyssee Button component</p>
+
+    <!-- Basic Variants -->
+    <div class="demo-section">
+      <h3></h3>Variants</h3>
+      <div id="variants-demo" class="button-group"></div>
+    </div>
+
+    <!-- Colors -->
+    <div class="demo-section">
+      <h3>Colors (Solid)</h3>
+      <div id="colors-demo" class="button-group"></div>
+    </div>
+
+    <!-- Sizes -->
+    <div class="demo-section">
+      <h3>Sizes</h3>
+      <div id="sizes-demo" class="button-group"></div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="demo-section">
+      <h3>Loading State</h3>
+      <div id="loading-demo" class="button-group"></div>
+      <div id="loading-output" class="demo-output">Click "Start Loading" to see the effect</div>
+    </div>
+
+    <!-- With Icons -->
+    <div class="demo-section">
+      <h3>With Icons</h3>
+      <div id="icons-demo" class="button-group"></div>
+    </div>
+
+    <!-- Disabled State -->
+    <div class="demo-section">
+      <h3>Disabled State</h3>
+      <div id="disabled-demo" class="button-group"></div>
+    </div>
+
+    <!-- Interactive Counter -->
+    <div class="demo-section">
+      <h3>Interactive Example - Counter</h3>
+      <div id="counter-demo" class="button-group"></div>
+      <div id="counter-output" class="demo-output">Count: 0</div>
+    </div>
+
+    <!-- Full Width -->
+    <div class="demo-section">
+      <h3>Full Width</h3>
+      <div id="fullwidth-demo"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    // Mock Pulse Framework for demo purposes
+    const Pulse = {
+      signal(initialValue) {
+        let value = initialValue;
+        const subscribers = new Set();
+
+        const signal = (newValue) => {
+          if (newValue !== undefined) {
+            value = newValue;
+            subscribers.forEach(fn => fn());
+            return value;
+          }
+          return value;
+        };
+
+        signal.subscribe = (fn) => {
+          subscribers.add(fn);
+          return () => subscribers.delete(fn);
+        };
+
+        return signal;
+      },
+
+      computed(fn) {
+        const sig = Pulse.signal(fn());
+        // Simple reactive computation
+        return sig;
+      },
+
+      effect(fn) {
+        fn();
+      },
+
+      createElement(tag, props, ...children) {
+        const element = document.createElement(tag);
+
+        if (props) {
+          Object.entries(props).forEach(([key, value]) => {
+            if (key === 'class') {
+              element.className = value;
+            } else if (key.startsWith('on')) {
+              const event = key.toLowerCase().slice(2);
+              element.addEventListener(event, value);
+            } else {
+              element.setAttribute(key, value);
+            }
+          });
+        }
+
+        children.forEach(child => {
+          if (typeof child === 'string') {
+            element.appendChild(document.createTextNode(child));
+          } else if (child) {
+            element.appendChild(child);
+          }
+        });
+
+        return element;
+      },
+
+      Fn(fn) {
+        return fn;
+      }
+    };
+
+    // Simple Button implementation for demo
+    const Button = (props) => {
+      const {
+        type = 'button',
+        variant = 'solid',
+        color = 'primary',
+        size = 'md',
+        disabled = false,
+        loading = false,
+        icon,
+        iconPosition = 'left',
+        fullWidth = false,
+        onClick,
+        children,
+        className = '',
+      } = props;
+
+      const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+
+      const sizeClasses = {
+        xs: 'px-2 py-1 text-xs rounded gap-1',
+        sm: 'px-3 py-1.5 text-sm rounded gap-1.5',
+        md: 'px-4 py-2 text-sm rounded-md gap-2',
+        lg: 'px-5 py-2.5 text-base rounded-md gap-2',
+        xl: 'px-6 py-3 text-lg rounded-lg gap-2.5',
+      };
+
+      const variantColorClasses = {
+        solid: {
+          primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+          secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
+          success: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
+          danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+          warning: 'bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-400',
+          info: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+        },
+        outline: {
+          primary: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
+          secondary: 'border-2 border-gray-600 text-gray-600 hover:bg-gray-50',
+          success: 'border-2 border-green-600 text-green-600 hover:bg-green-50',
+          danger: 'border-2 border-red-600 text-red-600 hover:bg-red-50',
+          warning: 'border-2 border-yellow-500 text-yellow-600 hover:bg-yellow-50',
+          info: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
+        },
+        ghost: {
+          primary: 'text-blue-600 hover:bg-blue-50',
+          secondary: 'text-gray-600 hover:bg-gray-50',
+          success: 'text-green-600 hover:bg-green-50',
+          danger: 'text-red-600 hover:bg-red-50',
+          warning: 'text-yellow-600 hover:bg-yellow-50',
+          info: 'text-blue-600 hover:bg-blue-50',
+        },
+        soft: {
+          primary: 'bg-blue-100 text-blue-700 hover:bg-blue-200',
+          secondary: 'bg-gray-100 text-gray-700 hover:bg-gray-200',
+          success: 'bg-green-100 text-green-700 hover:bg-green-200',
+          danger: 'bg-red-100 text-red-700 hover:bg-red-200',
+          warning: 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200',
+          info: 'bg-blue-100 text-blue-700 hover:bg-blue-200',
+        },
+        link: {
+          primary: 'text-blue-600 hover:text-blue-700 underline-offset-4 hover:underline',
+          secondary: 'text-gray-600 hover:text-gray-700 underline-offset-4 hover:underline',
+          success: 'text-green-600 hover:text-green-700 underline-offset-4 hover:underline',
+          danger: 'text-red-600 hover:text-red-700 underline-offset-4 hover:underline',
+          warning: 'text-yellow-600 hover:text-yellow-700 underline-offset-4 hover:underline',
+          info: 'text-blue-600 hover:text-blue-700 underline-offset-4 hover:underline',
+        },
+      };
+
+      const widthClass = fullWidth ? 'w-full' : '';
+      const buttonClasses = `${baseClasses} ${sizeClasses[size]} ${variantColorClasses[variant][color]} ${widthClass} ${className}`.trim();
+
+      const button = document.createElement('button');
+      button.type = type;
+      button.className = buttonClasses;
+
+      const isLoadingSignal = typeof loading === 'function' ? loading : null;
+      const isDisabledValue = typeof disabled === 'function' ? disabled() : disabled;
+
+      const updateButton = () => {
+        const isLoadingValue = isLoadingSignal ? isLoadingSignal() : loading;
+        button.disabled = isDisabledValue || isLoadingValue;
+        button.innerHTML = '';
+
+        if (isLoadingValue) {
+          const spinner = document.createElement('span');
+          spinner.className = 'animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full';
+          spinner.setAttribute('role', 'status');
+          spinner.setAttribute('aria-label', 'Loading');
+          button.appendChild(spinner);
+        }
+
+        if (icon && iconPosition === 'left' && !isLoadingValue) {
+          const iconSpan = document.createElement('span');
+          iconSpan.textContent = icon;
+          button.appendChild(iconSpan);
+        }
+
+        if (children) {
+          const textSpan = document.createElement('span');
+          textSpan.textContent = children;
+          button.appendChild(textSpan);
+        }
+
+        if (icon && iconPosition === 'right' && !isLoadingValue) {
+          const iconSpan = document.createElement('span');
+          iconSpan.textContent = icon;
+          button.appendChild(iconSpan);
+        }
+      };
+
+      updateButton();
+
+      if (isLoadingSignal) {
+        isLoadingSignal.subscribe(updateButton);
+      }
+
+      if (onClick) {
+        button.addEventListener('click', onClick);
+      }
+
+      return button;
+    };
+
+    // Demo: Variants
+    const variantsContainer = document.getElementById('variants-demo');
+    ['solid', 'outline', 'ghost', 'soft', 'link'].forEach(variant => {
+      const btn = Button({
+        variant,
+        children: variant.charAt(0).toUpperCase() + variant.slice(1)
+      });
+      variantsContainer.appendChild(btn);
+    });
+
+    // Demo: Colors
+    const colorsContainer = document.getElementById('colors-demo');
+    ['primary', 'secondary', 'success', 'danger', 'warning', 'info'].forEach(color => {
+      const btn = Button({
+        color,
+        children: color.charAt(0).toUpperCase() + color.slice(1)
+      });
+      colorsContainer.appendChild(btn);
+    });
+
+    // Demo: Sizes
+    const sizesContainer = document.getElementById('sizes-demo');
+    ['xs', 'sm', 'md', 'lg', 'xl'].forEach(size => {
+      const btn = Button({
+        size,
+        children: size.toUpperCase()
+      });
+      sizesContainer.appendChild(btn);
+    });
+
+    // Demo: Loading
+    const loadingContainer = document.getElementById('loading-demo');
+    const loadingOutput = document.getElementById('loading-output');
+    const isLoading = Pulse.signal(false);
+
+    const loadingBtn = Button({
+      loading: isLoading,
+      children: 'Submit',
+      onClick: () => {
+        isLoading(true);
+        loadingOutput.textContent = 'Loading... Please wait.';
+        setTimeout(() => {
+          isLoading(false);
+          loadingOutput.textContent = 'Done! Click again to restart.';
+        }, 2000);
+      }
+    });
+    loadingContainer.appendChild(loadingBtn);
+
+    // Demo: Icons
+    const iconsContainer = document.getElementById('icons-demo');
+    const iconBtn1 = Button({
+      icon: '🚀',
+      iconPosition: 'left',
+      children: 'Launch'
+    });
+    const iconBtn2 = Button({
+      icon: '→',
+      iconPosition: 'right',
+      children: 'Next',
+      variant: 'outline'
+    });
+    const iconBtn3 = Button({
+      icon: '❤️',
+      children: '',
+      color: 'danger',
+      variant: 'soft'
+    });
+    iconsContainer.appendChild(iconBtn1);
+    iconsContainer.appendChild(iconBtn2);
+    iconsContainer.appendChild(iconBtn3);
+
+    // Demo: Disabled
+    const disabledContainer = document.getElementById('disabled-demo');
+    const disabledBtn1 = Button({
+      disabled: true,
+      children: 'Disabled Button'
+    });
+    const disabledBtn2 = Button({
+      disabled: true,
+      variant: 'outline',
+      children: 'Disabled Outline'
+    });
+    disabledContainer.appendChild(disabledBtn1);
+    disabledContainer.appendChild(disabledBtn2);
+
+    // Demo: Counter
+    const counterContainer = document.getElementById('counter-demo');
+    const counterOutput = document.getElementById('counter-output');
+    const count = Pulse.signal(0);
+
+    const incrementBtn = Button({
+      children: 'Increment',
+      color: 'success',
+      onClick: () => {
+        count(count() + 1);
+        counterOutput.textContent = `Count: ${count()}`;
+      }
+    });
+
+    const decrementBtn = Button({
+      children: 'Decrement',
+      color: 'danger',
+      variant: 'outline',
+      onClick: () => {
+        count(count() - 1);
+        counterOutput.textContent = `Count: ${count()}`;
+      }
+    });
+
+    const resetBtn = Button({
+      children: 'Reset',
+      variant: 'ghost',
+      onClick: () => {
+        count(0);
+        counterOutput.textContent = `Count: ${count()}`;
+      }
+    });
+
+    counterContainer.appendChild(incrementBtn);
+    counterContainer.appendChild(decrementBtn);
+    counterContainer.appendChild(resetBtn);
+
+    // Demo: Full Width
+    const fullwidthContainer = document.getElementById('fullwidth-demo');
+    const fullwidthBtn = Button({
+      fullWidth: true,
+      children: 'Full Width Button',
+      size: 'lg'
+    });
+    fullwidthContainer.appendChild(fullwidthBtn);
+  </script>
+</body>
+</html>

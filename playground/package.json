@@ -1,0 +1,22 @@
+{
+  "name": "components-playground",
+  "version": "1.0.0",
+  "description": "Interactive playground for Odyssee Components",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@odyssee/components": "file:../../odyssee-components",
+    "pulse-framework": "file:../pulse-framework-0.1.0-rc.2.tgz"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "typescript": "^5.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0"
+  }
+}
