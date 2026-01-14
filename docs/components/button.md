@@ -7,6 +7,14 @@ description: A versatile button component with multiple variants, sizes, and sta
 
 A versatile button component with multiple variants, sizes, loading states, and icons. Built for Pulse Framework with full reactivity support.
 
+## Live Code Editor
+
+Modifiez le code ci-dessous et voyez le résultat en temps réel :
+
+<LiveCodeEditor :defaultCode="`<Button variant='solid' color='primary'>
+  Click me
+</Button>`" />
+
 ## Import
 
 ```tsx
@@ -16,82 +24,55 @@ import { Button, Pulse } from '@odyssee/components';
 ## Basic Usage
 
 ```tsx
-const button = (
-  <Button>Click me</Button>
-);
+const button = Button({
+  variant: 'solid',
+  color: 'primary',
+  children: 'Click me'
+});
 ```
 
 ## Variants
 
 The Button component supports five variants: `solid`, `outline`, `ghost`, `soft`, and `link`.
 
+<LiveCodeEditor :defaultCode="`<Button variant='outline' color='primary'>
+  Outline Button
+</Button>`" />
+
 ```tsx
-// Solid (default)
-const solidBtn = (
-  <Button variant="solid">Solid Button</Button>
-);
-
-// Outline
-const outlineBtn = (
-  <Button variant="outline">Outline Button</Button>
-);
-
-// Ghost
-const ghostBtn = (
-  <Button variant="ghost">Ghost Button</Button>
-);
-
-// Soft
-const softBtn = (
-  <Button variant="soft">Soft Button</Button>
-);
-
-// Link
-const linkBtn = (
-  <Button variant="link">Link Button</Button>
-);
+Button({ variant: 'solid', children: 'Solid Button' })
+Button({ variant: 'outline', children: 'Outline Button' })
+Button({ variant: 'ghost', children: 'Ghost Button' })
+Button({ variant: 'soft', children: 'Soft Button' })
+Button({ variant: 'link', children: 'Link Button' })
 ```
 
 ## Colors
 
 Buttons support multiple color schemes: `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, and `dark`.
 
+<LiveCodeEditor :defaultCode="`<Button variant='solid' color='success'>
+  Success Button
+</Button>`" />
+
 ```tsx
-const primaryBtn = (
-  <Button color="primary">Primary</Button>
-);
-
-const successBtn = (
-  <Button color="success">Success</Button>
-);
-
-const dangerBtn = (
-  <Button color="danger">Danger</Button>
-);
-
-const warningBtn = (
-  <Button color="warning">Warning</Button>
-);
-
-const infoBtn = (
-  <Button color="info">Info</Button>
-);
+Button({ color: 'primary', children: 'Primary' })
+Button({ color: 'success', children: 'Success' })
+Button({ color: 'danger', children: 'Danger' })
 ```
 
 ## Sizes
 
 Five size options are available: `xs`, `sm`, `md`, `lg`, and `xl`.
 
+<LiveCodeEditor :defaultCode="`<Button variant='solid' color='primary' size='lg'>
+  Large Button
+</Button>`" />
+
 ```tsx
-const sizes = (
-  <div class="flex gap-2 items-center">
-    <Button size="xs">Extra Small</Button>
-    <Button size="sm">Small</Button>
-    <Button size="md">Medium</Button>
-    <Button size="lg">Large</Button>
-    <Button size="xl">Extra Large</Button>
-  </div>
-);
+Button({ size: 'xs', children: 'Extra Small' })
+Button({ size: 'md', children: 'Medium' })
+Button({ size: 'xl', children: 'Extra Large' })
 ```
 
 ## Loading State

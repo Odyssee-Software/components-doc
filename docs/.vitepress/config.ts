@@ -1,4 +1,5 @@
 import { defineConfig } from "vitepress";
+import path from "path";
 
 export default defineConfig({
   title: "Odyssee Components",
@@ -83,15 +84,8 @@ export default defineConfig({
 
   // Vite configuration for Pulse Framework
   vite: {
-    resolve: {
-      alias: {
-        "pulse-framework": "/pulse-framework-0.1.0-rc.2.tgz",
-      },
-    },
-    esbuild: {
-      jsx: "transform",
-      jsxFactory: "Pulse.createElement",
-      jsxFragment: "Pulse.Fragment",
+    ssr: {
+      noExternal: ["@odyssee/components"],
     },
   },
 

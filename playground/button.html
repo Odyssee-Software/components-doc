@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Component - Odyssee Components</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f9fafb;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        }
+
+        .demo-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            color: #111827;
+        }
+
+        .demo-section p {
+            color: #6b7280;
+            margin: 0 0 1.5rem 0;
+        }
+
+        .demo-grid {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .demo-output {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f3f4f6;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .code-block {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: #f9fafb;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 1rem 0;
+        }
+
+        .subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            margin-bottom: 3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table th {
+            background: #f9fafb;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #111827;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #374151;
+        }
+
+        table tbody tr:hover {
+            background: #f9fafb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1></h1>Button Component</h1>
+        <p class="subtitle">Un composant bouton polyvalent avec plusieurs variantes, tailles, états de chargement et icônes.</p>
+
+        <!-- Exemple de Base -->
+        <div class="demo-section">
+            <h2>Exemple de Base</h2>
+            <p>Un simple bouton avec le style par défaut</p>
+            <div class="demo-grid" id="demo-basic"></div>
+            <div class="code-block"><code>const btn = Button({
+  variant: "solid",
+  color: "primary",
+  children: "Click me"
+});</code></div>
+        </div>
+
+        <!-- Variantes -->
+        <div class="demo-section">
+            <h2>Variantes</h2>
+            <p>Cinq styles différents : solid, outline, ghost, soft, et link</p>
+            <div class="demo-grid" id="demo-variants"></div>
+            <div class="code-block"><code>Button({ variant: "solid", children: "Solid" })
+Button({ variant: "outline", children: "Outline" })
+Button({ variant: "ghost", children: "Ghost" })
+Button({ variant: "soft", children: "Soft" })
+Button({ variant: "link", children: "Link" })</code></div>
+        </div>
+
+        <!-- Couleurs -->
+        <div class="demo-section">
+            <h2>Couleurs</h2>
+            <p>Huit couleurs disponibles pour différents contextes</p>
+            <div class="demo-grid" id="demo-colors"></div>
+            <div class="code-block"><code>Button({ color: "primary", children: "Primary" })
+Button({ color: "success", children: "Success" })
+Button({ color: "danger", children: "Danger" })
+Button({ color: "warning", children: "Warning" })</code></div>
+        </div>
+
+        <!-- Tailles -->
+        <div class="demo-section">
+            <h2>Tailles</h2>
+            <p>Cinq tailles de xs à xl</p>
+            <div class="demo-grid" id="demo-sizes"></div>
+            <div class="code-block"><code>Button({ size: "xs", children: "XS" })
+Button({ size: "sm", children: "SM" })
+Button({ size: "md", children: "MD" })
+Button({ size: "lg", children: "LG" })
+Button({ size: "xl", children: "XL" })</code></div>
+        </div>
+
+        <!-- Avec Icônes -->
+        <div class="demo-section">
+            <h2>Avec Icônes</h2>
+            <p>Ajouter des icônes à gauche ou à droite</p>
+            <div class="demo-grid" id="demo-icons"></div>
+            <div class="code-block"><code>Button({ icon: "🚀", iconPosition: "left", children: "Launch" })
+Button({ icon: "→", iconPosition: "right", children: "Next" })
+Button({ icon: "❤️", color: "danger", variant: "soft" })</code></div>
+        </div>
+
+        <!-- Compteur Interactif -->
+        <div class="demo-section">
+            <h2>Compteur Interactif</h2>
+            <p>Exemple avec Pulse signals pour la réactivité</p>
+            <div class="demo-output" id="counter-output">Count: 0</div>
+            <div class="demo-grid" id="demo-counter"></div>
+            <div class="code-block"><code>const count = Pulse.signal(0);
+
+const btn = Button({
+  onClick: () => {
+    count(count() + 1);
+    console.log('Count:', count());
+  },
+  children: "Increment"
+});</code></div>
+        </div>
+
+        <!-- État de Chargement -->
+        <div class="demo-section">
+            <h2>État de Chargement</h2>
+            <p>Afficher un spinner pendant les opérations asynchrones</p>
+            <div class="demo-output" id="loading-output">Cliquez pour démarrer</div>
+            <div class="demo-grid" id="demo-loading"></div>
+            <div class="code-block"><code>const isLoading = Pulse.signal(false);
+
+const btn = Button({
+  loading: isLoading,
+  onClick: async () => {
+    isLoading(true);
+    await someAsyncOperation();
+    isLoading(false);
+  },
+  children: "Submit"
+});</code></div>
+        </div>
+
+        <!-- Props -->
+        <div class="demo-section">
+            <h2>Props</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Prop</th>
+                        <th>Type</th>
+                        <th>Défaut</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>variant</code></td>
+                        <td>"solid" | "outline" | "ghost" | "soft" | "link"</td>
+                        <td>"solid"</td>
+                        <td>Style du bouton</td>
+                    </tr>
+                    <tr>
+                        <td><code>color</code></td>
+                        <td>"primary" | "secondary" | "success" | "danger" | "warning" | "info"</td>
+                        <td>"primary"</td>
+                        <td>Couleur du bouton</td>
+                    </tr>
+                    <tr>
+                        <td><code>size</code></td>
+                        <td>"xs" | "sm" | "md" | "lg" | "xl"</td>
+                        <td>"md"</td>
+                        <td>Taille du bouton</td>
+                    </tr>
+                    <tr>
+                        <td><code>disabled</code></td>
+                        <td>boolean | Signal&lt;boolean&gt;</td>
+                        <td>false</td>
+                        <td>Désactiver le bouton</td>
+                    </tr>
+                    <tr>
+                        <td><code>loading</code></td>
+                        <td>boolean | Signal&lt;boolean&gt;</td>
+                        <td>false</td>
+                        <td>Afficher l'état de chargement</td>
+                    </tr>
+                    <tr>
+                        <td><code>icon</code></td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Icône à afficher</td>
+                    </tr>
+                    <tr>
+                        <td><code>iconPosition</code></td>
+                        <td>"left" | "right"</td>
+                        <td>"left"</td>
+                        <td>Position de l'icône</td>
+                    </tr>
+                    <tr>
+                        <td><code>fullWidth</code></td>
+                        <td>boolean</td>
+                        <td>false</td>
+                        <td>Bouton pleine largeur</td>
+                    </tr>
+                    <tr>
+                        <td><code>onClick</code></td>
+                        <td>(event: Event) =&gt; void</td>
+                        <td>-</td>
+                        <td>Gestionnaire de clic</td>
+                    </tr>
+                    <tr>
+                        <td><code>children</code></td>
+                        <td>string | HTMLElement</td>
+                        <td>-</td>
+                        <td>Contenu du bouton</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="module">
+        import Pulse from 'pulse-framework';
+        import { Button } from '@odyssee/components';
+
+        // Exemple de Base
+        const basicBtn = Button({
+            variant: "solid",
+            color: "primary",
+            children: "Click me"
+        });
+        document.getElementById('demo-basic').appendChild(basicBtn);
+
+        // Variantes
+        const variants = ['solid', 'outline', 'ghost', 'soft', 'link'];
+        const variantsContainer = document.getElementById('demo-variants');
+        variants.forEach(variant => {
+            const btn = Button({
+                variant: variant,
+                children: variant.charAt(0).toUpperCase() + variant.slice(1)
+            });
+            variantsContainer.appendChild(btn);
+        });
+
+        // Couleurs
+        const colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info'];
+        const colorsContainer = document.getElementById('demo-colors');
+        colors.forEach(color => {
+            const btn = Button({
+                color: color,
+                children: color.charAt(0).toUpperCase() + color.slice(1)
+            });
+            colorsContainer.appendChild(btn);
+        });
+
+        // Tailles
+        const sizes = ['xs', 'sm', 'md', 'lg', 'xl'];
+        const sizesContainer = document.getElementById('demo-sizes');
+        sizes.forEach(size => {
+            const btn = Button({
+                size: size,
+                children: size.toUpperCase()
+            });
+            sizesContainer.appendChild(btn);
+        });
+
+        // Avec Icônes
+        const iconsContainer = document.getElementById('demo-icons');
+
+        const iconBtn1 = Button({
+            icon: "🚀",
+            iconPosition: "left",
+            children: "Launch"
+        });
+
+        const iconBtn2 = Button({
+            icon: "→",
+            iconPosition: "right",
+            children: "Next",
+            variant: "outline"
+        });
+
+        const iconBtn3 = Button({
+            icon: "❤️",
+            color: "danger",
+            variant: "soft"
+        });
+
+        iconsContainer.appendChild(iconBtn1);
+        iconsContainer.appendChild(iconBtn2);
+        iconsContainer.appendChild(iconBtn3);
+
+        // Compteur Interactif
+        const count = Pulse.signal(0);
+        const counterOutput = document.getElementById('counter-output');
+        const counterContainer = document.getElementById('demo-counter');
+
+        const incrementBtn = Button({
+            color: "success",
+            onClick: () => {
+                count(count() + 1);
+                counterOutput.textContent = 'Count: ' + count();
+            },
+            children: "Increment"
+        });
+
+        const decrementBtn = Button({
+            color: "danger",
+            variant: "outline",
+            onClick: () => {
+                count(count() - 1);
+                counterOutput.textContent = 'Count: ' + count();
+            },
+            children: "Decrement"
+        });
+
+        const resetBtn = Button({
+            variant: "ghost",
+            onClick: () => {
+                count(0);
+                counterOutput.textContent = 'Count: ' + count();
+            },
+            children: "Reset"
+        });
+
+        counterContainer.appendChild(incrementBtn);
+        counterContainer.appendChild(decrementBtn);
+        counterContainer.appendChild(resetBtn);
+
+        // État de Chargement
+        const isLoading = Pulse.signal(false);
+        const loadingOutput = document.getElementById('loading-output');
+        const loadingContainer = document.getElementById('demo-loading');
+
+        const loadingBtn = Button({
+            color: "primary",
+            loading: isLoading,
+            onClick: async () => {
+                isLoading(true);
+                loadingOutput.textContent = '⏳ Chargement...';
+
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                isLoading(false);
+                loadingOutput.textContent = '✅ Terminé ! Cliquez à nouveau.';
+            },
+            children: "Démarrer le chargement"
+        });
+
+        loadingContainer.appendChild(loadingBtn);
+    </script>
+</body>
+</html>

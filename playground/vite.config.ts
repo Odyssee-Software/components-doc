@@ -1,7 +1,16 @@
 import { defineConfig } from "vite";
 import path from "path";
+import mdx from "@mdx-js/rollup";
+import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 
 export default defineConfig({
+  plugins: [
+    mdx({
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypeHighlight],
+    }),
+  ],
   resolve: {
     alias: {
       "@odyssee/components": path.resolve(
