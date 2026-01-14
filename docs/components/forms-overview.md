@@ -14,131 +14,102 @@ A comprehensive collection of form components built with Pulse Framework for cre
 #### [Input](/components/input)
 Text input fields with labels, hints, validation, and icons.
 
-```tsx
-<Input 
-  label="Email"
-  type="email"
-  value={email}
-  onChange={(val) => email(val)}
-/>
-```
+<LiveCodeEditor :defaultCode="`<Input 
+  label='Email'
+  type='email'
+  placeholder='you@example.com'
+/>`" />
 
 #### [Textarea](/components/textarea)
 Multi-line text input with auto-resize support.
 
-```tsx
-<Textarea 
-  label="Description"
-  value={description}
-  onChange={(val) => description(val)}
+<LiveCodeEditor :defaultCode="`<Textarea 
+  label='Description'
+  placeholder='Enter description...'
   autoResize={true}
-/>
-```
+/>`" />
 
 ### Selection Components
 
 #### [Select](/components/select)
 Dropdown selection with options and groups.
 
-```tsx
-<Select 
-  label="Country"
-  value={country}
+<LiveCodeEditor :defaultCode="`<Select 
+  label='Country'
   options={[
+    { value: '', label: 'Select a country' },
     { value: 'us', label: 'United States' },
-    { value: 'uk', label: 'United Kingdom' }
+    { value: 'uk', label: 'United Kingdom' },
+    { value: 'fr', label: 'France' }
   ]}
-  onChange={(val) => country(val)}
-/>
-```
+/>`" />
 
 #### [RadioGroup](/components/radio-group)
 Grouped radio buttons for single selection.
 
-```tsx
-<RadioGroup 
-  label="Plan"
-  value={plan}
+<LiveCodeEditor :defaultCode="`<RadioGroup 
+  label='Plan'
   options={[
-    { value: 'free', label: 'Free' },
-    { value: 'pro', label: 'Pro' }
+    { value: 'free', label: 'Free', description: 'Basic features' },
+    { value: 'pro', label: 'Pro', description: 'Advanced features' }
   ]}
-  onChange={(val) => plan(val)}
-/>
-```
+/>`" />
 
 ### Boolean Input Components
 
 #### [Checkbox](/components/checkbox)
 Checkbox input with label and description.
 
-```tsx
-<Checkbox 
-  label="Accept terms"
-  checked={accepted}
-  onChange={(val) => accepted(val)}
-/>
-```
+<LiveCodeEditor :defaultCode="`<Checkbox 
+  label='I accept the Terms and Conditions'
+/>`" />
 
 #### [Toggle](/components/toggle)
 Switch component for on/off states.
 
-```tsx
-<Toggle 
-  label="Dark Mode"
-  checked={darkMode}
-  onChange={(val) => darkMode(val)}
-/>
-```
+<LiveCodeEditor :defaultCode="`<Toggle 
+  label='Enable Dark Mode'
+  description='Switch between light and dark theme'
+/>`" />
 
 ### Specialized Input Components
 
 #### [FileInput](/components/file-input)
 File upload input with validation.
 
-```tsx
-<FileInput 
-  label="Upload image"
-  accept="image/*"
-  onChange={(files) => handleFiles(files)}
-/>
-```
+<LiveCodeEditor :defaultCode="`<FileInput 
+  label='Upload image'
+  accept='image/*'
+  hint='PNG, JPG or GIF (max. 5MB)'
+/>`" />
 
 #### [RangeSlider](/components/range-slider)
 Numeric range slider.
 
-```tsx
-<RangeSlider 
-  label="Volume"
+<LiveCodeEditor :defaultCode="`<RangeSlider 
+  label='Volume'
   min={0}
   max={100}
-  value={volume}
-  onChange={(val) => volume(val)}
-/>
-```
+  value={50}
+/>`" />
 
 #### [ColorPicker](/components/color-picker)
 Color selection input.
 
-```tsx
-<ColorPicker 
-  label="Brand Color"
-  value={color}
-  onChange={(val) => color(val)}
-/>
-```
+<LiveCodeEditor :defaultCode="`<ColorPicker 
+  label='Brand Color'
+  value='#3B82F6'
+/>`" />
 
 ### Layout Components
 
 #### [FormGroup](/components/form-group)
 Container for organizing form fields.
 
-```tsx
-<FormGroup label="Personal Info" bordered={true}>
-  <Input label="First Name" />
-  <Input label="Last Name" />
-</FormGroup>
-```
+<LiveCodeEditor :defaultCode="`<FormGroup label='Personal Info' bordered={true}>
+  <Input label='First Name' placeholder='John' />
+  <Input label='Last Name' placeholder='Doe' />
+</FormGroup>`" />
 
 ## Complete Form Example
 

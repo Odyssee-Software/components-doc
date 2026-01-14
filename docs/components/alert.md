@@ -15,124 +15,79 @@ import { Alert, Pulse } from '@odyssee/components';
 
 ## Basic Usage
 
-```tsx
-const alert = (
-  <Alert color="info">
-    This is a basic info alert!
-  </Alert>
-);
-```
+<LiveCodeEditor :defaultCode="`<Alert color='info'>
+  This is a basic info alert!
+</Alert>`" />
 
 ## Variants
 
 The Alert component supports three variants: `solid`, `soft`, and `bordered`.
 
-### Solid
-
-```tsx
-const solidAlert = (
-  <Alert variant="solid" color="primary">
+<LiveCodeEditor :defaultCode="`<div class='space-y-3'>
+  <Alert variant='solid' color='primary'>
     Solid variant with filled background
   </Alert>
-);
-```
-
-### Soft
-
-```tsx
-const softAlert = (
-  <Alert variant="soft" color="success">
+  <Alert variant='soft' color='success'>
     Soft variant with light background
   </Alert>
-);
-```
-
-### Bordered
-
-```tsx
-const borderedAlert = (
-  <Alert variant="bordered" color="warning">
+  <Alert variant='bordered' color='warning'>
     Bordered variant with outline only
   </Alert>
-);
-```
+</div>`" />
 
 ## Colors
 
 Alerts support multiple color schemes: `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, and `dark`.
 
-```tsx
-const infoAlert = (
-  <Alert color="info">
+<LiveCodeEditor :defaultCode="`<div class='space-y-3'>
+  <Alert color='info'>
     Information alert
   </Alert>
-);
-
-const successAlert = (
-  <Alert color="success">
+  <Alert color='success'>
     Success alert
   </Alert>
-);
-
-const warningAlert = (
-  <Alert color="warning">
+  <Alert color='warning'>
     Warning alert
   </Alert>
-);
-
-const dangerAlert = (
-  <Alert color="danger">
+  <Alert color='danger'>
     Danger alert
   </Alert>
-);
-```
+</div>`" />
 
 ## With Title
 
-```tsx
-const alertWithTitle = (
-  <Alert 
-    variant="soft" 
-    color="success"
-    title="Successfully updated"
-  >
-    Your email preferences have been saved.
-  </Alert>
-);
-```
+<LiveCodeEditor :defaultCode="`<Alert 
+  variant='soft' 
+  color='success'
+  title='Successfully updated'
+>
+  Your email preferences have been saved.
+</Alert>`" />
 
 ## With Icon
 
-```tsx
-const alertWithIcon = (
-  <Alert 
-    variant="bordered" 
-    color="danger"
-    icon="⚠️"
-    title="Error occurred"
-  >
-    Your purchase has been declined.
-  </Alert>
-);
-```
+<LiveCodeEditor :defaultCode="`<Alert 
+  variant='bordered' 
+  color='danger'
+  icon='⚠️'
+  title='Error occurred'
+>
+  Your purchase has been declined.
+</Alert>`" />
 
 ## With List Content
 
-```tsx
-const alertWithList = (
-  <Alert 
-    variant="soft" 
-    color="danger"
-    title="A problem has occurred"
-  >
-    <ul class="list-disc ml-4 mt-2">
-      <li>This username is already in use</li>
-      <li>Email field can't be empty</li>
-      <li>Please enter a valid phone number</li>
-    </ul>
-  </Alert>
-);
-```
+<LiveCodeEditor :defaultCode="`<Alert 
+  variant='soft' 
+  color='danger'
+  title='A problem has occurred'
+>
+  <ul class='list-disc ml-4 mt-2'>
+    <li>This username is already in use</li>
+    <li>Email field can't be empty</li>
+    <li>Please enter a valid phone number</li>
+  </ul>
+</Alert>`" />
 
 ## Dismissible Alert
 

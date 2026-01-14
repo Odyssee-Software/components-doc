@@ -59,8 +59,16 @@ const executeCode = async () => {
     // Dynamic import to avoid SSR issues
     const Pulse = (await import('pulse-framework')).default;
     const components = await import('@odyssee/components');
-    const BabelModule = await import('@babel/standalone');
-    const Babel = BabelModule.default || BabelModule;
+
+    // Import Babel and check what we get
+    const babelModule = await import('@babel/standalone');
+    console.log('Babel module:', babelModule);
+    console.log('Babel.default:', babelModule.default);
+    console.log('Babel keys:', Object.keys(babelModule));
+
+    const Babel = babelModule.default || babelModule;
+    console.log('Final Babel:', Babel);
+    console.log('Babel.transform:', Babel?.transform);
 
     // Create scope with all components
     const scope = {

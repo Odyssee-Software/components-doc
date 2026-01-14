@@ -15,131 +15,71 @@ import { Badge, Pulse } from '@odyssee/components';
 
 ## Basic Usage
 
-```tsx
-const badge = (
-  <Badge>New</Badge>
-);
-```
+<LiveCodeEditor :defaultCode="`<Badge>New</Badge>`" />
 
 ## Variants
 
 The Badge component supports three variants: `solid`, `soft`, and `outline`.
 
-### Solid
-
-```tsx
-const solidBadge = (
-  <Badge variant="solid" color="primary">
-    Solid
-  </Badge>
-);
-```
-
-### Soft
-
-```tsx
-const softBadge = (
-  <Badge variant="soft" color="success">
-    Soft
-  </Badge>
-);
-```
-
-### Outline
-
-```tsx
-const outlineBadge = (
-  <Badge variant="outline" color="danger">
-    Outline
-  </Badge>
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='flex gap-2'>
+  <Badge variant='solid' color='primary'>Solid</Badge>
+  <Badge variant='soft' color='success'>Soft</Badge>
+  <Badge variant='outline' color='danger'>Outline</Badge>
+</div>`" />
 
 ## Colors
 
 Badges support multiple color schemes: `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `light`, and `dark`.
 
-```tsx
-const badges = (
-  <div class="flex gap-2">
-    <Badge color="primary">Primary</Badge>
-    <Badge color="secondary">Secondary</Badge>
-    <Badge color="success">Success</Badge>
-    <Badge color="danger">Danger</Badge>
-    <Badge color="warning">Warning</Badge>
-    <Badge color="info">Info</Badge>
-  </div>
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='flex gap-2 flex-wrap'>
+  <Badge color='primary'>Primary</Badge>
+  <Badge color='secondary'>Secondary</Badge>
+  <Badge color='success'>Success</Badge>
+  <Badge color='danger'>Danger</Badge>
+  <Badge color='warning'>Warning</Badge>
+  <Badge color='info'>Info</Badge>
+</div>`" />
 
 ## Sizes
 
 Three size options are available: `sm`, `md`, and `lg`.
 
-```tsx
-const sizes = (
-  <div class="flex gap-2 items-center">
-    <Badge size="sm">Small</Badge>
-    <Badge size="md">Medium</Badge>
-    <Badge size="lg">Large</Badge>
-  </div>
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='flex gap-2 items-center'>
+  <Badge size='sm'>Small</Badge>
+  <Badge size='md'>Medium</Badge>
+  <Badge size='lg'>Large</Badge>
+</div>`" />
 
 ## With Icon
 
 Add icons to badges for additional context.
 
-```tsx
-const iconBadges = (
-  <div class="flex gap-2">
-    <Badge icon="✓" color="success">
-      Verified
-    </Badge>
-    <Badge icon="⚠️" color="warning">
-      Warning
-    </Badge>
-    <Badge icon="⭐" color="primary">
-      Featured
-    </Badge>
-  </div>
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='flex gap-2'>
+  <Badge icon='✓' color='success'>Verified</Badge>
+  <Badge icon='⚠️' color='warning'>Warning</Badge>
+  <Badge icon='⭐' color='primary'>Featured</Badge>
+</div>`" />
 
 ## With Dot Indicator
 
 Show a status dot before the text.
 
-```tsx
-const dotBadges = (
-  <div class="flex gap-2">
-    <Badge dot={true} color="success">
-      Active
-    </Badge>
-    <Badge dot={true} color="danger">
-      Offline
-    </Badge>
-    <Badge dot={true} color="warning">
-      Away
-    </Badge>
-  </div>
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='flex gap-2'>
+  <Badge dot={true} color='success'>Active</Badge>
+  <Badge dot={true} color='danger'>Offline</Badge>
+  <Badge dot={true} color='warning'>Away</Badge>
+</div>`" />
 
 ## Rounded Styles
 
 Control the border radius with the `rounded` prop.
 
-```tsx
-const roundedBadges = (
-  <div class="flex gap-2">
-    <Badge rounded="sm">Square</Badge>
-    <Badge rounded="md">Rounded</Badge>
-    <Badge rounded="lg">More Rounded</Badge>
-    <Badge rounded="full">Pill</Badge>
-  </div>
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='flex gap-2'>
+  <Badge rounded='sm'>Square</Badge>
+  <Badge rounded='md'>Rounded</Badge>
+  <Badge rounded='lg'>More Rounded</Badge>
+  <Badge rounded='full'>Pill</Badge>
+</div>`" />
 
 ## Removable Badges
 
@@ -197,24 +137,20 @@ const notificationBadge = (
 
 Display status information.
 
-```tsx
-const statusBadges = (
-  <div class="space-y-2">
-    <div class="flex items-center gap-2">
-      <Badge dot={true} color="success">Active</Badge>
-      <span>User is currently online</span>
-    </div>
-    <div class="flex items-center gap-2">
-      <Badge dot={true} color="warning">Away</Badge>
-      <span>User is away from keyboard</span>
-    </div>
-    <div class="flex items-center gap-2">
-      <Badge dot={true} color="danger">Offline</Badge>
-      <span>User is offline</span>
-    </div>
+<LiveCodeEditor :defaultCode="`<div class='space-y-2'>
+  <div class='flex items-center gap-2'>
+    <Badge dot={true} color='success'>Active</Badge>
+    <span>User is currently online</span>
   </div>
-);
-```
+  <div class='flex items-center gap-2'>
+    <Badge dot={true} color='warning'>Away</Badge>
+    <span>User is away from keyboard</span>
+  </div>
+  <div class='flex items-center gap-2'>
+    <Badge dot={true} color='danger'>Offline</Badge>
+    <span>User is offline</span>
+  </div>
+</div>`" />
 
 ## Category Tags
 

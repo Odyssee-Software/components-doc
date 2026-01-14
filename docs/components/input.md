@@ -15,142 +15,81 @@ import { Input, Pulse } from '@odyssee/components';
 
 ## Basic Usage
 
-```tsx
-const input = (
-  <Input 
-    placeholder="Enter your name"
-  />
-);
-```
+<LiveCodeEditor :defaultCode="`<Input 
+  placeholder='Enter your name'
+/>`" />
 
 ## Input Types
 
 The Input component supports various HTML5 input types.
 
-```tsx
-// Text input
-const textInput = (
-  <Input type="text" placeholder="Enter text" />
-);
-
-// Email input
-const emailInput = (
-  <Input type="email" placeholder="you@example.com" />
-);
-
-// Password input
-const passwordInput = (
-  <Input type="password" placeholder="••••••••" />
-);
-
-// Number input
-const numberInput = (
-  <Input type="number" placeholder="0" />
-);
-
-// Tel input
-const telInput = (
-  <Input type="tel" placeholder="+1 (555) 000-0000" />
-);
-
-// URL input
-const urlInput = (
-  <Input type="url" placeholder="https://example.com" />
-);
-
-// Search input
-const searchInput = (
-  <Input type="search" placeholder="Search..." />
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='space-y-3'>
+  <Input type='text' placeholder='Enter text' />
+  <Input type='email' placeholder='you@example.com' />
+  <Input type='password' placeholder='••••••••' />
+  <Input type='number' placeholder='0' />
+  <Input type='tel' placeholder='+1 (555) 000-0000' />
+  <Input type='url' placeholder='https://example.com' />
+  <Input type='search' placeholder='Search...' />
+</div>`" />
 
 ## With Label
 
-```tsx
-const labeledInput = (
-  <Input 
-    label="Email Address"
-    type="email"
-    placeholder="you@example.com"
-  />
-);
-```
+<LiveCodeEditor :defaultCode="`<Input 
+  label='Email Address'
+  type='email'
+  placeholder='you@example.com'
+/>`" />
 
 ## With Hint
 
-```tsx
-const hintInput = (
-  <Input 
-    label="Password"
-    type="password"
-    hint="Must be at least 8 characters"
-    placeholder="••••••••"
-  />
-);
-```
+<LiveCodeEditor :defaultCode="`<Input 
+  label='Password'
+  type='password'
+  hint='Must be at least 8 characters'
+  placeholder='••••••••'
+/>`" />
 
 ## Validation States
 
-### Error State
-
-```tsx
-const errorInput = (
+<LiveCodeEditor :defaultCode="`<div class='space-y-3'>
   <Input 
-    label="Email"
-    type="email"
-    value="invalid-email"
-    error="Please enter a valid email address"
+    label='Email'
+    type='email'
+    value='invalid-email'
+    error='Please enter a valid email address'
   />
-);
-```
-
-### Success State
-
-```tsx
-const successInput = (
   <Input 
-    label="Username"
-    value="john_doe"
-    success="This username is available"
+    label='Username'
+    value='john_doe'
+    success='This username is available'
   />
-);
-```
+</div>`" />
 
 ## With Icon
 
-```tsx
-// Icon on the left (default)
-const iconLeftInput = (
+<LiveCodeEditor :defaultCode="`<div class='space-y-3'>
   <Input 
-    icon="🔍"
-    iconPosition="left"
-    placeholder="Search..."
+    icon='🔍'
+    iconPosition='left'
+    placeholder='Search...'
   />
-);
-
-// Icon on the right
-const iconRightInput = (
   <Input 
-    icon="✉️"
-    iconPosition="right"
-    placeholder="Email address"
+    icon='✉️'
+    iconPosition='right'
+    placeholder='Email address'
   />
-);
-```
+</div>`" />
 
 ## Sizes
 
 Three size options are available: `sm`, `md`, and `lg`.
 
-```tsx
-const sizes = (
-  <div class="space-y-3">
-    <Input size="sm" placeholder="Small input" />
-    <Input size="md" placeholder="Medium input" />
-    <Input size="lg" placeholder="Large input" />
-  </div>
-);
-```
+<LiveCodeEditor :defaultCode="`<div class='space-y-3'>
+  <Input size='sm' placeholder='Small input' />
+  <Input size='md' placeholder='Medium input' />
+  <Input size='lg' placeholder='Large input' />
+</div>`" />
 
 ## Reactive Input with Signals
 
@@ -177,39 +116,27 @@ Pulse.effect(() => {
 
 ## Required Fields
 
-```tsx
-const requiredInput = (
-  <Input 
-    label="Full Name"
-    required={true}
-    placeholder="John Doe"
-  />
-);
-```
+<LiveCodeEditor :defaultCode="`<Input 
+  label='Full Name'
+  required={true}
+  placeholder='John Doe'
+/>`" />
 
 ## Disabled State
 
-```tsx
-const disabledInput = (
-  <Input 
-    label="Username"
-    value="john_doe"
-    disabled={true}
-  />
-);
-```
+<LiveCodeEditor :defaultCode="`<Input 
+  label='Username'
+  value='john_doe'
+  disabled={true}
+/>`" />
 
 ## Readonly State
 
-```tsx
-const readonlyInput = (
-  <Input 
-    label="ID"
-    value="USR-12345"
-    readonly={true}
-  />
-);
-```
+<LiveCodeEditor :defaultCode="`<Input 
+  label='ID'
+  value='USR-12345'
+  readonly={true}
+/>`" />
 
 ## Reactive Validation
 
