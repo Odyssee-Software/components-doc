@@ -6,8 +6,8 @@ export default defineConfig({
   description:
     "A comprehensive UI component library built with Pulse Framework",
 
-  // Base URL for deployment
-  base: "/",
+  // Base URL for deployment (GitHub Pages: https://odyssee-software.github.io/components-doc/)
+  base: "/components-doc/",
 
   // Theme configuration
   themeConfig: {

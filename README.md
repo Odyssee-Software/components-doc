@@ -1,6 +1,10 @@
 # Odyssee Components Documentation
 
+[![Deploy Documentation](https://github.com/Odyssee-Software/components-doc/actions/workflows/deploy.yml/badge.svg)](https://github.com/Odyssee-Software/components-doc/actions/workflows/deploy.yml)
+
 Documentation complète pour la bibliothèque `@odyssee/components` - Une collection de composants UI construits avec Pulse Framework, stylisés avec Tailwind CSS et Preline.
+
+🌐 **[Voir la documentation en ligne](https://odyssee-software.github.io/components-doc/)**
 
 ## 📚 À propos
 
@@ -117,6 +121,41 @@ cd playground
 npm run build
 npm run preview
 ```
+
+## 🚀 Déploiement sur GitHub Pages
+
+Ce projet est configuré pour se déployer automatiquement sur GitHub Pages à chaque push sur la branche `main`.
+
+### Configuration Requise
+
+1. **Activer GitHub Pages** dans votre repository :
+   - Allez dans `Settings` > `Pages`
+   - Source : `GitHub Actions`
+
+2. **Configurer le base path** dans `docs/.vitepress/config.ts` :
+   ```ts
+   export default defineConfig({
+     base: "/components-doc/",  // Déjà configuré pour ce repo
+   })
+   ```
+
+3. **Push sur main** :
+   ```bash
+   git add .
+   git commit -m "Deploy documentation"
+   git push origin main
+   ```
+
+Le workflow GitHub Actions (`.github/workflows/deploy.yml`) va automatiquement :
+- ✅ Installer les dépendances
+- ✅ Builder la documentation VitePress
+- ✅ Déployer sur GitHub Pages
+
+Votre documentation sera accessible sur : `https://odyssee-software.github.io/components-doc/`
+
+### Déploiement Manuel
+
+Si vous préférez déployer manuellement, vous pouvez aussi déclencher le workflow depuis l'onglet `Actions` de GitHub.
 
 ## 📝 Documentation Disponible
 
@@ -329,18 +368,18 @@ import "../../../odyssee-components/src/styles.css";
 5. Créer page sur l'accessibilité
 
 ### Playground à Étendre
-1. Ajouter démos pour Input
-2. Ajouter démos pour Select
+1. ~~Ajouter démos pour Input~~ ✅ Complété avec LiveCodeEditor
+2. ~~Ajouter démos pour Select~~ ✅ Complété avec LiveCodeEditor
 3. Ajouter démos pour Modal
 4. Créer formulaire complet d'exemple
 5. Ajouter mode dark/light toggle
 
 ### Améliorations
 1. Ajouter tests E2E avec Playwright
-2. Ajouter CI/CD pour build automatique
-3. Déployer la documentation (Netlify/Vercel)
+2. ~~Ajouter CI/CD pour build automatique~~ ✅ Workflow GitHub Actions ajouté
+3. ~~Déployer la documentation~~ ✅ GitHub Pages configuré
 4. Ajouter recherche Algolia
-5. Créer composants Vue pour intégration VitePress
+5. ~~Créer composants Vue pour intégration VitePress~~ ✅ LiveCodeEditor créé
 
 ## 📄 Scripts Disponibles
 
@@ -388,9 +427,9 @@ Pour contribuer à la documentation :
 
 ## 📞 Support
 
-- 📖 [Documentation](http://localhost:5173)
-- 🎮 [Playground](http://localhost:3000)
-- 💬 GitHub Issues
+- 📖 [Documentation](https://odyssee-software.github.io/components-doc/)
+- 💬 [GitHub Issues](https://github.com/Odyssee-Software/components-doc/issues)
+- 📦 [GitHub Repository](https://github.com/Odyssee-Software/components-doc)
 - 📧 Email: contact@odyssee.dev
 
 ---
