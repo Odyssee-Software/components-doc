@@ -9,6 +9,9 @@ export default defineConfig({
   // Base URL for deployment (GitHub Pages: https://odyssee-software.github.io/components-doc/)
   base: "/components-doc/",
 
+  // Ignore dead links during build (pages not yet created)
+  ignoreDeadLinks: true,
+
   // Theme configuration
   themeConfig: {
     // Logo in navbar
