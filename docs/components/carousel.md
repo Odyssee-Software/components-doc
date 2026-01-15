@@ -9,67 +9,60 @@ Showcase content in a dynamic slideshow format with smooth transitions, autoplay
 
 ## Import
 
-```tsx
-import { Carousel, AutoPlayCarousel, ThumbnailCarousel } from '@odyssee/components';
-import type { CarouselSlide } from '@odyssee/components';
+```ts
+import { Carousel, AutoPlayCarousel, ThumbnailCarousel, type CarouselSlide } from '@odyssee/components';
 ```
 
 ## Basic Usage
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  { content: "First Slide" },
-  { content: "Second Slide" },
-  { content: "Third Slide" }
-];
-
-<Carousel slides={slides} />`" />
+<LiveCodeEditor :defaultCode="`<Carousel slides={[
+  { content: 'First Slide' },
+  { content: 'Second Slide' },
+  { content: 'Third Slide' }
+]} />`" />
 
 ## With Images
 
-<LiveCodeEditor :defaultCode="`const imageSlides = [
+<LiveCodeEditor :defaultCode="`<Carousel slides={[
   {
     content: (
       <img
-        src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800"
-        alt="Nature 1"
-        class="w-full h-full object-cover"
+        src='https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800'
+        alt='Nature 1'
+        class='w-full h-full object-cover'
       />
     )
   },
   {
     content: (
       <img
-        src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800"
-        alt="Nature 2"
-        class="w-full h-full object-cover"
+        src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'
+        alt='Nature 2'
+        class='w-full h-full object-cover'
       />
     )
   },
   {
     content: (
       <img
-        src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800"
-        alt="Nature 3"
-        class="w-full h-full object-cover"
+        src='https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800'
+        alt='Nature 3'
+        class='w-full h-full object-cover'
       />
     )
   }
-];
-
-<Carousel slides={imageSlides} minHeight="min-h-96" />`" />
+]} minHeight='min-h-96' />`" />
 
 ## AutoPlay
 
 Enable automatic slide transitions.
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  { content: "Slide 1 - Auto-advancing" },
-  { content: "Slide 2 - Every 3 seconds" },
-  { content: "Slide 3 - Loops continuously" }
-];
-
-<AutoPlayCarousel
-  slides={slides}
+<LiveCodeEditor :defaultCode="`<AutoPlayCarousel
+  slides={[
+    { content: 'Slide 1 - Auto-advancing' },
+    { content: 'Slide 2 - Every 3 seconds' },
+    { content: 'Slide 3 - Loops continuously' }
+  ]}
   interval={3000}
   loop={true}
 />`" />
@@ -78,14 +71,12 @@ Enable automatic slide transitions.
 
 Enable infinite looping through slides.
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  { content: "First Slide" },
-  { content: "Second Slide" },
-  { content: "Last Slide - Will loop back" }
-];
-
-<Carousel
-  slides={slides}
+<LiveCodeEditor :defaultCode="`<Carousel
+  slides={[
+    { content: 'First Slide' },
+    { content: 'Second Slide' },
+    { content: 'Last Slide - Will loop back' }
+  ]}
   loop={true}
   showInfo={true}
 />`" />
@@ -96,45 +87,39 @@ Enable infinite looping through slides.
 
 Standard controls positioned outside the carousel.
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  { content: "Slide with Default Controls" },
-  { content: "Arrow buttons with shadow" },
-  { content: "Positioned at middle edges" }
-];
-
-<Carousel
-  slides={slides}
-  controlsVariant="default"
+<LiveCodeEditor :defaultCode="`<Carousel
+  slides={[
+    { content: 'Slide with Default Controls' },
+    { content: 'Arrow buttons with shadow' },
+    { content: 'Positioned at middle edges' }
+  ]}
+  controlsVariant='default'
 />`" />
 
 ### Overlay Controls
 
 Controls overlaid on the carousel content.
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  { content: "Overlay Controls Style" },
-  { content: "Buttons over content" },
-  { content: "Great for full-width images" }
-];
-
-<Carousel
-  slides={slides}
-  controlsVariant="overlay"
+<LiveCodeEditor :defaultCode="`<Carousel
+  slides={[
+    { content: 'Overlay Controls Style' },
+    { content: 'Buttons over content' },
+    { content: 'Great for full-width images' }
+  ]}
+  controlsVariant='overlay'
 />`" />
 
 ## Pagination
 
 Show dot indicators for navigation.
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  { content: "Slide 1" },
-  { content: "Slide 2" },
-  { content: "Slide 3" },
-  { content: "Slide 4" }
-];
-
-<Carousel
-  slides={slides}
+<LiveCodeEditor :defaultCode="`<Carousel
+  slides={[
+    { content: 'Slide 1' },
+    { content: 'Slide 2' },
+    { content: 'Slide 3' },
+    { content: 'Slide 4' }
+  ]}
   showPagination={true}
 />`" />
 
@@ -142,16 +127,14 @@ Show dot indicators for navigation.
 
 Display current slide number and total.
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  { content: "Slide 1 of 5" },
-  { content: "Slide 2 of 5" },
-  { content: "Slide 3 of 5" },
-  { content: "Slide 4 of 5" },
-  { content: "Slide 5 of 5" }
-];
-
-<Carousel
-  slides={slides}
+<LiveCodeEditor :defaultCode="`<Carousel
+  slides={[
+    { content: 'Slide 1 of 5' },
+    { content: 'Slide 2 of 5' },
+    { content: 'Slide 3 of 5' },
+    { content: 'Slide 4 of 5' },
+    { content: 'Slide 5 of 5' }
+  ]}
   showInfo={true}
   showPagination={false}
 />`" />
@@ -160,28 +143,26 @@ Display current slide number and total.
 
 ### Bottom Thumbnails
 
-<LiveCodeEditor :defaultCode="`const slides = [
-  {
-    content: "Main Content 1",
-    thumbnail: "Thumb 1"
-  },
-  {
-    content: "Main Content 2",
-    thumbnail: "Thumb 2"
-  },
-  {
-    content: "Main Content 3",
-    thumbnail: "Thumb 3"
-  },
-  {
-    content: "Main Content 4",
-    thumbnail: "Thumb 4"
-  }
-];
-
-<ThumbnailCarousel
-  slides={slides}
-  thumbnailsPosition="bottom"
+<LiveCodeEditor :defaultCode="`<ThumbnailCarousel
+  slides={[
+    {
+      content: 'Main Content 1',
+      thumbnail: 'Thumb 1'
+    },
+    {
+      content: 'Main Content 2',
+      thumbnail: 'Thumb 2'
+    },
+    {
+      content: 'Main Content 3',
+      thumbnail: 'Thumb 3'
+    },
+    {
+      content: 'Main Content 4',
+      thumbnail: 'Thumb 4'
+    }
+  ]}
+  thumbnailsPosition='bottom'
 />`" />
 
 ### Side Thumbnails
