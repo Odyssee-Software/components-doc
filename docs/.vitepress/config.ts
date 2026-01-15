@@ -40,9 +40,17 @@ export default defineConfig({
         {
           text: "Base Components",
           items: [
-            { text: "Button", link: "/components/button" },
             { text: "Alert", link: "/components/alert" },
+            { text: "Avatar", link: "/components/avatar" },
+            { text: "AvatarGroup", link: "/components/avatar-group" },
             { text: "Badge", link: "/components/badge" },
+            { text: "Blockquote", link: "/components/blockquote" },
+            { text: "Button", link: "/components/button" },
+            { text: "ButtonGroup", link: "/components/button-group" },
+            { text: "Card", link: "/components/card" },
+            { text: "Carousel", link: "/components/carousel" },
+            { text: "Collapse", link: "/components/collapse" },
+            { text: "Progress", link: "/components/progress" },
           ],
         },
         {
@@ -50,12 +58,12 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: "Overview", link: "/components/forms-overview" },
-            { text: "Input", link: "/components/input" },
-            { text: "Textarea", link: "/components/textarea" },
-            { text: "Select", link: "/components/select" },
             { text: "Checkbox", link: "/components/checkbox" },
+            { text: "Input", link: "/components/input" },
             { text: "Radio", link: "/components/radio" },
             { text: "RadioGroup", link: "/components/radio-group" },
+            { text: "Select", link: "/components/select" },
+            { text: "Textarea", link: "/components/textarea" },
             { text: "Toggle", link: "/components/toggle" },
             { text: "FileInput", link: "/components/file-input" },
             { text: "RangeSlider", link: "/components/range-slider" },
@@ -64,8 +72,15 @@ export default defineConfig({
           ],
         },
         {
+          text: "Navigation Components",
+          items: [{ text: "Accordion", link: "/components/accordion" }],
+        },
+        {
           text: "Overlay Components",
-          items: [{ text: "Modal", link: "/components/modal" }],
+          items: [
+            { text: "Modal", link: "/components/modal" },
+            { text: "Tooltip", link: "/components/tooltip" },
+          ],
         },
       ],
     },
