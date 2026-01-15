@@ -17,10 +17,10 @@ import type { AvatarGroupItem } from '@odyssee/components';
 ## Basic Usage
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1', name: 'Chris Lynch' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2', name: 'Maria Guan' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3', name: 'Amil Evara' },
-  { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', alt: 'User 4', name: 'Bob Johnson' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1", name: "Chris Lynch" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2", name: "Maria Guan" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3", name: "Amil Evara" },
+  { src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100", alt: "User 4", name: "Bob Johnson" }
 ];
 
 <AvatarGroup avatars={avatars} />`" />
@@ -32,11 +32,11 @@ import type { AvatarGroupItem } from '@odyssee/components';
 Avatars overlap each other for a compact display.
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3' },
-  { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', alt: 'User 4' },
-  { src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100', alt: 'User 5' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3" },
+  { src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100", alt: "User 4" },
+  { src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100", alt: "User 5" }
 ];
 
 <StackAvatarGroup avatars={avatars} size="md" />`" />
@@ -46,11 +46,11 @@ Avatars overlap each other for a compact display.
 Avatars displayed in a grid with spacing.
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3' },
-  { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', alt: 'User 4' },
-  { src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100', alt: 'User 5' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3" },
+  { src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100", alt: "User 4" },
+  { src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100", alt: "User 5" }
 ];
 
 <GridAvatarGroup avatars={avatars} spacing="md" size="md" />`" />
@@ -60,31 +60,31 @@ Avatars displayed in a grid with spacing.
 Available sizes: `xs`, `sm`, `md`, `lg`, `xl`.
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3" }
 ];
 
-<div class='space-y-4'>
+<div class="space-y-4">
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Extra Small</p>
-    <AvatarGroup avatars={avatars} size='xs' />
+    <p class="text-sm text-gray-600 mb-2">Extra Small</p>
+    <AvatarGroup avatars={avatars} size="xs" />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Small</p>
-    <AvatarGroup avatars={avatars} size='sm' />
+    <p class="text-sm text-gray-600 mb-2">Small</p>
+    <AvatarGroup avatars={avatars} size="sm" />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Medium (default)</p>
-    <AvatarGroup avatars={avatars} size='md' />
+    <p class="text-sm text-gray-600 mb-2">Medium (default)</p>
+    <AvatarGroup avatars={avatars} size="md" />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Large</p>
-    <AvatarGroup avatars={avatars} size='lg' />
+    <p class="text-sm text-gray-600 mb-2">Large</p>
+    <AvatarGroup avatars={avatars} size="lg" />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Extra Large</p>
-    <AvatarGroup avatars={avatars} size='xl' />
+    <p class="text-sm text-gray-600 mb-2">Extra Large</p>
+    <AvatarGroup avatars={avatars} size="xl" />
   </div>
 </div>`" />
 
@@ -93,23 +93,23 @@ Available sizes: `xs`, `sm`, `md`, `lg`, `xl`.
 Limit the number of visible avatars and show a counter for remaining ones.
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3' },
-  { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', alt: 'User 4' },
-  { src: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100', alt: 'User 5' },
-  { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', alt: 'User 6' },
-  { src: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100', alt: 'User 7' },
-  { src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100', alt: 'User 8' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3" },
+  { src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100", alt: "User 4" },
+  { src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100", alt: "User 5" },
+  { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100", alt: "User 6" },
+  { src: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100", alt: "User 7" },
+  { src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100", alt: "User 8" }
 ];
 
-<div class='space-y-4'>
+<div class="space-y-4">
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Show max 4 avatars</p>
+    <p class="text-sm text-gray-600 mb-2">Show max 4 avatars</p>
     <AvatarGroup avatars={avatars} max={4} showCounter={true} />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Show max 5 avatars</p>
+    <p class="text-sm text-gray-600 mb-2">Show max 5 avatars</p>
     <AvatarGroup avatars={avatars} max={5} showCounter={true} />
   </div>
 </div>`" />
@@ -119,23 +119,23 @@ Limit the number of visible avatars and show a counter for remaining ones.
 Customize the border/ring around avatars.
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3" }
 ];
 
-<div class='space-y-4'>
-  <div class='bg-white p-4 rounded'>
-    <p class='text-sm text-gray-600 mb-2'>White Ring (default)</p>
-    <AvatarGroup avatars={avatars} ringColor='white' />
+<div class="space-y-4">
+  <div class="bg-white p-4 rounded">
+    <p class="text-sm text-gray-600 mb-2">White Ring (default)</p>
+    <AvatarGroup avatars={avatars} ringColor="white" />
   </div>
-  <div class='bg-gray-100 p-4 rounded'>
-    <p class='text-sm text-gray-600 mb-2'>Gray Ring</p>
-    <AvatarGroup avatars={avatars} ringColor='gray' />
+  <div class="bg-gray-100 p-4 rounded">
+    <p class="text-sm text-gray-600 mb-2">Gray Ring</p>
+    <AvatarGroup avatars={avatars} ringColor="gray" />
   </div>
-  <div class='bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded'>
-    <p class='text-sm text-gray-600 mb-2'>Transparent Ring</p>
-    <AvatarGroup avatars={avatars} ringColor='transparent' />
+  <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded">
+    <p class="text-sm text-gray-600 mb-2">Transparent Ring</p>
+    <AvatarGroup avatars={avatars} ringColor="transparent" />
   </div>
 </div>`" />
 
@@ -144,28 +144,28 @@ Customize the border/ring around avatars.
 Control spacing between avatars in grid layout.
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3' },
-  { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', alt: 'User 4' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3" },
+  { src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100", alt: "User 4" }
 ];
 
-<div class='space-y-4'>
+<div class="space-y-4">
   <div>
-    <p class='text-sm text-gray-600 mb-2'>No Spacing</p>
-    <GridAvatarGroup avatars={avatars} spacing='none' />
+    <p class="text-sm text-gray-600 mb-2">No Spacing</p>
+    <GridAvatarGroup avatars={avatars} spacing="none" />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Small Spacing</p>
-    <GridAvatarGroup avatars={avatars} spacing='sm' />
+    <p class="text-sm text-gray-600 mb-2">Small Spacing</p>
+    <GridAvatarGroup avatars={avatars} spacing="sm" />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Medium Spacing</p>
-    <GridAvatarGroup avatars={avatars} spacing='md' />
+    <p class="text-sm text-gray-600 mb-2">Medium Spacing</p>
+    <GridAvatarGroup avatars={avatars} spacing="md" />
   </div>
   <div>
-    <p class='text-sm text-gray-600 mb-2'>Large Spacing</p>
-    <GridAvatarGroup avatars={avatars} spacing='lg' />
+    <p class="text-sm text-gray-600 mb-2">Large Spacing</p>
+    <GridAvatarGroup avatars={avatars} spacing="lg" />
   </div>
 </div>`" />
 
@@ -174,10 +174,10 @@ Control spacing between avatars in grid layout.
 Enable tooltips to show names on hover.
 
 <LiveCodeEditor :defaultCode="`const avatars = [
-  { src: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100', alt: 'User 1', tooltip: 'Chris Lynch' },
-  { src: 'https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100', alt: 'User 2', tooltip: 'Maria Guan' },
-  { src: 'https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100', alt: 'User 3', tooltip: 'Amil Evara' },
-  { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', alt: 'User 4', tooltip: 'Bob Johnson' }
+  { src: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100", alt: "User 1", tooltip: "Chris Lynch" },
+  { src: "https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?w=100", alt: "User 2", tooltip: "Maria Guan" },
+  { src: "https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?w=100", alt: "User 3", tooltip: "Amil Evara" },
+  { src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100", alt: "User 4", tooltip: "Bob Johnson" }
 ];
 
 <AvatarGroup avatars={avatars} enableTooltips={true} hoverEffect={true} />`" />

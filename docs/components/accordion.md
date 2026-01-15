@@ -18,20 +18,20 @@ import type { AccordionItem } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'item-1',
-    title: 'What is Odyssee Components?',
-    content: 'Odyssee Components is a modern UI library built with Pulse Framework and Tailwind CSS, providing beautiful, accessible components.',
+    id: "item-1",
+    title: "What is Odyssee Components?",
+    content: "Odyssee Components is a modern UI library built with Pulse Framework and Tailwind CSS, providing beautiful, accessible components.",
     open: true
   },
   {
-    id: 'item-2',
-    title: 'How do I get started?',
-    content: 'Install the package via npm and import the components you need. Check our getting started guide for details.'
+    id: "item-2",
+    title: "How do I get started?",
+    content: "Install the package via npm and import the components you need. Check our getting started guide for details."
   },
   {
-    id: 'item-3',
-    title: 'Is TypeScript supported?',
-    content: 'Yes! All components have full TypeScript support with complete type definitions.'
+    id: "item-3",
+    title: "Is TypeScript supported?",
+    content: "Yes! All components have full TypeScript support with complete type definitions."
   }
 ];
 
@@ -45,20 +45,20 @@ The default variant with plus/minus icons.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'basic-1',
-    title: 'Accordion Item #1',
-    content: 'This is the first item accordion body with plus/minus icons.',
+    id: "basic-1",
+    title: "Accordion Item #1",
+    content: "This is the first item accordion body with plus/minus icons.",
     open: true
   },
   {
-    id: 'basic-2',
-    title: 'Accordion Item #2',
-    content: 'This is the second item accordion body.'
+    id: "basic-2",
+    title: "Accordion Item #2",
+    content: "This is the second item accordion body."
   },
   {
-    id: 'basic-3',
-    title: 'Accordion Item #3',
-    content: 'This is the third item accordion body.'
+    id: "basic-3",
+    title: "Accordion Item #3",
+    content: "This is the third item accordion body."
   }
 ];
 
@@ -70,15 +70,15 @@ Clean accordion without any icons.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'no-arrow-1',
-    title: 'Clean Design',
-    content: 'This accordion has no icons for a minimal, clean look.',
+    id: "no-arrow-1",
+    title: "Clean Design",
+    content: "This accordion has no icons for a minimal, clean look.",
     open: true
   },
   {
-    id: 'no-arrow-2',
-    title: 'Simple Interface',
-    content: 'Perfect for text-heavy content where icons might be distracting.'
+    id: "no-arrow-2",
+    title: "Simple Interface",
+    content: "Perfect for text-heavy content where icons might be distracting."
   }
 ];
 
@@ -90,15 +90,15 @@ Accordion with chevron up/down icons.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'arrow-1',
-    title: 'Modern Style',
-    content: 'This variant uses chevron icons for a modern appearance.',
+    id: "arrow-1",
+    title: "Modern Style",
+    content: "This variant uses chevron icons for a modern appearance.",
     open: true
   },
   {
-    id: 'arrow-2',
-    title: 'Clear Indicators',
-    content: 'Chevrons provide clear visual feedback for expandable content.'
+    id: "arrow-2",
+    title: "Clear Indicators",
+    content: "Chevrons provide clear visual feedback for expandable content."
   }
 ];
 
@@ -110,15 +110,15 @@ Title and arrow stretched to opposite ends.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'stretched-1',
-    title: 'Full Width Layout',
-    content: 'The title and icon span the full width for better visual balance.',
+    id: "stretched-1",
+    title: "Full Width Layout",
+    content: "The title and icon span the full width for better visual balance.",
     open: true
   },
   {
-    id: 'stretched-2',
-    title: 'Professional Look',
-    content: 'Great for professional dashboards and admin panels.'
+    id: "stretched-2",
+    title: "Professional Look",
+    content: "Great for professional dashboards and admin panels."
   }
 ];
 
@@ -130,20 +130,20 @@ Accordion with borders around each item.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'bordered-1',
-    title: 'Bordered Design',
-    content: 'Each accordion item has a border for clear separation.',
+    id: "bordered-1",
+    title: "Bordered Design",
+    content: "Each accordion item has a border for clear separation.",
     open: true
   },
   {
-    id: 'bordered-2',
-    title: 'Enhanced Structure',
-    content: 'Borders help define the accordion structure visually.'
+    id: "bordered-2",
+    title: "Enhanced Structure",
+    content: "Borders help define the accordion structure visually."
   },
   {
-    id: 'bordered-3',
-    title: 'Card-Like Appearance',
-    content: 'Works well in card-based layouts and modern interfaces.'
+    id: "bordered-3",
+    title: "Card-Like Appearance",
+    content: "Works well in card-based layouts and modern interfaces."
   }
 ];
 
@@ -155,20 +155,20 @@ Borders appear only on active (expanded) items.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'active-bordered-1',
-    title: 'Dynamic Borders',
-    content: 'Borders appear when this section is expanded, drawing attention to active content.',
+    id: "active-bordered-1",
+    title: "Dynamic Borders",
+    content: "Borders appear when this section is expanded, drawing attention to active content.",
     open: true
   },
   {
-    id: 'active-bordered-2',
-    title: 'Focus on Active',
-    content: 'This creates a clean look while highlighting expanded sections.'
+    id: "active-bordered-2",
+    title: "Focus on Active",
+    content: "This creates a clean look while highlighting expanded sections."
   },
   {
-    id: 'active-bordered-3',
-    title: 'Modern Interaction',
-    content: 'Great for contemporary designs with subtle interactions.'
+    id: "active-bordered-3",
+    title: "Modern Interaction",
+    content: "Great for contemporary designs with subtle interactions."
   }
 ];
 
@@ -180,21 +180,21 @@ Allow multiple sections to be open simultaneously.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'multi-1',
-    title: 'Section 1',
-    content: 'This section can remain open while others are expanded.',
+    id: "multi-1",
+    title: "Section 1",
+    content: "This section can remain open while others are expanded.",
     open: true
   },
   {
-    id: 'multi-2',
-    title: 'Section 2',
-    content: 'Multiple sections can be open at the same time.',
+    id: "multi-2",
+    title: "Section 2",
+    content: "Multiple sections can be open at the same time.",
     open: true
   },
   {
-    id: 'multi-3',
-    title: 'Section 3',
-    content: 'Use multiple={true} to enable this behavior.'
+    id: "multi-3",
+    title: "Section 3",
+    content: "Use multiple={true} to enable this behavior."
   }
 ];
 
@@ -206,21 +206,21 @@ Prevent specific items from being opened.
 
 <LiveCodeEditor :defaultCode="`const items = [
   {
-    id: 'disabled-1',
-    title: 'Available Section',
-    content: 'This section works normally and can be opened.',
+    id: "disabled-1",
+    title: "Available Section",
+    content: "This section works normally and can be opened.",
     open: true
   },
   {
-    id: 'disabled-2',
-    title: 'Disabled Section (Coming Soon)',
-    content: 'This content is not yet available.',
+    id: "disabled-2",
+    title: "Disabled Section (Coming Soon)",
+    content: "This content is not yet available.",
     disabled: true
   },
   {
-    id: 'disabled-3',
-    title: 'Another Available Section',
-    content: 'This section is also interactive.'
+    id: "disabled-3",
+    title: "Another Available Section",
+    content: "This section is also interactive."
   }
 ];
 
