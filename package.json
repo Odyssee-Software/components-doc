@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/standalone": "^7.28.6",
-    "@odyssee/components": "file:odyssee-components-1.0.0-rc.2.tgz",
-    "pulse-framework": "file:pulse-framework-0.1.0-rc.2-4.tar"
+    "@odyssee-software/components": "^1.0.0-rc.4.5",
+    "@odyssee-software/pulse-framework": "^0.1.0-rc.2-7"
   }
 }

@@ -10,7 +10,7 @@ Small count and labeling components used for displaying status, categories, noti
 ## Import
 
 ```tsx
-import { Badge, Pulse } from '@odyssee/components';
+import { Badge, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -175,7 +175,7 @@ const categoryTags = (
 Here's a comprehensive example with multiple features:
 
 ```tsx
-import { Badge, Pulse } from '@odyssee/components';
+import { Badge, Pulse } from '@odyssee-software/components';
 
 const ArticleCard = () => {
   const tags = Pulse.signal(['JavaScript', 'TypeScript', 'Pulse Framework']);
@@ -363,7 +363,7 @@ const customBadge = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { BadgeProps } from '@odyssee/components';
+import type { BadgeProps } from '@odyssee-software/components';
 
 const props: BadgeProps = {
   variant: 'solid',

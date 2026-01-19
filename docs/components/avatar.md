@@ -10,7 +10,7 @@ Display user avatars with support for images, initials, icons, status indicators
 ## Import
 
 ```tsx
-import { Avatar, Pulse } from '@odyssee/components';
+import { Avatar, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -186,7 +186,7 @@ const reactiveAvatar = (
 Here's a comprehensive example with multiple features:
 
 ```tsx
-import { Avatar, Badge, Pulse } from '@odyssee/components';
+import { Avatar, Badge, Pulse } from '@odyssee-software/components';
 
 const UserProfile = () => {
   const user = Pulse.signal({
@@ -426,7 +426,7 @@ const customAvatar = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { AvatarProps } from '@odyssee/components';
+import type { AvatarProps } from '@odyssee-software/components';
 
 const props: AvatarProps = {
   src: 'https://...',

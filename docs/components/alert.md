@@ -10,7 +10,7 @@ Display contextual feedback messages for typical user actions with flexible aler
 ## Import
 
 ```tsx
-import { Alert, Pulse } from '@odyssee/components';
+import { Alert, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -166,7 +166,7 @@ const reactiveAlert = (
 Here's a comprehensive example with multiple features:
 
 ```tsx
-import { Alert, Button, Pulse } from '@odyssee/components';
+import { Alert, Button, Pulse } from '@odyssee-software/components';
 
 const NotificationSystem = () => {
   const alerts = Pulse.signal<Array<{

@@ -10,7 +10,7 @@ Display chat messages in a conversational interface with support for user/bot me
 ## Import
 
 ```ts
-import { ChatBubble, UserChatBubble, BotChatBubble, ChatBubbleList } from '@odyssee/components';
+import { ChatBubble, UserChatBubble, BotChatBubble, ChatBubbleList } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -176,7 +176,7 @@ const richBubble = (
 Create interactive chat interfaces with Pulse signals.
 
 ```tsx
-import { ChatBubble, ChatBubbleList, Input, Button, Pulse } from '@odyssee/components';
+import { ChatBubble, ChatBubbleList, Input, Button, Pulse } from '@odyssee-software/components';
 
 const ChatInterface = () => {
   const messages = Pulse.signal([
@@ -257,7 +257,7 @@ const ChatInterface = () => {
 ## Complete Example: Customer Support Chat
 
 ```tsx
-import { ChatBubble, ChatBubbleList, Card, Badge, Pulse } from '@odyssee/components';
+import { ChatBubble, ChatBubbleList, Card, Badge, Pulse } from '@odyssee-software/components';
 
 const SupportChat = () => {
   const chatHistory = [
@@ -600,7 +600,7 @@ const darkModeChat = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { ChatBubbleProps, ChatContentItem, ChatStatus } from '@odyssee/components';
+import type { ChatBubbleProps, ChatContentItem, ChatStatus } from '@odyssee-software/components';
 
 // Type-safe content items
 const contentItems: ChatContentItem[] = [

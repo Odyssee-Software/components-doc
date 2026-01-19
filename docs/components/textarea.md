@@ -10,7 +10,7 @@ A versatile multiline text input component with support for labels, validation, 
 ## Import
 
 ```tsx
-import { Textarea, Pulse } from '@odyssee/components';
+import { Textarea, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -212,7 +212,7 @@ const FeedbackForm = () => {
 Here's a comprehensive comment form with all features:
 
 ```tsx
-import { Textarea, Button, Alert, Pulse } from '@odyssee/components';
+import { Textarea, Button, Alert, Pulse } from '@odyssee-software/components';
 
 const CommentForm = () => {
   const comment = Pulse.signal('');
@@ -505,7 +505,7 @@ const customTextarea = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { TextareaProps } from '@odyssee/components';
+import type { TextareaProps } from '@odyssee-software/components';
 
 const props: TextareaProps = {
   label: 'Message',

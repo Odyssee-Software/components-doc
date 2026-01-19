@@ -10,7 +10,7 @@ A flexible text input component with labels, hints, validation states, icons, an
 ## Import
 
 ```tsx
-import { Input, Pulse } from '@odyssee/components';
+import { Input, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -171,7 +171,7 @@ const validatedInput = (
 ## Complete Example - Login Form
 
 ```tsx
-import { Input, Button, Pulse } from '@odyssee/components';
+import { Input, Button, Pulse } from '@odyssee-software/components';
 
 const LoginForm = () => {
   const email = Pulse.signal('');
@@ -445,7 +445,7 @@ const customInput = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { InputProps } from '@odyssee/components';
+import type { InputProps } from '@odyssee-software/components';
 
 const props: InputProps = {
   type: 'email',

@@ -10,7 +10,7 @@ A versatile dropdown select component with support for option groups, validation
 ## Import
 
 ```tsx
-import { Select, Pulse } from '@odyssee/components';
+import { Select, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -300,7 +300,7 @@ const RegistrationForm = () => {
 Here's a comprehensive user profile form with multiple selects:
 
 ```tsx
-import { Select, Input, Button, Alert, Pulse } from '@odyssee/components';
+import { Select, Input, Button, Alert, Pulse } from '@odyssee-software/components';
 
 const UserProfileForm = () => {
   const profile = Pulse.signal({
@@ -652,7 +652,7 @@ const customSelect = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { SelectProps, SelectOption } from '@odyssee/components';
+import type { SelectProps, SelectOption } from '@odyssee-software/components';
 
 const options: SelectOption[] = [
   { value: 'opt1', label: 'Option 1' },

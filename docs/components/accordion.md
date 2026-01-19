@@ -10,7 +10,7 @@ Expand and collapse content sections to organize information efficiently. Perfec
 ## Import
 
 ```ts
-import { Accordion, BasicAccordion, BorderedAccordion, type AccordionItem } from '@odyssee/components';
+import { Accordion, BasicAccordion, BorderedAccordion, type AccordionItem } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -212,8 +212,8 @@ Prevent specific items from being opened.
 Control accordion state with Pulse signals for dynamic behavior.
 
 ```tsx
-import { Accordion, Button, Pulse } from '@odyssee/components';
-import type { AccordionItem } from '@odyssee/components';
+import { Accordion, Button, Pulse } from '@odyssee-software/components';
+import type { AccordionItem } from '@odyssee-software/components';
 
 const ReactiveAccordion = () => {
   // Create reactive items
@@ -304,8 +304,8 @@ const richItems: AccordionItem[] = [
 A comprehensive FAQ section with multiple features.
 
 ```tsx
-import { Accordion, Badge, Card, Input, Pulse } from '@odyssee/components';
-import type { AccordionItem } from '@odyssee/components';
+import { Accordion, Badge, Card, Input, Pulse } from '@odyssee-software/components';
+import type { AccordionItem } from '@odyssee-software/components';
 
 const FAQSection = () => {
   const searchQuery = Pulse.signal('');
@@ -686,7 +686,7 @@ const darkModeAccordion = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { AccordionProps, AccordionItem } from '@odyssee/components';
+import type { AccordionProps, AccordionItem } from '@odyssee-software/components';
 
 // Type-safe item definition
 const items: AccordionItem[] = [

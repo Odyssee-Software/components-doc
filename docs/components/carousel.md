@@ -10,7 +10,7 @@ Showcase content in a dynamic slideshow format with smooth transitions, autoplay
 ## Import
 
 ```ts
-import { Carousel, AutoPlayCarousel, ThumbnailCarousel, type CarouselSlide } from '@odyssee/components';
+import { Carousel, AutoPlayCarousel, ThumbnailCarousel, type CarouselSlide } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -194,8 +194,8 @@ const carousel = (
 Control carousel state with Pulse signals.
 
 ```tsx
-import { Carousel, Button, Pulse } from '@odyssee/components';
-import type { CarouselSlide } from '@odyssee/components';
+import { Carousel, Button, Pulse } from '@odyssee-software/components';
+import type { CarouselSlide } from '@odyssee-software/components';
 
 const InteractiveCarousel = () => {
   const currentSlide = Pulse.signal(0);
@@ -294,8 +294,8 @@ const productCarousel = (
 A full-featured hero carousel for landing pages.
 
 ```tsx
-import { Carousel, Button, Badge, Pulse } from '@odyssee/components';
-import type { CarouselSlide } from '@odyssee/components';
+import { Carousel, Button, Badge, Pulse } from '@odyssee-software/components';
+import type { CarouselSlide } from '@odyssee-software/components';
 
 const HeroCarousel = () => {
   const currentSlide = Pulse.signal(0);
@@ -683,7 +683,7 @@ const darkModeCarousel = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { CarouselProps, CarouselSlide } from '@odyssee/components';
+import type { CarouselProps, CarouselSlide } from '@odyssee-software/components';
 
 // Type-safe slide definition
 const slides: CarouselSlide[] = [

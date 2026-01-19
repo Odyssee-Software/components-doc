@@ -10,7 +10,7 @@ Display progress with elegant linear bars, circular indicators, or gauge visuali
 ## Import
 
 ```tsx
-import { Progress, Pulse } from '@odyssee/components';
+import { Progress, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -109,7 +109,7 @@ const verticalProgress = (
 Use Pulse signals for dynamic progress updates.
 
 ```tsx
-import { Progress, Button, Pulse } from '@odyssee/components';
+import { Progress, Button, Pulse } from '@odyssee-software/components';
 
 const FileUploader = () => {
   const uploadProgress = Pulse.signal(0);
@@ -222,7 +222,7 @@ const progress = (
 Here's a comprehensive multi-step form with progress tracking:
 
 ```tsx
-import { Progress, Button, Card, Badge, Pulse } from '@odyssee/components';
+import { Progress, Button, Card, Badge, Pulse } from '@odyssee-software/components';
 
 const MultiStepForm = () => {
   const currentStep = Pulse.signal(1);
@@ -534,7 +534,7 @@ const customProgress = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { ProgressProps } from '@odyssee/components';
+import type { ProgressProps } from '@odyssee-software/components';
 
 const props: ProgressProps = {
   value: 50,

@@ -10,7 +10,7 @@ A flexible radio button component for single selections from multiple options. S
 ## Import
 
 ```tsx
-import { Radio, Pulse } from '@odyssee/components';
+import { Radio, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -343,7 +343,7 @@ const PreferenceForm = () => {
 Here's a comprehensive checkout form with radio buttons:
 
 ```tsx
-import { Radio, Input, Button, Card, Alert, Pulse } from '@odyssee/components';
+import { Radio, Input, Button, Card, Alert, Pulse } from '@odyssee-software/components';
 
 const CheckoutForm = () => {
   const formData = Pulse.signal({
@@ -694,7 +694,7 @@ const customRadio = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { RadioProps } from '@odyssee/components';
+import type { RadioProps } from '@odyssee-software/components';
 
 const props: RadioProps = {
   name: 'option',

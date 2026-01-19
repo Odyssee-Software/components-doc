@@ -16,7 +16,7 @@ Before you begin, make sure you have:
 - **Pulse Framework** project set up
 
 ::: tip New to Pulse?
-If you're new to Pulse Framework, check out the [Pulse Framework Guide](/guide/pulse-framework) to learn about signals, computed values, and reactive programming.
+If you're new to Pulse Framework, check out the [Pulse Framework Guide](/guide/pulse-framework/) to learn about signals, computed values, and reactive programming.
 :::
 
 ## Installation

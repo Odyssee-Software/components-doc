@@ -10,7 +10,7 @@ Upload files with a polished interface supporting drag-and-drop, validation, mul
 ## Import
 
 ```ts
-import { FileInput } from '@odyssee/components';
+import { FileInput } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -109,7 +109,7 @@ Available sizes: `xs`, `sm`, `md`, `lg`, `xl`.
 Handle file uploads with Pulse signals.
 
 ```tsx
-import { FileInput, Button, Progress, Pulse } from '@odyssee/components';
+import { FileInput, Button, Progress, Pulse } from '@odyssee-software/components';
 
 const FileUploader = () => {
   const selectedFiles = Pulse.signal<FileList | null>(null);
@@ -205,7 +205,7 @@ const FileUploader = () => {
 ## Complete Example: Profile Photo Upload
 
 ```tsx
-import { FileInput, Avatar, Button, Card, Pulse } from '@odyssee/components';
+import { FileInput, Avatar, Button, Card, Pulse } from '@odyssee-software/components';
 
 const ProfilePhotoUpload = () => {
   const selectedFile = Pulse.signal<File | null>(null);
@@ -550,7 +550,7 @@ const darkModeInput = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { FileInputProps } from '@odyssee/components';
+import type { FileInputProps } from '@odyssee-software/components';
 
 // Type-safe props
 const props: FileInputProps = {

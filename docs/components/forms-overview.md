@@ -126,7 +126,7 @@ import {
   Button,
   FormGroup,
   Pulse 
-} from '@odyssee/components';
+} from '@odyssee-software/components';
 
 const RegistrationForm = () => {
   // Form state

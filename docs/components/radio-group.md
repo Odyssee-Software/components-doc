@@ -10,7 +10,7 @@ A convenient wrapper component for managing multiple radio buttons as a group. S
 ## Import
 
 ```tsx
-import { RadioGroup, Pulse } from '@odyssee/components';
+import { RadioGroup, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -280,7 +280,7 @@ const SurveyForm = () => {
 Here's a comprehensive registration form with RadioGroup:
 
 ```tsx
-import { RadioGroup, Input, Button, Card, Alert, Pulse } from '@odyssee/components';
+import { RadioGroup, Input, Button, Card, Alert, Pulse } from '@odyssee-software/components';
 
 const RegistrationForm = () => {
   const formData = Pulse.signal({
@@ -673,7 +673,7 @@ const customRadioGroup = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { RadioGroupProps, RadioOption } from '@odyssee/components';
+import type { RadioGroupProps, RadioOption } from '@odyssee-software/components';
 
 const options: RadioOption[] = [
   { value: 'opt1', label: 'Option 1' },

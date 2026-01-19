@@ -32,7 +32,23 @@ export default defineConfig({
           items: [
             { text: "Getting Started", link: "/guide/getting-started" },
             { text: "Installation", link: "/guide/installation" },
-            { text: "Pulse Framework", link: "/guide/pulse-framework" },
+          ],
+        },
+        {
+          text: "Pulse Framework",
+          collapsed: false,
+          items: [
+            { text: "Overview", link: "/guide/pulse-framework/" },
+            { text: "Reactivity", link: "/guide/pulse-framework/reactivity" },
+            { text: "Components", link: "/guide/pulse-framework/components" },
+            {
+              text: "Advanced Patterns",
+              link: "/guide/pulse-framework/advanced",
+            },
+            {
+              text: "Pulse vs React",
+              link: "/guide/pulse-framework/comparison",
+            },
           ],
         },
       ],

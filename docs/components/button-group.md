@@ -10,7 +10,7 @@ Group related buttons together with seamless styling and flexible layouts. Perfe
 ## Import
 
 ```tsx
-import { ButtonGroup, Pulse } from '@odyssee/components';
+import { ButtonGroup, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -244,7 +244,7 @@ const FilterButtons = () => {
 Here's a comprehensive text editor toolbar:
 
 ```tsx
-import { ButtonGroup, Card, Pulse } from '@odyssee/components';
+import { ButtonGroup, Card, Pulse } from '@odyssee-software/components';
 
 const TextEditor = () => {
   const textFormatting = Pulse.signal(['bold']);
@@ -542,7 +542,7 @@ const customButtonGroup = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { ButtonGroupProps, ButtonGroupItem } from '@odyssee/components';
+import type { ButtonGroupProps, ButtonGroupItem } from '@odyssee-software/components';
 
 const buttons: ButtonGroupItem[] = [
   { label: 'Option 1', value: '1' },

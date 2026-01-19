@@ -10,7 +10,7 @@ Select numeric values within a defined range using an intuitive slider interface
 ## Import
 
 ```ts
-import { RangeSlider } from '@odyssee/components';
+import { RangeSlider } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -134,7 +134,7 @@ Format the displayed value with a custom function.
 Control slider value with Pulse signals.
 
 ```tsx
-import { RangeSlider, Button, Pulse } from '@odyssee/components';
+import { RangeSlider, Button, Pulse } from '@odyssee-software/components';
 
 const VolumeControl = () => {
   const volume = Pulse.signal(50);
@@ -207,7 +207,7 @@ const VolumeControl = () => {
 ## Complete Example: Image Editor
 
 ```tsx
-import { RangeSlider, Card, Button, Pulse } from '@odyssee/components';
+import { RangeSlider, Card, Button, Pulse } from '@odyssee-software/components';
 
 const ImageEditor = () => {
   const brightness = Pulse.signal(100);
@@ -549,8 +549,8 @@ const darkModeSlider = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { RangeSliderProps } from '@odyssee/components';
-import { Pulse } from '@odyssee/components';
+import type { RangeSliderProps } from '@odyssee-software/components';
+import { Pulse } from '@odyssee-software/components';
 
 // Type-safe props
 const props: RangeSliderProps = {

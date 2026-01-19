@@ -10,7 +10,7 @@ A flexible card component for displaying content in a contained, organized forma
 ## Import
 
 ```tsx
-import { Card, Pulse } from '@odyssee/components';
+import { Card, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -210,7 +210,7 @@ const cardWithActions = (
 Use Pulse signals to create dynamic cards.
 
 ```tsx
-import { Card, Button, Pulse } from '@odyssee/components';
+import { Card, Button, Pulse } from '@odyssee-software/components';
 
 const DynamicCard = () => {
   const likes = Pulse.signal(42);
@@ -252,7 +252,7 @@ const DynamicCard = () => {
 Here's a comprehensive example combining multiple features:
 
 ```tsx
-import { Card, Badge, Button, Avatar, Pulse } from '@odyssee/components';
+import { Card, Badge, Button, Avatar, Pulse } from '@odyssee-software/components';
 
 const BlogPostCard = () => {
   const post = Pulse.signal({
@@ -511,7 +511,7 @@ const customCard = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { CardProps } from '@odyssee/components';
+import type { CardProps } from '@odyssee-software/components';
 
 const props: CardProps = {
   title: 'TypeScript Card',

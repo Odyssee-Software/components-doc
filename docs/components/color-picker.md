@@ -10,7 +10,7 @@ Select colors using an intuitive color picker interface with hex value display. 
 ## Import
 
 ```ts
-import { ColorPicker } from '@odyssee/components';
+import { ColorPicker } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -83,7 +83,7 @@ Available sizes: `xs`, `sm`, `md`, `lg`, `xl`.
 Control color with Pulse signals.
 
 ```tsx
-import { ColorPicker, Card, Button, Pulse } from '@odyssee/components';
+import { ColorPicker, Card, Button, Pulse } from '@odyssee-software/components';
 
 const ThemeCustomizer = () => {
   const primaryColor = Pulse.signal('#3b82f6');
@@ -168,7 +168,7 @@ const ThemeCustomizer = () => {
 ## Complete Example: Brand Color Manager
 
 ```tsx
-import { ColorPicker, Card, Button, Badge, Pulse } from '@odyssee/components';
+import { ColorPicker, Card, Button, Badge, Pulse } from '@odyssee-software/components';
 
 const BrandColorManager = () => {
   const brandColors = Pulse.signal([
@@ -511,8 +511,8 @@ const darkModePicker = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { ColorPickerProps } from '@odyssee/components';
-import { Pulse } from '@odyssee/components';
+import type { ColorPickerProps } from '@odyssee-software/components';
+import { Pulse } from '@odyssee-software/components';
 
 // Type-safe props
 const props: ColorPickerProps = {

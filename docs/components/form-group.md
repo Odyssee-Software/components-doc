@@ -10,7 +10,7 @@ Organize and structure form fields with consistent spacing, layout, and visual g
 ## Import
 
 ```ts
-import { FormGroup } from '@odyssee/components';
+import { FormGroup } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -125,7 +125,7 @@ Control spacing between form fields.
 Build dynamic forms with Pulse signals.
 
 ```tsx
-import { FormGroup, Input, Select, Button, Pulse } from '@odyssee/components';
+import { FormGroup, Input, Select, Button, Pulse } from '@odyssee-software/components';
 
 const DynamicForm = () => {
   const formData = Pulse.signal({
@@ -250,7 +250,7 @@ const DynamicForm = () => {
 ## Complete Example: User Profile Form
 
 ```tsx
-import { FormGroup, Input, Textarea, Select, Toggle, Button, Card, Pulse } from '@odyssee/components';
+import { FormGroup, Input, Textarea, Select, Toggle, Button, Card, Pulse } from '@odyssee-software/components';
 
 const UserProfileForm = () => {
   const profile = Pulse.signal({
@@ -703,7 +703,7 @@ const darkModeForm = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { FormGroupProps } from '@odyssee/components';
+import type { FormGroupProps } from '@odyssee-software/components';
 
 // Type-safe props
 const props: FormGroupProps = {

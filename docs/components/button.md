@@ -18,7 +18,7 @@ Modifiez le code ci-dessous et voyez le résultat en temps réel :
 ## Import
 
 ```tsx
-import { Button, Pulse } from '@odyssee/components';
+import { Button, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -226,7 +226,7 @@ const customBtn = (
 Here's a comprehensive example combining multiple features:
 
 ```tsx
-import { Button, Input, Pulse } from '@odyssee/components';
+import { Button, Input, Pulse } from '@odyssee-software/components';
 
 const LoginForm = () => {
   const email = Pulse.signal('');
@@ -419,7 +419,7 @@ const customColorBtn = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { ButtonProps } from '@odyssee/components';
+import type { ButtonProps } from '@odyssee-software/components';
 
 const props: ButtonProps = {
   variant: 'solid',

@@ -10,7 +10,7 @@ Show and hide content with smooth animations. Perfect for FAQs, expandable secti
 ## Import
 
 ```tsx
-import { Collapse, Pulse } from '@odyssee/components';
+import { Collapse, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -210,7 +210,7 @@ const FAQSection = () => {
 Here's a comprehensive example with multiple features:
 
 ```tsx
-import { Collapse, Card, Badge, Pulse } from '@odyssee/components';
+import { Collapse, Card, Badge, Pulse } from '@odyssee-software/components';
 
 const ProductDetails = () => {
   const specsOpen = Pulse.signal(false);
@@ -526,7 +526,7 @@ const customCollapse = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { CollapseProps } from '@odyssee/components';
+import type { CollapseProps } from '@odyssee-software/components';
 
 const props: CollapseProps = {
   trigger: 'TypeScript Collapse',

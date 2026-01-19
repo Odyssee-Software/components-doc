@@ -31,8 +31,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: 🔑 Add authentication token to ~/.npmrc
+        run: echo "@odyssee-software:registry=https://npm.pkg.github.com/" > .npmrc && echo "//npm.pkg.github.com/:_authToken=${{secrets.PUBLISH_TOKEN}}" >> .npmrc
+
       - name: Install dependencies
-        run: npm ci
+        run: npm i
 
       - name: Build with VitePress
         run: npm run docs:build

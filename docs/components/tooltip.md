@@ -10,7 +10,7 @@ Display contextual information on hover or focus. Perfect for providing hints, d
 ## Import
 
 ```tsx
-import { Tooltip, Pulse } from '@odyssee/components';
+import { Tooltip, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -226,7 +226,7 @@ const NavigationWithTooltips = () => (
 Here's a comprehensive toolbar with tooltips:
 
 ```tsx
-import { Tooltip, Button, Badge, Pulse } from '@odyssee/components';
+import { Tooltip, Button, Badge, Pulse } from '@odyssee-software/components';
 
 const EditorToolbar = () => {
   const isBold = Pulse.signal(false);
@@ -568,7 +568,7 @@ const customTooltip = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { TooltipProps } from '@odyssee/components';
+import type { TooltipProps } from '@odyssee-software/components';
 
 const props: TooltipProps = {
   content: 'TypeScript tooltip',

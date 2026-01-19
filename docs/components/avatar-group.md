@@ -10,7 +10,7 @@ Display collections of user avatars in elegant stack or grid layouts. Perfect fo
 ## Import
 
 ```ts
-import { AvatarGroup, StackAvatarGroup, GridAvatarGroup, type AvatarGroupItem } from '@odyssee/components';
+import { AvatarGroup, StackAvatarGroup, GridAvatarGroup, type AvatarGroupItem } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -246,8 +246,8 @@ const groupWithDropdown = (
 Dynamically update avatar groups with Pulse signals.
 
 ```tsx
-import { AvatarGroup, Button, Pulse } from '@odyssee/components';
-import type { AvatarGroupItem } from '@odyssee/components';
+import { AvatarGroup, Button, Pulse } from '@odyssee-software/components';
+import type { AvatarGroupItem } from '@odyssee-software/components';
 
 const TeamMembers = () => {
   const allMembers: AvatarGroupItem[] = [
@@ -304,8 +304,8 @@ const TeamMembers = () => {
 A comprehensive example showing team members with various interactions.
 
 ```tsx
-import { AvatarGroup, Card, Badge, Button, Pulse } from '@odyssee/components';
-import type { AvatarGroupItem } from '@odyssee/components';
+import { AvatarGroup, Card, Badge, Button, Pulse } from '@odyssee-software/components';
+import type { AvatarGroupItem } from '@odyssee-software/components';
 
 const TeamDashboard = () => {
   const activeMembers: AvatarGroupItem[] = [
@@ -690,7 +690,7 @@ const darkModeGroup = (
 Full TypeScript support with complete type definitions.
 
 ```tsx
-import type { AvatarGroupProps, AvatarGroupItem } from '@odyssee/components';
+import type { AvatarGroupProps, AvatarGroupItem } from '@odyssee-software/components';
 
 // Type-safe avatar items
 const members: AvatarGroupItem[] = [

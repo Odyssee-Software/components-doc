@@ -10,7 +10,7 @@ Display content in an overlay dialog with backdrop, animations, and flexible siz
 ## Import
 
 ```tsx
-import { Modal, Pulse } from '@odyssee/components';
+import { Modal, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -332,7 +332,7 @@ const ConfirmationDialog = ({ onConfirm }) => {
 Here's a comprehensive example with multiple features:
 
 ```tsx
-import { Modal, Button, Input, Alert, Pulse } from '@odyssee/components';
+import { Modal, Button, Input, Alert, Pulse } from '@odyssee-software/components';
 
 const UserManagementModal = () => {
   const isOpen = Pulse.signal(false);
@@ -662,7 +662,7 @@ const customModal = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { ModalProps } from '@odyssee/components';
+import type { ModalProps } from '@odyssee-software/components';
 
 const props: ModalProps = {
   isOpen: true,

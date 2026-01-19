@@ -10,7 +10,7 @@ A sleek toggle switch component for binary on/off states. Supports labels, descr
 ## Import
 
 ```tsx
-import { Toggle, Pulse } from '@odyssee/components';
+import { Toggle, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -291,7 +291,7 @@ const ConsentForm = () => {
 Here's a comprehensive preferences form with multiple toggle groups:
 
 ```tsx
-import { Toggle, Button, Card, Alert, Pulse } from '@odyssee/components';
+import { Toggle, Button, Card, Alert, Pulse } from '@odyssee-software/components';
 
 const PreferencesForm = () => {
   const preferences = Pulse.signal({
@@ -650,7 +650,7 @@ const customToggle = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { ToggleProps } from '@odyssee/components';
+import type { ToggleProps } from '@odyssee-software/components';
 
 const props: ToggleProps = {
   label: 'Enable feature',

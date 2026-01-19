@@ -10,7 +10,7 @@ Display quoted text with elegant styling, author attribution, and flexible layou
 ## Import
 
 ```tsx
-import { Blockquote, Pulse } from '@odyssee/components';
+import { Blockquote, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -177,7 +177,7 @@ const TestimonialCard = () => (
 Use Pulse signals for dynamic quotes.
 
 ```tsx
-import { Blockquote, Button, Pulse } from '@odyssee/components';
+import { Blockquote, Button, Pulse } from '@odyssee-software/components';
 
 const QuoteRotator = () => {
   const quotes = [
@@ -227,7 +227,7 @@ const QuoteRotator = () => {
 Here's a comprehensive testimonial section:
 
 ```tsx
-import { Blockquote, Badge, Avatar, Pulse } from '@odyssee/components';
+import { Blockquote, Badge, Avatar, Pulse } from '@odyssee-software/components';
 
 const TestimonialSection = () => {
   const testimonials = [
@@ -462,7 +462,7 @@ const customBlockquote = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { BlockquoteProps, BlockquoteAuthor } from '@odyssee/components';
+import type { BlockquoteProps, BlockquoteAuthor } from '@odyssee-software/components';
 
 const author: BlockquoteAuthor = {
   name: 'John Doe',

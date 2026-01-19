@@ -10,7 +10,7 @@ A flexible checkbox component with support for labels, descriptions, indetermina
 ## Import
 
 ```tsx
-import { Checkbox, Pulse } from '@odyssee/components';
+import { Checkbox, Pulse } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
@@ -272,7 +272,7 @@ const TermsForm = () => {
 Here's a comprehensive settings form with multiple checkbox groups:
 
 ```tsx
-import { Checkbox, Button, Card, Alert, Pulse } from '@odyssee/components';
+import { Checkbox, Button, Card, Alert, Pulse } from '@odyssee-software/components';
 
 const SettingsForm = () => {
   const settings = Pulse.signal({
@@ -642,7 +642,7 @@ const customCheckbox = (
 Full TypeScript support with complete type definitions:
 
 ```tsx
-import type { CheckboxProps } from '@odyssee/components';
+import type { CheckboxProps } from '@odyssee-software/components';
 
 const props: CheckboxProps = {
   label: 'Subscribe',

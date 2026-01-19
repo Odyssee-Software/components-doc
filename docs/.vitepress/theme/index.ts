@@ -1,7 +1,7 @@
 import DefaultTheme from "vitepress/theme";
 import type { Theme } from "vitepress";
 import "./custom.css";
-import "@odyssee/components/styles";
+import "@odyssee-software/components/styles";
 import ButtonDemo from "./components/ButtonDemo.vue";
 import PulseButton from "./components/PulseButton.vue";
 import LiveCodeEditor from "./components/LiveCodeEditor.vue";
