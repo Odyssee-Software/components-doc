@@ -120,7 +120,16 @@ export default defineConfig({
   // Vite configuration for Pulse Framework
   vite: {
     ssr: {
-      noExternal: ["@odyssee/components"],
+      noExternal: ["@odyssee-software/components"],
+    },
+    css: {
+      postcss: {
+        plugins: [],
+      },
+    },
+    // Force CSS injection order: load Odyssee components CSS after VitePress
+    build: {
+      cssCodeSplit: false,
     },
   },
 

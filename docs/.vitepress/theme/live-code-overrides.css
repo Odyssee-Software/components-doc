@@ -1,0 +1,54 @@
+/**
+ * LiveCodeEditor CSS Overrides
+ * This file MUST be imported LAST to override VitePress base styles
+ * for components rendered in the LiveCodeEditor preview
+ */
+
+/* Reset VitePress button styles inside LiveCodeEditor preview */
+#odyssee-live-preview button,
+#odyssee-live-preview input,
+#odyssee-live-preview select,
+#odyssee-live-preview textarea,
+#odyssee-live-preview optgroup {
+    /* Override VitePress resets with !important to ensure Tailwind classes work */
+    background-color: revert !important;
+    background-image: revert !important;
+    border: revert !important;
+    padding: revert !important;
+    font-family: revert !important;
+    font-size: revert !important;
+    line-height: revert !important;
+    color: revert !important;
+    margin: revert !important;
+}
+
+/* Reset link styles */
+#odyssee-live-preview a {
+    text-decoration: revert !important;
+    color: revert !important;
+}
+
+/* Reset list styles */
+#odyssee-live-preview ul,
+#odyssee-live-preview ol,
+#odyssee-live-preview menu {
+    list-style: revert !important;
+}
+
+/* Reset heading styles */
+#odyssee-live-preview h1,
+#odyssee-live-preview h2,
+#odyssee-live-preview h3,
+#odyssee-live-preview h4,
+#odyssee-live-preview h5,
+#odyssee-live-preview h6 {
+    font-size: revert !important;
+    font-weight: revert !important;
+}
+
+/* Ensure box-sizing works properly with Tailwind */
+#odyssee-live-preview *,
+#odyssee-live-preview *::before,
+#odyssee-live-preview *::after {
+    box-sizing: border-box;
+}

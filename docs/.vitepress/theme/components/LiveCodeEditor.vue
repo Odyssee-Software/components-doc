@@ -21,7 +21,13 @@
         </div>
 
         <div class="preview-container">
-            <div ref="previewRef" class="preview-content"></div>
+            <iframe
+                ref="iframeRef"
+                class="preview-iframe"
+                sandbox="allow-scripts allow-same-origin"
+                :srcdoc="iframeContent"
+                title="Component Preview"
+            ></iframe>
             <div v-if="error" class="error-message">{{ error }}</div>
         </div>
     </div>
@@ -43,89 +49,290 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
-const previewRef = ref<HTMLDivElement | null>(null);
+const iframeRef = ref<HTMLIFrameElement | null>(null);
 const currentCode = ref(props.code || props.defaultCode);
 const error = ref<string | null>(null);
+const iframeContent = ref("");
 
 let debounceTimer: number | null = null;
+let iframeReady = false;
+let modulesLoaded = false;
 
-const executeCode = async () => {
-    if (!previewRef.value) return;
+// Preload modules and CSS in parent
+let Pulse: any = null;
+let components: any = null;
+let Babel: any = null;
+let cssContent: string = "";
 
-    error.value = null;
-    previewRef.value.innerHTML = "";
+const loadModules = async () => {
+    if (modulesLoaded) return;
 
     try {
-        // Dynamic import to avoid SSR issues
-        const Pulse = (await import("@odyssee-software/pulse-framework"))
-            .default;
-        const components = await import("@odyssee-software//components");
+        Pulse = (await import("@odyssee-software/pulse-framework")).default;
+        components = await import("@odyssee-software/components");
+        const BabelModule = await import("@babel/standalone");
+        Babel = BabelModule.default || BabelModule;
 
-        // Import Babel and check what we get
-        const babelModule = await import("@babel/standalone");
-        console.log("Babel module:", babelModule);
-        console.log("Babel.default:", babelModule.default);
-        console.log("Babel keys:", Object.keys(babelModule));
+        // Load CSS content as string
+        console.log("🔍 Loading CSS...");
+        const cssModule =
+            await import("@odyssee-software/components/styles?inline");
+        cssContent = cssModule.default || cssModule;
+        console.log("🔍 CSS loaded:", typeof cssContent);
+        console.log("🔍 CSS length:", cssContent?.length || 0);
 
-        const Babel = babelModule.default || babelModule;
-        console.log("Final Babel:", Babel);
-        console.log("Babel.transform:", Babel?.transform);
+        modulesLoaded = true;
+        console.log("✅ Modules loaded");
+    } catch (err) {
+        console.error("❌ Failed to load modules:", err);
+        throw err;
+    }
+};
 
-        // Create scope with all components
-        const scope = {
-            Pulse,
-            ...components,
+// Listen for messages from iframe
+const handleIframeMessage = (event: MessageEvent) => {
+    if (event.data.type === "IFRAME_READY") {
+        iframeReady = true;
+        executeCode();
+    } else if (event.data.type === "ERROR") {
+        error.value = event.data.error;
+    }
+};
+
+// Generate the HTML document for the iframe
+const generateIframeDocument = () => {
+    console.log("🔍 Generating iframe document");
+    console.log("🔍 CSS content available:", !!cssContent);
+    console.log("🔍 CSS length in template:", cssContent?.length || 0);
+
+    // Use variables to avoid Vue parsing HTML tags in template string
+    const htmlOpen = '<!DOCTYPE html>\n<html lang="en">\n<head>';
+    const headClose = "</head>";
+    const bodyOpen = "<body>";
+    const bodyClose = "</body>\n</html>";
+
+    return (
+        htmlOpen +
+        `
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview</title>
+
+    <!-- Load lodash (required by Preline) -->
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"><\/script>
+
+    <!-- Load Preline -->
+    <script src="https://cdn.jsdelivr.net/npm/preline@2.4.1/dist/preline.js"><\/script>
+
+    <style>
+        ${cssContent}
+    </style>
+    <style>
+        body {
+            margin: 0;
+            padding: 1.5rem;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: transparent;
+        }
+        #preview {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .error {
+            color: #dc2626;
+            padding: 1rem;
+            background: #fee2e2;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+    </style>
+` +
+        headClose +
+        bodyOpen +
+        `
+    <div id="preview"></div>
+    <script>
+        // Execute code with dependencies passed from parent
+        const executeCode = (code, Pulse, components, Babel) => {
+            try {
+                console.log('🔍 Iframe: executeCode called');
+                console.log('🔍 Code:', code);
+                console.log('🔍 Pulse:', Pulse);
+                console.log('🔍 Components:', Object.keys(components));
+                console.log('🔍 Babel:', Babel);
+
+                // Create scope with all components
+                const scope = {
+                    Pulse,
+                    ...components,
+                };
+
+                // Build the function with scope
+                const scopeKeys = Object.keys(scope);
+                const scopeValues = Object.values(scope);
+
+                let codeToExecute = code.trim();
+                console.log('🔍 Code to execute:', codeToExecute);
+
+                // Check if code is JSX (starts with <)
+                const isJSX = codeToExecute.startsWith("<");
+
+                if (isJSX) {
+                    console.log('🔍 Compiling JSX...');
+                    // Compile JSX to JS
+                    const transformed = Babel.transform(codeToExecute, {
+                        presets: ["react"],
+                        plugins: [
+                            [
+                                "transform-react-jsx",
+                                {
+                                    pragma: "Pulse.jsx",
+                                    pragmaFrag: "Pulse.render.fragment",
+                                },
+                            ],
+                        ],
+                    });
+                    codeToExecute = transformed.code || codeToExecute;
+                    console.log('🔍 Compiled code:', codeToExecute);
+                }
+
+                // Wrap code to return result
+                const wrappedCode = \`
+                    try {
+                        const result = \${codeToExecute};
+                        return result;
+                    } catch (e) {
+                        throw new Error(e.message);
+                    }
+                \`;
+
+                // Execute code
+                const func = new Function(...scopeKeys, wrappedCode);
+                const result = func(...scopeValues);
+
+                console.log('🔍 Result:', result);
+                console.log('🔍 Result type:', typeof result);
+                console.log('🔍 Result instanceof Node:', result instanceof Node);
+                console.log('🔍 Result instanceof HTMLElement:', result instanceof HTMLElement);
+
+                // Render result
+                const preview = document.getElementById("preview");
+                console.log({preview , result})
+                if (preview) {
+                    preview.innerHTML = "";
+
+                    if (result) {
+                        if (result instanceof Element || result instanceof Node || typeof result === "object") {
+                            console.log('✅ Appending result to preview');
+                            preview.appendChild(result);
+
+                            console.log({ components })
+
+                            // Initialize odyssee components
+                            if (typeof components.Init === "function") {
+                                setTimeout(() => {
+                                    components.Init(true);
+                                    console.log('✅ components.init called');
+                                }, 10);
+                            }
+                        } else if (typeof result === "string") {
+                            console.log('✅ Rendering string result');
+                            preview.textContent = result;
+                        }
+                    } else {
+                        console.log('⚠️ Result is falsy:', result);
+                    }
+                }
+            } catch (err) {
+                const preview = document.getElementById("preview");
+                if (preview) {
+                    preview.innerHTML = \`<div class="error">\${err.message || "Error executing code"}</div>\`;
+                }
+                console.error("Preview error:", err);
+                window.parent.postMessage({ type: 'ERROR', error: err.message }, '*');
+            }
         };
 
-        // Build the function with scope
-        const scopeKeys = Object.keys(scope);
-        const scopeValues = Object.values(scope);
+        // Listen for code execution requests
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'EXECUTE_CODE') {
+                const { code } = event.data;
+                // Get modules from window object set by parent
+                const { Pulse, components, Babel } = window.__MODULES__ || {};
+                if (Pulse && components && Babel) {
+                    executeCode(code, Pulse, components, Babel);
+                } else {
+                    console.error('Modules not available');
+                }
+            }
+        });
 
-        let codeToExecute = currentCode.value.trim();
+        // Signal that iframe is ready
+        window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
+    <\/script>
+` +
+        bodyClose
+    );
+};
 
-        // Check if code is JSX (starts with <)
-        const isJSX = codeToExecute.startsWith("<");
+const executeCode = async () => {
+    if (!iframeRef.value) return;
 
-        if (isJSX) {
-            // Compile JSX to JS
-            const transformed = Babel.transform(codeToExecute, {
-                presets: ["react"],
-                plugins: [
-                    [
-                        "transform-react-jsx",
-                        {
-                            pragma: "Pulse.jsx",
-                            pragmaFrag: "Pulse.render.fragment",
-                        },
-                    ],
-                ],
-            });
-            codeToExecute = transformed.code || codeToExecute;
+    error.value = null;
+
+    try {
+        // Load modules if not already loaded
+        await loadModules();
+
+        // If iframe is not ready yet, regenerate it
+        if (!iframeReady) {
+            iframeContent.value = generateIframeDocument();
+            return;
         }
 
-        // Wrap code to return result
-        const wrappedCode = `
-      try {
-        const result = ${codeToExecute};
-        return result;
-      } catch (e) {
-        throw new Error(e.message);
-      }
-    `;
+        // Serialize modules to transferable data
+        const serializableData = {
+            type: "EXECUTE_CODE",
+            code: currentCode.value,
+            Pulse: {
+                jsx: Pulse.jsx.toString(),
+                signal: Pulse.signal.toString(),
+                computed: Pulse.computed.toString(),
+                effect: Pulse.effect.toString(),
+                init: Pulse.init?.toString(),
+            },
+            components: Object.keys(components).reduce((acc, key) => {
+                if (typeof components[key] === "function") {
+                    acc[key] = components[key].toString();
+                }
+                return acc;
+            }, {}),
+            Babel: {
+                transform: Babel.transform?.toString(),
+            },
+        };
 
-        // Execute code
-        const func = new Function(...scopeKeys, wrappedCode);
-        const result = func(...scopeValues);
+        // Send serialized data to iframe
+        const iframe = iframeRef.value;
+        if (iframe.contentWindow) {
+            // Instead of serializing, set modules on iframe's window directly
+            iframe.contentWindow.postMessage(
+                {
+                    type: "EXECUTE_CODE",
+                    code: currentCode.value,
+                },
+                "*",
+            );
 
-        // Render result
-        if (result) {
-            if (result instanceof HTMLElement || result instanceof Node) {
-                previewRef.value.appendChild(result);
-            } else if (typeof result === "string") {
-                previewRef.value.textContent = result;
-            } else if (typeof result === "object") {
-                previewRef.value.textContent = JSON.stringify(result, null, 2);
-            }
+            // Pass modules via iframe window object (same-origin allows this)
+            iframe.contentWindow.__MODULES__ = {
+                Pulse,
+                components,
+                Babel,
+            };
         }
     } catch (err: any) {
         error.value = err.message || "Erreur lors de l'exécution du code";
@@ -159,8 +366,13 @@ watch(currentCode, () => {
     resizeTextarea();
 });
 
-onMounted(() => {
-    executeCode();
+onMounted(async () => {
+    // Listen for iframe messages
+    window.addEventListener("message", handleIframeMessage);
+
+    // Load modules first, then initialize iframe content
+    await loadModules();
+    iframeContent.value = generateIframeDocument();
     resizeTextarea();
 });
 
@@ -168,9 +380,7 @@ onUnmounted(() => {
     if (debounceTimer) {
         clearTimeout(debounceTimer);
     }
-    if (previewRef.value) {
-        previewRef.value.innerHTML = "";
-    }
+    window.removeEventListener("message", handleIframeMessage);
 });
 </script>
 
@@ -252,20 +462,22 @@ onUnmounted(() => {
 }
 
 .preview-container {
-    padding: 1.5rem;
+    padding: 0;
     background: var(--vp-c-bg-soft);
-    min-height: 80px;
+    min-height: 120px;
+    position: relative;
 }
 
-.preview-content {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    align-items: center;
+.preview-iframe {
+    width: 100%;
+    min-height: 120px;
+    border: none;
+    display: block;
+    background: transparent;
 }
 
 .error-message {
-    margin-top: 1rem;
+    margin: 1rem;
     padding: 1rem;
     background: #fee2e2;
     color: #991b1b;
@@ -286,7 +498,6 @@ onUnmounted(() => {
     color: #fecaca;
 }
 
-/* Dark mode support */
 .dark .editor-container {
     background: #0d0d0d;
 }
