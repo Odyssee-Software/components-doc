@@ -157,6 +157,7 @@ const generateIframeDocument = () => {
     <script>
         // Execute code with dependencies passed from parent
         const executeCode = (code, Pulse, components, Babel) => {
+        console.log({window})
             try {
                 console.log('🔍 Iframe: executeCode called');
                 console.log('🔍 Code:', code);
@@ -235,6 +236,7 @@ const generateIframeDocument = () => {
                             if (typeof components.Init === "function") {
                                 setTimeout(() => {
                                     components.Init(true);
+                                    window.HSStaticMethods["autoInit"]();
                                     console.log('✅ components.init called');
                                 }, 10);
                             }
