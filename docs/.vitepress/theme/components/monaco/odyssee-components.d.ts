@@ -60,11 +60,11 @@ export type ClickCallback = EventCallback<void>;
 /**
  * Pulse signal type
  */
-export type Signal<T> = ReturnType<typeof Pulse.signal<T>>;
+export type Signal<T> = ReturnType<() => void<T>>;
 /**
  * Pulse computed type
  */
-export type Computed<T> = ReturnType<typeof Pulse.computed<T>>;
+export type Computed<T> = ReturnType<() => void<T>>;
 /**
  * Utility functions for Odyssee Components
  * Helper functions used across components

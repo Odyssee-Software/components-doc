@@ -530,15 +530,15 @@ export declare function clearRegistry(): void;
  * ```
  */
 export declare const __DEBUG__: {
-    enable: typeof DebugAPI.enableDebug;
-    disable: typeof DebugAPI.disableDebug;
-    graph: typeof DebugAPI.debugGraph;
-    tree: typeof DebugAPI.debugGraphTree;
-    stats: typeof DebugAPI.debugStats;
-    dirty: typeof DebugAPI.debugDirtyPropagation;
-    findNode: typeof DebugAPI.findNode;
-    findByType: typeof DebugAPI.findNodesByType;
-    clear: typeof DebugAPI.clearRegistry;
+    enable: () => void;
+    disable: () => void;
+    graph: () => void;
+    tree: () => void;
+    stats: () => void;
+    dirty: () => void;
+    findNode: () => void;
+    findByType: () => void;
+    clear: () => void;
     readonly enabled: boolean;
     readonly nodeCount: number;
 };
@@ -695,7 +695,7 @@ declare const Pulse: {
     batch: typeof batch;
     bindEffectToElement: typeof bindEffectToElement;
     flush: typeof flush;
-    render: ((template: import('./render').RenderTemplate, parentIsSVG?: boolean) => HTMLElement | SVGElement) & {
+    render: ((template: any, parentIsSVG?: boolean) => HTMLElement | SVGElement) & {
         fragment: (props?: {
             children?: any;
         }) => DocumentFragment;
@@ -708,15 +708,15 @@ declare const Pulse: {
     scanDSL: typeof scanDSL;
     createDSLScope: typeof createDSLScope;
     __DEBUG__: {
-        enable: typeof DebugAPI.enableDebug;
-        disable: typeof DebugAPI.disableDebug;
-        graph: typeof DebugAPI.debugGraph;
-        tree: typeof DebugAPI.debugGraphTree;
-        stats: typeof DebugAPI.debugStats;
-        dirty: typeof DebugAPI.debugDirtyPropagation;
-        findNode: typeof DebugAPI.findNode;
-        findByType: typeof DebugAPI.findNodesByType;
-        clear: typeof DebugAPI.clearRegistry;
+        enable: () => void;
+        disable: () => void;
+        graph: () => void;
+        tree: () => void;
+        stats: () => void;
+        dirty: () => void;
+        findNode: () => void;
+        findByType: () => void;
+        clear: () => void;
         readonly enabled: boolean;
         readonly nodeCount: number;
     };

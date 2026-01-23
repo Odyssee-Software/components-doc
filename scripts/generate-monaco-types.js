@@ -148,6 +148,12 @@ function resolveAndCombineTypes(packagePath, distPath) {
         continue;
       }
 
+      // Remplacer les import() dynamiques par any
+      line = line.replace(/import\(['"][^'"]+['"]\)\.\w+/g, "any");
+
+      // Remplacer les typeof avec namespaces non déclarés
+      line = line.replace(/typeof \w+\.\w+/g, "() => void");
+
       // Remplacer les import type externes par any
       line = line.replace(
         /import\(['"]@odyssee-software\/[^'"]+['"]\)\./g,
@@ -156,6 +162,15 @@ function resolveAndCombineTypes(packagePath, distPath) {
       line = line.replace(
         /typeof import\(['"]@odyssee-software\/[^'"]+['"]\)\./g,
         "any /*",
+      );
+
+      // Remplacer Pulse.Fn<Props> par (props: Props) => HTMLElement
+      line = line.replace(/Pulse\.Fn<([^>]+)>/g, "(props: $1) => HTMLElement");
+
+      // Remplacer Pulse.JSX.Element par HTMLElement | SVGElement | DocumentFragment
+      line = line.replace(
+        /Pulse\.JSX\.Element/g,
+        "HTMLElement | SVGElement | DocumentFragment",
       );
 
       // Inclure la ligne
