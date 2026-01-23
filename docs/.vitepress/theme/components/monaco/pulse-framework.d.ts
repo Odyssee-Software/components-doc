@@ -648,22 +648,24 @@ export {
 export {};
 
 
+
 // ============================================
 // Global declarations for Monaco Editor
 // ============================================
 
-/**
- * Pulse is available globally in the editor
- * Use it to create signals, computed values, effects, and JSX
- *
- * @example
- * const count = Pulse.signal(0);
- *
- * <button onclick={() => count(count() + 1)}>
- *   Count: {count()}
- * </button>
- */
-declare const Pulse: {
+declare global {
+  /**
+   * Pulse is available globally in the editor
+   * Use it to create signals, computed values, effects, and JSX
+   *
+   * @example
+   * const count = Pulse.signal(0);
+   *
+   * <button onclick={() => count(count() + 1)}>
+   *   Count: {count()}
+   * </button>
+   */
+  declare const Pulse: {
 	signal: typeof signal;
 	computed: typeof computed;
 	effect: typeof effect;
@@ -696,3 +698,4 @@ declare const Pulse: {
 		readonly nodeCount: number;
 	};
 };
+}
