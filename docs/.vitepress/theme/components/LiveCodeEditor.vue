@@ -240,11 +240,8 @@ const generateIframeDocument = () => {
 
                             // Initialize odyssee components
                             if (typeof components.Init === "function") {
-                                setTimeout(() => {
-                                    components.Init(true);
-                                    window.HSStaticMethods["autoInit"]();
-                                    console.log('✅ components.init called');
-                                }, 10);
+                            window.HSStaticMethods["autoInit"]();
+                            console.log('✅ components.init called');
                             }
                         } else if (typeof result === "string") {
                             console.log('✅ Rendering string result');

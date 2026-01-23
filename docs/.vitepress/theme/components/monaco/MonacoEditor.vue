@@ -11,7 +11,7 @@ import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 // Import type definitions as raw strings
 import pulseTypeDefs from "./pulse-framework.d.ts?raw";
 import componentsTypeDefs from "./odyssee-components.d.ts?raw";
-import componentsTypesDefs from "./odyssee-components-types.d.ts?raw";
+import globalTypeDefs from "./globals.d.ts?raw";
 
 interface Props {
     modelValue: string;
@@ -44,38 +44,6 @@ self.MonacoEnvironment = {
     },
 };
 
-// Global type definitions to make components available without imports
-const globalTypeDefs = `
-declare const Pulse: typeof import('@odyssee-software/pulse-framework').default;
-declare const Button: typeof import('@odyssee-software/components').Button;
-declare const Input: typeof import('@odyssee-software/components').Input;
-declare const Select: typeof import('@odyssee-software/components').Select;
-declare const Checkbox: typeof import('@odyssee-software/components').Checkbox;
-declare const Radio: typeof import('@odyssee-software/components').Radio;
-declare const RadioGroup: typeof import('@odyssee-software/components').RadioGroup;
-declare const Toggle: typeof import('@odyssee-software/components').Toggle;
-declare const Textarea: typeof import('@odyssee-software/components').Textarea;
-declare const FileInput: typeof import('@odyssee-software/components').FileInput;
-declare const Alert: typeof import('@odyssee-software/components').Alert;
-declare const Badge: typeof import('@odyssee-software/components').Badge;
-declare const Card: typeof import('@odyssee-software/components').Card;
-declare const Avatar: typeof import('@odyssee-software/components').Avatar;
-declare const AvatarGroup: typeof import('@odyssee-software/components').AvatarGroup;
-declare const Blockquote: typeof import('@odyssee-software/components').Blockquote;
-declare const Progress: typeof import('@odyssee-software/components').Progress;
-declare const ButtonGroup: typeof import('@odyssee-software/components').ButtonGroup;
-declare const Collapse: typeof import('@odyssee-software/components').Collapse;
-declare const Divider: typeof import('@odyssee-software/components').Divider;
-declare const Icon: typeof import('@odyssee-software/components').Icon;
-declare const Spinner: typeof import('@odyssee-software/components').Spinner;
-declare const Skeleton: typeof import('@odyssee-software/components').Skeleton;
-declare const Modal: typeof import('@odyssee-software/components').Modal;
-declare const Tooltip: typeof import('@odyssee-software/components').Tooltip;
-declare const Dropdown: typeof import('@odyssee-software/components').Dropdown;
-declare const Tabs: typeof import('@odyssee-software/components').Tabs;
-declare const Accordion: typeof import('@odyssee-software/components').Accordion;
-`;
-
 onMounted(() => {
     if (!editorContainer.value) return;
 
@@ -106,12 +74,7 @@ onMounted(() => {
         "file:///node_modules/@odyssee-software/components/dist/index.d.ts",
     );
 
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        componentsTypesDefs,
-        "file:///node_modules/@odyssee-software/components/dist/types.d.ts",
-    );
-
-    // Add global declarations for easier access
+    // Add global declarations for easier access (auto-generated)
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
         globalTypeDefs,
         "file:///globals.d.ts",
