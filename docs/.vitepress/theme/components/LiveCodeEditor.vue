@@ -91,6 +91,11 @@ const loadModules = async () => {
 
 // Listen for messages from iframe
 const handleIframeMessage = (event: MessageEvent) => {
+    // Vérifier que le message vient bien de notre iframe
+    if (!iframeRef.value || event.source !== iframeRef.value.contentWindow) {
+        return;
+    }
+
     if (event.data.type === "IFRAME_READY") {
         iframeReady = true;
         executeCode();
