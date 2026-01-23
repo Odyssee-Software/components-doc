@@ -2707,6 +2707,7 @@ export {
 
 export {};
 
+
 // ============================================
 // Global declarations for Monaco Editor
 // ============================================
@@ -2718,75 +2719,135 @@ export {};
  * @example
  * <Button variant="solid" color="primary">Click me</Button>
  */
-declare const Button: typeof Button;
-declare const Input: typeof Input;
-declare const Select: typeof Select;
-declare const Checkbox: typeof Checkbox;
-declare const Radio: typeof Radio;
-declare const RadioGroup: typeof RadioGroup;
-declare const Toggle: typeof Toggle;
-declare const Textarea: typeof Textarea;
-declare const FileInput: typeof FileInput;
-declare const Alert: typeof Alert;
-declare const Badge: typeof Badge;
-declare const Card: typeof Card;
-declare const Avatar: typeof Avatar;
-declare const AvatarGroup: typeof AvatarGroup;
-declare const Blockquote: typeof Blockquote;
-declare const Progress: typeof Progress;
-declare const ButtonGroup: typeof ButtonGroup;
-declare const Collapse: typeof Collapse;
-declare const Divider: typeof Divider;
-declare const Icon: typeof Icon;
-declare const Spinner: typeof Spinner;
-declare const ButtonSpinner: typeof ButtonSpinner;
-declare const Skeleton: typeof Skeleton;
-declare const Modal: typeof Modal;
-declare const Tooltip: typeof Tooltip;
-declare const Dropdown: typeof Dropdown;
-declare const Popover: typeof Popover;
-declare const Tabs: typeof Tabs;
-declare const Accordion: typeof Accordion;
-declare const Table: typeof Table;
-declare const Pagination: typeof Pagination;
-declare const Breadcrumb: typeof Breadcrumb;
-declare const Navbar: typeof Navbar;
-declare const Container: typeof Container;
-declare const Grid: typeof Grid;
-declare const Columns: typeof Columns;
-declare const H1: typeof H1;
-declare const H2: typeof H2;
-declare const H3: typeof H3;
-declare const H4: typeof H4;
-declare const H5: typeof H5;
-declare const H6: typeof H6;
-declare const Text: typeof Text;
-declare const Link: typeof Link;
-declare const Image: typeof Image;
-declare const Offcanvas: typeof Offcanvas;
-declare const ContextMenu: typeof ContextMenu;
-declare const TreeView: typeof TreeView;
-declare const Stepper: typeof Stepper;
-declare const FormGroup: typeof FormGroup;
-declare const InputGroup: typeof InputGroup;
-declare const RangeSlider: typeof RangeSlider;
-declare const ColorPicker: typeof ColorPicker;
-declare const TimePicker: typeof TimePicker;
-declare const DatePicker: typeof DatePicker;
-declare const InputNumber: typeof InputNumber;
-declare const PinInput: typeof PinInput;
-declare const ComboBox: typeof ComboBox;
-declare const SearchBox: typeof SearchBox;
-declare const StrongPassword: typeof StrongPassword;
-declare const TogglePassword: typeof TogglePassword;
-declare const Carousel: typeof Carousel;
-declare const ChatBubble: typeof ChatBubble;
-declare const Device: typeof Device;
-declare const Rating: typeof Rating;
-declare const Timeline: typeof Timeline;
-declare const Toast: typeof Toast;
-declare const List: typeof List;
-declare const ListGroup: typeof ListGroup;
-declare const Kbd: typeof Kbd;
-declare const FormLabel: typeof FormLabel;
-declare const FormHelperText: typeof FormHelperText;
+declare const Button: Pulse.Fn<Button.Props>;
+declare const Input: Pulse.Fn<Input.Props>;
+declare const Select: Pulse.Fn<Select.Props>;
+declare const Checkbox: Pulse.Fn<Checkbox.Props>;
+declare const Radio: Pulse.Fn<Radio.Props>;
+declare const RadioGroup: Pulse.Fn<RadioGroup.Props>;
+declare const Toggle: Pulse.Fn<Toggle.Props>;
+declare const Textarea: Pulse.Fn<Textarea.Props>;
+declare const FileInput: Pulse.Fn<FileInput.Props>;
+declare const Alert: Pulse.Fn<Alert.Props>;
+declare const Badge: Pulse.Fn<Badge.Props>;
+declare const Card: Pulse.Fn<Card.Props>;
+declare const Avatar: Pulse.Fn<Avatar.Props>;
+declare const AvatarGroup: Pulse.Fn<AvatarGroup.Props> & {
+	Stack: Pulse.Fn<AvatarGroup.Props>;
+	Grid: Pulse.Fn<AvatarGroup.Props>;
+};
+declare const Blockquote: Pulse.Fn<Blockquote.Props> & {
+	Bordered: Pulse.Fn<Blockquote.Props>;
+	Minimal: Pulse.Fn<Blockquote.Props>;
+};
+declare const Progress: Pulse.Fn<Progress.Props>;
+declare const ButtonGroup: Pulse.Fn<ButtonGroup.Props> & {
+	Horizontal: Pulse.Fn<ButtonGroup.Props>;
+	Vertical: Pulse.Fn<ButtonGroup.Props>;
+	Toolbar: Pulse.Fn<ButtonGroup.Props>;
+	Responsive: Pulse.Fn<ButtonGroup.Props>;
+};
+declare const Collapse: Pulse.Fn<Collapse.Props> & {
+	Content: Pulse.Fn<CollapseContent.Props>;
+	Trigger: Pulse.Fn<CollapseTrigger.Props>;
+	ReadMore: Pulse.Fn<Collapse.Props>;
+};
+declare const Divider: Pulse.Fn<Divider.Props> & {
+	Vertical: Pulse.Fn<Divider.Props>;
+	WithText: Pulse.Fn<Omit<Divider.Props, "labelPosition">>;
+};
+declare const Icon: Pulse.Fn<Icon.Props>;
+declare const Spinner: Pulse.Fn<Spinner.Props>;
+declare const ButtonSpinner: Pulse.Fn<Omit<Spinner.Props, "size">>;
+declare const Skeleton: any;
+declare const Modal: Pulse.Fn<Modal.Props>;
+declare const Tooltip: Pulse.Fn<Tooltip.Props>;
+declare const Dropdown: Pulse.Fn<Dropdown.Props> & {
+	Item: Pulse.Fn<Dropdown.ItemProps>;
+	Divider: Pulse.Fn<Dropdown.DividerProps>;
+};
+declare const Popover: Pulse.Fn<Popover.Props>;
+declare const Tabs: Pulse.Fn<Tabs.Props> & {
+	Panel: Pulse.Fn<Tabs.PanelProps>;
+};
+declare const Accordion: Pulse.Fn<Accordion.Props> & {
+	Basic: Pulse.Fn<Accordion.Props>;
+	NoArrow: Pulse.Fn<Accordion.Props>;
+	Arrow: Pulse.Fn<Accordion.Props>;
+	Stretched: Pulse.Fn<Accordion.Props>;
+	Bordered: Pulse.Fn<Accordion.Props>;
+	ActiveBordered: Pulse.Fn<Accordion.Props>;
+	Nested: Pulse.Fn<NestedAccordionProps>;
+};
+declare const Table: <T extends Record<string, any> = Record<string, any>>(props: Table.Props<T>) => Pulse.JSX.Element;
+declare const Pagination: Pulse.Fn<Pagination.Props>;
+declare const Breadcrumb: Pulse.Fn<Breadcrumb.Props> & {
+	Chevron: Pulse.Fn<Omit<Breadcrumb.Props, "separator">>;
+	Slash: Pulse.Fn<Omit<Breadcrumb.Props, "separator">>;
+	Bordered: Pulse.Fn<Omit<Breadcrumb.Props, "bordered">>;
+};
+declare const Navbar: Pulse.Fn<Navbar.Props> & {
+	Link: Pulse.Fn<Navbar.LinkProps>;
+	Dark: Pulse.Fn<Navbar.Props>;
+	Primary: Pulse.Fn<Navbar.Props>;
+	Sticky: Pulse.Fn<Navbar.Props>;
+};
+declare const Container: Pulse.Fn<Container.Props>;
+declare const Grid: any;
+declare const Columns: any;
+declare const H1: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+declare const H2: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+declare const H3: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+declare const H4: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+declare const H5: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+declare const H6: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+declare const Text: any;
+declare const Link: Pulse.Fn<Link.Props>;
+declare const Image: any;
+declare const Offcanvas: Pulse.Fn<Offcanvas.Props>;
+declare const ContextMenu: Pulse.Fn<ContextMenu.Props>;
+declare const TreeView: Pulse.Fn<TreeView.Props> & {
+	Node: Pulse.Fn<TreeView.NodeProps>;
+};
+declare const Stepper: Pulse.Fn<Stepper.Props> & {
+	Item: Pulse.Fn<Stepper.ItemProps>;
+};
+declare const FormGroup: Pulse.Fn<FormGroup.Props>;
+declare const InputGroup: Pulse.Fn<InputGroup.Props>;
+declare const RangeSlider: Pulse.Fn<RangeSlider.Props>;
+declare const ColorPicker: Pulse.Fn<ColorPicker.Props>;
+declare const TimePicker: Pulse.Fn<TimePicker.Props>;
+declare const DatePicker: Pulse.Fn<DatePicker.Props>;
+declare const InputNumber: Pulse.Fn<InputNumber.Props>;
+declare const PinInput: Pulse.Fn<PinInput.Props>;
+declare const ComboBox: Pulse.Fn<ComboBox.Props>;
+declare const SearchBox: Pulse.Fn<SearchBox.Props>;
+declare const StrongPassword: Pulse.Fn<StrongPassword.Props>;
+declare const TogglePassword: Pulse.Fn<TogglePassword.Props>;
+declare const Carousel: Pulse.Fn<Carousel.Props> & {
+	AutoPlay: Pulse.Fn<Carousel.Props>;
+	Thumbnail: Pulse.Fn<Carousel.Props>;
+};
+declare const ChatBubble: any;
+declare const Device: Pulse.Fn<Device.Props>;
+declare const Rating: Pulse.Fn<Rating.Props>;
+declare const Timeline: any;
+declare const Toast: Pulse.Fn<Toast.Props>;
+declare const List: Pulse.Fn<List.Props> & {
+	Check: Pulse.Fn<Omit<List.Props, "type"> & {
+		color?: List.Props["checkColor"];
+		variant?: List.Props["checkVariant"];
+	}>;
+	Inline: Pulse.Fn<Omit<List.Props, "type">>;
+	Ordered: Pulse.Fn<Omit<List.Props, "type">>;
+	Unordered: Pulse.Fn<Omit<List.Props, "type">>;
+};
+declare const ListGroup: Pulse.Fn<ListGroup.Props> & {
+	Link: Pulse.Fn<Omit<ListGroup.Props, "as">>;
+	Button: Pulse.Fn<Omit<ListGroup.Props, "as">>;
+	Flush: Pulse.Fn<Omit<ListGroup.Props, "variant">>;
+	Horizontal: Pulse.Fn<Omit<ListGroup.Props, "variant">>;
+};
+declare const Kbd: any;
+declare const FormLabel: any;
+declare const FormHelperText: any;

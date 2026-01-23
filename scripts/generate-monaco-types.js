@@ -76,7 +76,9 @@ function generateTypeBundle(entryPoint, packageName) {
     finalOutput += cleanedOutput;
 
     // Ajouter les déclarations globales à la fin du fichier
-    finalOutput += "\n\n" + generateGlobalDeclarations(packageName);
+    // On passe le contenu nettoyé pour extraire les vraies signatures
+    finalOutput +=
+      "\n" + generateGlobalDeclarations(packageName, cleanedOutput);
 
     return finalOutput;
   } catch (error) {
@@ -116,26 +118,40 @@ function cleanTypeDefinitions(content) {
 /**
  * Génère des déclarations globales pour un package
  * Ces déclarations sont ajoutées à la fin du fichier bundlé
+ * On extrait les signatures d'export réelles du contenu généré
  */
-function generateGlobalDeclarations(packageName) {
+function generateGlobalDeclarations(packageName, bundledContent) {
   if (packageName === "@odyssee-software/pulse-framework") {
-    return `// ============================================
+    // Pour Pulse, extraire la signature de l'export const Pulse
+    const pulseExportMatch = bundledContent.match(
+      /export declare const Pulse: \{[\s\S]*?\n\};/,
+    );
+
+    if (pulseExportMatch) {
+      const pulseSignature = pulseExportMatch[0].replace(/^export /, "");
+      return `
+
+
+// ============================================
 // Global declarations for Monaco Editor
 // ============================================
 
-/**
- * Pulse is available globally in the editor
- * Use it to create signals, computed values, effects, and JSX
- *
- * @example
- * const count = Pulse.signal(0);
- *
- * <button onclick={() => count(count() + 1)}>
- *   Count: {count()}
- * </button>
- */
-declare const Pulse: typeof Pulse;
+declare global {
+  /**
+   * Pulse is available globally in the editor
+   * Use it to create signals, computed values, effects, and JSX
+   *
+   * @example
+   * const count = Pulse.signal(0);
+   *
+   * <button onclick={() => count(count() + 1)}>
+   *   Count: {count()}
+   * </button>
+   */
+  ${pulseSignature}
+}
 `;
+    }
   } else if (packageName === "@odyssee-software/components") {
     const componentsToExport = [
       "Button",
@@ -212,22 +228,81 @@ declare const Pulse: typeof Pulse;
       "FormHelperText",
     ];
 
-    let declarations = `// ============================================
+    let declarations = `
+
+
+// ============================================
 // Global declarations for Monaco Editor
 // ============================================
 
-/**
- * All Odyssee components are available globally in the editor
- * No need to import them - just use them directly!
- *
- * @example
- * <Button variant="solid" color="primary">Click me</Button>
- */
+declare global {
+  /**
+   * All Odyssee components are available globally in the editor
+   * No need to import them - just use them directly!
+   *
+   * @example
+   * <Button variant="solid" color="primary">Click me</Button>
+   */
 `;
 
+    // Extraire les signatures d'export réelles pour chaque composant
     componentsToExport.forEach((comp) => {
-      declarations += `declare const ${comp}: typeof ${comp};\n`;
+      // Chercher "export declare const ComponentName: ..." jusqu'au point-virgule
+      // Gestion des accolades imbriquées avec un compteur
+      const startPattern = `export declare const ${comp}: `;
+      const startIndex = bundledContent.indexOf(startPattern);
+
+      if (startIndex !== -1) {
+        let endIndex = startIndex + startPattern.length;
+        let braceCount = 0;
+        let inString = false;
+        let stringChar = null;
+
+        // Parcourir caractère par caractère jusqu'à trouver le ; de fin
+        while (endIndex < bundledContent.length) {
+          const char = bundledContent[endIndex];
+          const prevChar = endIndex > 0 ? bundledContent[endIndex - 1] : "";
+
+          // Gérer les strings pour ignorer les accolades dedans
+          if (
+            (char === '"' || char === "'" || char === "`") &&
+            prevChar !== "\\"
+          ) {
+            if (!inString) {
+              inString = true;
+              stringChar = char;
+            } else if (char === stringChar) {
+              inString = false;
+              stringChar = null;
+            }
+          }
+
+          if (!inString) {
+            if (char === "{") {
+              braceCount++;
+            } else if (char === "}") {
+              braceCount--;
+            } else if (char === ";" && braceCount === 0) {
+              // Trouvé la fin de la déclaration
+              break;
+            }
+          }
+
+          endIndex++;
+        }
+
+        const signature = bundledContent.substring(
+          startIndex + startPattern.length,
+          endIndex,
+        );
+        declarations += `  const ${comp}: ${signature};\n`;
+      } else {
+        // Fallback si pas trouvé
+        declarations += `  const ${comp}: any;\n`;
+      }
     });
+
+    declarations += `}\n`;
 
     return declarations;
   }
