@@ -12,6 +12,65 @@ import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 import pulseTypeDefs from "./pulse-framework.d.ts?raw";
 import componentsTypeDefs from "./odyssee-components.d.ts?raw";
 
+// Global flag to ensure Monaco is configured only once
+let monacoConfigured = false;
+
+/**
+ * Configure Monaco globally - should only happen once
+ */
+function configureMonacoGlobally() {
+    if (monacoConfigured) return;
+
+    console.log("[Monaco] Configuring TypeScript globally...");
+
+    // Configure TypeScript compiler options
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+        target: monaco.languages.typescript.ScriptTarget.ES2020,
+        allowNonTsExtensions: true,
+        moduleResolution:
+            monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+        module: monaco.languages.typescript.ModuleKind.ESNext,
+        noEmit: true,
+        esModuleInterop: true,
+        jsx: monaco.languages.typescript.JsxEmit.React,
+        jsxFactory: "Pulse.jsx",
+        reactNamespace: "Pulse",
+        allowJs: true,
+        typeRoots: ["node_modules/@types"],
+        skipLibCheck: true,
+        skipDefaultLibCheck: true,
+    });
+
+    // Disable diagnostics (no red squiggles)
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: true,
+    });
+
+    // Enable eager model sync for better IntelliSense
+    monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
+
+    // Add type definitions with consistent URIs
+    console.log("[Monaco] Loading Pulse types:", pulseTypeDefs.length, "chars");
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        pulseTypeDefs,
+        "file:///node_modules/@types/pulse-framework/index.d.ts",
+    );
+
+    console.log(
+        "[Monaco] Loading Components types:",
+        componentsTypeDefs.length,
+        "chars",
+    );
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(
+        componentsTypeDefs,
+        "file:///node_modules/@types/odyssee-components/index.d.ts",
+    );
+
+    monacoConfigured = true;
+    console.log("[Monaco] Global configuration complete");
+}
+
 interface Props {
     modelValue: string;
     language?: string;
@@ -32,57 +91,42 @@ const emit = defineEmits<{
 
 const editorContainer = ref<HTMLElement | null>(null);
 let editor: monaco.editor.IStandaloneCodeEditor | null = null;
+let editorId = 0;
 
-// Configure Monaco workers
-self.MonacoEnvironment = {
-    getWorker(_: string, label: string) {
-        if (label === "typescript" || label === "javascript") {
-            return new tsWorker();
-        }
-        return new editorWorker();
-    },
-};
+// Configure Monaco workers (only once)
+if (!self.MonacoEnvironment) {
+    self.MonacoEnvironment = {
+        getWorker(_: string, label: string) {
+            if (label === "typescript" || label === "javascript") {
+                return new tsWorker();
+            }
+            return new editorWorker();
+        },
+    };
+}
 
 onMounted(() => {
     if (!editorContainer.value) return;
 
-    // Configure TypeScript compiler options
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-        target: monaco.languages.typescript.ScriptTarget.ES2020,
-        allowNonTsExtensions: true,
-        moduleResolution:
-            monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-        module: monaco.languages.typescript.ModuleKind.ESNext,
-        noEmit: true,
-        esModuleInterop: true,
-        jsx: monaco.languages.typescript.JsxEmit.React,
-        jsxFactory: "Pulse.jsx",
-        reactNamespace: "Pulse",
-        allowJs: true,
-        typeRoots: ["node_modules/@types"],
-    });
+    // Configure Monaco globally (only once)
+    configureMonacoGlobally();
 
-    // Add type definitions from actual library files
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        pulseTypeDefs,
-        "file:///node_modules/@odyssee-software/pulse-framework/dist/index.d.ts",
+    // Create a unique ID for this editor instance
+    editorId = Date.now() + Math.random();
+
+    console.log(`[Monaco #${editorId}] Creating editor instance...`);
+
+    // Create a model with unique URI and language
+    const modelUri = monaco.Uri.parse(`file:///editor-${editorId}.tsx`);
+    const model = monaco.editor.createModel(
+        props.modelValue || "",
+        "typescript",
+        modelUri,
     );
 
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        componentsTypeDefs,
-        "file:///node_modules/@odyssee-software/components/dist/index.d.ts",
-    );
-
-    // Set diagnostic options
-    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-        noSemanticValidation: false,
-        noSyntaxValidation: false,
-    });
-
-    // Create editor instance
+    // Create editor instance with the model
     editor = monaco.editor.create(editorContainer.value, {
-        value: props.modelValue,
-        language: props.language,
+        model: model,
         theme: props.theme,
         readOnly: props.readonly,
         automaticLayout: true,
@@ -103,8 +147,30 @@ onMounted(() => {
         suggestOnTriggerCharacters: true,
         acceptSuggestionOnEnter: "on",
         snippetSuggestions: "inline",
+        parameterHints: {
+            enabled: true,
+        },
+        suggest: {
+            showMethods: true,
+            showFunctions: true,
+            showConstructors: true,
+            showFields: true,
+            showVariables: true,
+            showClasses: true,
+            showStructs: true,
+            showInterfaces: true,
+            showModules: true,
+            showProperties: true,
+            showValues: true,
+            showConstants: true,
+        },
         padding: { top: 10, bottom: 10 },
     });
+
+    console.log(
+        `[Monaco #${editorId}] Editor created with value length:`,
+        props.modelValue?.length || 0,
+    );
 
     // Listen to content changes
     editor.onDidChangeModelContent(() => {
@@ -120,8 +186,16 @@ onMounted(() => {
 watch(
     () => props.modelValue,
     (newValue) => {
-        if (editor && editor.getValue() !== newValue) {
-            editor.setValue(newValue);
+        if (editor) {
+            const currentValue = editor.getValue();
+            if (currentValue !== newValue) {
+                console.log(
+                    `[Monaco #${editorId}] Updating value:`,
+                    newValue?.length || 0,
+                    "chars",
+                );
+                editor.setValue(newValue || "");
+            }
         }
     },
 );
@@ -138,7 +212,11 @@ watch(
 
 onUnmounted(() => {
     if (editor) {
+        const model = editor.getModel();
         editor.dispose();
+        if (model) {
+            model.dispose();
+        }
     }
 });
 </script>
