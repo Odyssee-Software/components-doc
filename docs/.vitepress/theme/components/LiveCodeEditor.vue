@@ -126,6 +126,7 @@ const generateIframeDocument = () => {
     <!-- Load lodash (required by Preline) -->
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"><\/script>
     <!-- Load Floating-dom -->
+    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.3"><\/script>
     <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.4"><\/script>
     <!-- Load Preline -->
     <script src="https://cdn.jsdelivr.net/npm/preline@2.4.1/dist/preline.js"><\/script>
@@ -279,7 +280,9 @@ const generateIframeDocument = () => {
         });
 
         // Signal that iframe is ready
-        window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
+        document.addEventListener("DOMContentLoaded", () => {
+            window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
+        });
     <\/script>
 ` +
         bodyClose
