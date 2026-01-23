@@ -235,14 +235,10 @@ const generateIframeDocument = () => {
                         if (result instanceof Element || result instanceof Node || typeof result === "object") {
                             console.log('✅ Appending result to preview');
                             preview.appendChild(result);
-
-                            console.log({ components })
-
-                            // Initialize odyssee components
-                            if (typeof components.Init === "function") {
-                            window.HSStaticMethods["autoInit"]();
-                            console.log('✅ components.init called');
-                            }
+                            setTimeout(() => {
+                                window.HSStaticMethods["autoInit"]();
+                                console.log('✅ components.initComponents called');
+                            }, 1000 );
                         } else if (typeof result === "string") {
                             console.log('✅ Rendering string result');
                             preview.textContent = result;
