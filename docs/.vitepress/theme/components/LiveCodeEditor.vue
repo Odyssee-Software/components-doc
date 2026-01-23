@@ -6,13 +6,12 @@
         </div>
 
         <div class="editor-container">
-            <textarea
-                ref="textareaRef"
+            <MonacoEditor
                 v-model="currentCode"
-                class="code-textarea"
-                spellcheck="false"
-                @input="handleCodeChange"
-            ></textarea>
+                language="typescript"
+                theme="vs-dark"
+                @change="handleCodeChange"
+            />
         </div>
 
         <div class="preview-header">
@@ -35,6 +34,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from "vue";
+import MonacoEditor from "./monaco/MonacoEditor.vue";
 
 interface Props {
     code?: string;
@@ -48,7 +48,6 @@ const props = withDefaults(defineProps<Props>(), {
 </Button>`,
 });
 
-const textareaRef = ref<HTMLTextAreaElement | null>(null);
 const iframeRef = ref<HTMLIFrameElement | null>(null);
 const currentCode = ref(props.code || props.defaultCode);
 const error = ref<string | null>(null);
@@ -124,12 +123,12 @@ const generateIframeDocument = () => {
     <title>Preview</title>
 
     <!-- Load lodash (required by Preline) -->
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"><\/script>
+    <script id="lodash-script" src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"><\/script>
     <!-- Load Floating-dom -->
     <script src="https://cdn.jsdelivr.net/npm/@floating-ui/core@1.7.3"><\/script>
-    <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.4"><\/script>
+    <script id="floating-ui-script" src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.4"><\/script>
     <!-- Load Preline -->
-    <script src="https://cdn.jsdelivr.net/npm/preline@2.4.1/dist/preline.js"><\/script>
+    <script id="preline-script" src="https://cdn.jsdelivr.net/npm/preline@2.4.1/dist/preline.js"><\/script>
 
     <style>
         ${cssContent}
@@ -279,8 +278,9 @@ const generateIframeDocument = () => {
             }
         });
 
-        // Signal that iframe is ready
-        document.addEventListener("DOMContentLoaded", () => {
+        // Wait for all external scripts to load before signaling ready
+        window.addEventListener('load', () => {
+            console.log('✅ All external scripts loaded in iframe');
             window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
         });
     <\/script>
@@ -358,24 +358,13 @@ const handleCodeChange = () => {
 
     debounceTimer = setTimeout(() => {
         executeCode();
-    }, 500) as unknown as number;
+    }, 800) as unknown as number;
 };
 
 const resetCode = () => {
     currentCode.value = props.defaultCode;
     executeCode();
 };
-
-const resizeTextarea = () => {
-    if (textareaRef.value) {
-        textareaRef.value.style.height = "auto";
-        textareaRef.value.style.height = textareaRef.value.scrollHeight + "px";
-    }
-};
-
-watch(currentCode, () => {
-    resizeTextarea();
-});
 
 onMounted(async () => {
     // Listen for iframe messages
@@ -384,7 +373,6 @@ onMounted(async () => {
     // Load modules first, then initialize iframe content
     await loadModules();
     iframeContent.value = generateIframeDocument();
-    resizeTextarea();
 });
 
 onUnmounted(() => {
@@ -449,27 +437,8 @@ onUnmounted(() => {
 
 .editor-container {
     background: #1e1e1e;
-    padding: 1rem;
-}
-
-.code-textarea {
-    width: 100%;
-    min-height: 120px;
-    max-height: 400px;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #d4d4d4;
-    font-family: "Monaco", "Menlo", "Courier New", monospace;
-    font-size: 0.875rem;
-    line-height: 1.6;
-    resize: none;
-    overflow-y: auto;
-    tab-size: 2;
-}
-
-.code-textarea::selection {
-    background: #264f78;
+    height: 300px;
+    overflow: hidden;
 }
 
 .preview-container {
