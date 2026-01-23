@@ -5,9 +5,6 @@
  * Odyssee Components
  * A comprehensive UI component library built with Pulse Framework and styled with Tailwind CSS + Preline
  */
-import "./styles.css";
-import "preline";
-import "@preline/datepicker";
 /**
  * Base types for Odyssee Components
  * Shared utility types and interfaces used across all components
@@ -15,7 +12,6 @@ import "@preline/datepicker";
  * Note: Component-specific types are now co-located in their respective
  * component namespaces (e.g., Button.Props, Dropdown.Item, etc.)
  */
-import type Pulse from "@odyssee-software/pulse-framework";
 /**
  * Base component props extended by all components
  */
@@ -305,7 +301,6 @@ export declare function getOrientationClasses(orientation: "horizontal" | "verti
  * <Button fullWidth variant="outline" color="secondary">Full Width</Button>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 /**
  * Spinner Component
  * A loading indicator component with various colors and sizes
@@ -338,7 +333,6 @@ import Pulse from "@odyssee-software/pulse-framework";
  * </div>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Spinner {
     interface Props extends BaseComponentProps {
         size?: "xs" | "sm" | "md" | "lg" | "xl";
@@ -489,7 +483,6 @@ export { Button };
  * </Alert>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Alert {
     interface Props extends BaseComponentProps {
         variant?: "solid" | "soft" | "bordered";
@@ -543,7 +536,6 @@ export { Alert };
  * </Badge>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Badge {
     interface Props extends BaseComponentProps {
         variant?: Variant;
@@ -641,7 +633,6 @@ export { Badge };
  * </Card>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Card {
     interface Props extends BaseComponentProps {
         title?: string;
@@ -735,7 +726,6 @@ export { Card };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Avatar {
     interface Props extends BaseComponentProps {
         src?: string;
@@ -765,7 +755,6 @@ export { Avatar };
  * AvatarGroup Component
  * A component to display multiple avatars in a group with various layouts
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace AvatarGroup {
     interface Item {
         src?: string;
@@ -804,7 +793,6 @@ export { AvatarGroup };
  * Blockquote Component
  * A component for displaying quoted text with various styles and layouts
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Blockquote {
     interface Author {
         name: string;
@@ -889,7 +877,6 @@ export { Blockquote };
  * <Progress value={75} animated={true} transition={true} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Progress {
     interface Props extends BaseComponentProps {
         value: number | Signal<number>;
@@ -922,7 +909,6 @@ export { Progress };
  * ButtonGroup Component
  * A component for grouping buttons together with various layouts and styles
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace ButtonGroup {
     interface Item {
         label: string | HTMLElement;
@@ -960,7 +946,6 @@ export { ButtonGroup };
  * ChatBubble Component
  * A component for displaying chat messages with various layouts and styles
  */
-import Pulse from "@odyssee-software/pulse-framework";
 type ChatStatus = "sent" | "delivered" | "read" | "error" | "sending";
 declare namespace ChatBubble {
     interface ContentItem {
@@ -1000,7 +985,6 @@ export {};
  * Carousel Component
  * A slideshow component for cycling through elements with Pulse reactive state
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Carousel {
     interface Slide {
         id?: string;
@@ -1036,7 +1020,6 @@ export { Carousel };
  * Collapse Component
  * A component for showing/hiding content with smooth transitions
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Collapse {
     interface Props extends BaseComponentProps {
         isOpen?: boolean | Signal<boolean>;
@@ -1124,7 +1107,6 @@ export { Collapse };
  * <Divider responsiveOrientation={{ sm: "vertical" }} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Divider {
     interface Props extends BaseComponentProps {
         orientation?: "horizontal" | "vertical";
@@ -1145,7 +1127,6 @@ declare const Divider: Pulse.Fn<Divider.Props> & {
     WithText: Pulse.Fn<Omit<Divider.Props, "labelPosition">>;
 };
 export { Divider };
-import Pulse, { Signal } from "@odyssee-software/pulse-framework";
 /**
  * DatePicker component props
  */
@@ -1220,7 +1201,6 @@ export { DatePicker };
  * - Dark mode support
  * - Customizable alignment and sizing
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Device {
     interface Props extends BaseComponentProps {
         variant: "mobile" | "browser";
@@ -1278,7 +1258,6 @@ export { Device, MobileDevice, BrowserDevice };
  * </Icon>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Icon {
     interface Props extends BaseComponentProps {
         name?: string;
@@ -1338,7 +1317,6 @@ export { Icon };
  * <FileUploadProgress file={file} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace FileUploadProgress {
     interface Item {
         id: string;
@@ -1399,7 +1377,6 @@ export { FileUploadProgress };
  * <SkeletonCard avatar lines={4} animate />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Skeleton {
     interface Props extends BaseComponentProps {
         variant?: "text" | "circular" | "rectangular";
@@ -1489,7 +1466,6 @@ export {};
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace List {
     interface Item {
         id?: string;
@@ -1584,7 +1560,6 @@ export { List };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace ListGroup {
     interface Item {
         id?: string;
@@ -1649,7 +1624,6 @@ export { ListGroup };
  * <KbdGroup keys={['shift', 'and', 'b']} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Kbd {
     interface Props extends BaseComponentProps {
         children?: string | HTMLElement;
@@ -1740,7 +1714,6 @@ export {};
  * <Rating value={1} max={2} symbol="thumbs" />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 type RatingMode = "interactive" | "readonly";
 type RatingSymbol = "star" | "heart" | "emoji" | "thumbs" | "custom";
 type RatingSize = "sm" | "md" | "lg";
@@ -1819,7 +1792,6 @@ export { Rating };
  * </div>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 type LegendIndicatorSize = "xs" | "sm" | "md" | "lg";
 type LegendIndicatorShape = "circle" | "square";
 declare namespace LegendIndicator {
@@ -1920,7 +1892,6 @@ export { LegendIndicator };
  * </Timeline>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 type TimelineItemIcon = "dot" | "avatar" | "icon" | "badge";
 interface TimelineItemUser {
     name: string;
@@ -2051,7 +2022,6 @@ export {};
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 type ToastType = "info" | "success" | "error" | "warning" | "default";
 type ToastVariant = "default" | "solid" | "soft";
 declare namespace Toast {
@@ -2119,7 +2089,6 @@ export { Toast };
  * </ToastContainer>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 type ToastPosition = "top-left" | "top-center" | "top-right" | "center" | "bottom-left" | "bottom-center" | "bottom-right";
 declare namespace ToastContainer {
     interface Props extends BaseComponentProps {
@@ -2178,7 +2147,6 @@ export { ToastContainer, TopRightToastContainer, TopCenterToastContainer, Bottom
  * </Container>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Container {
     /**
      * Container props
@@ -2271,7 +2239,6 @@ export { Container, CenteredContainer, FluidContainer };
  * </Grid>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 /**
  * Responsive breakpoint value
  */
@@ -2393,7 +2360,6 @@ export { SimpleGrid, ResponsiveGrid };
  * </Columns>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 /**
  * Responsive column count
  */
@@ -2480,7 +2446,6 @@ export { TwoColumns, ThreeColumns, FourColumns, ResponsiveColumns };
  * <Text><Strong>Bold text</Strong> and <Em>italic text</Em></Text>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 /**
  * Text namespace - contains all text and typography related types
  */
@@ -2693,7 +2658,6 @@ export default Text;
  * </ExternalLink>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Link {
     /**
      * Link props
@@ -2837,7 +2801,6 @@ export { Link, IconLink, ExternalLink, NavLink, ButtonLink, BackLink, NextLink, 
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Image {
     /**
      * Image props
@@ -2994,7 +2957,6 @@ export { Image, ImageZoom, ImageOverlay, BackgroundImage, AvatarImage };
  * </LayoutSplitter>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace LayoutSplitter {
     /**
      * LayoutSplitter props
@@ -3138,7 +3100,6 @@ export { HorizontalSplitter, VerticalSplitter, CodeEditorLayout, ThreePanelLayou
  * </CustomScrollbar>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace CustomScrollbar {
     /**
      * CustomScrollbar props
@@ -3242,7 +3203,6 @@ export { CustomScrollbar, ScrollArea, ThinScrollbar, CodeScrollbar, ChatScrollba
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Input {
     interface Props extends BaseComponentProps {
         type?: "text" | "email" | "password" | "number" | "tel" | "url" | "search";
@@ -3328,7 +3288,6 @@ export { Input };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Select {
     interface Option {
         value: string | number;
@@ -3397,7 +3356,6 @@ export { Select };
  * <Checkbox label="Disabled option" disabled={true} checked={true} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Checkbox {
     interface Props extends BaseComponentProps {
         checked?: boolean | Signal<boolean>;
@@ -3471,7 +3429,6 @@ export { Checkbox };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Radio {
     interface Props extends BaseComponentProps {
         name?: string;
@@ -3547,7 +3504,6 @@ export { Radio };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace RadioGroup {
     interface Option {
         value: string | number;
@@ -3624,7 +3580,6 @@ export { RadioGroup };
  * <Toggle label="Disabled option" disabled={true} checked={true} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Toggle {
     interface Props extends BaseComponentProps {
         checked?: boolean | Signal<boolean>;
@@ -3696,7 +3651,6 @@ export { Toggle };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Textarea {
     interface Props extends BaseComponentProps {
         value?: string | Signal<string>;
@@ -3765,7 +3719,6 @@ export { Textarea };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace FileInput {
     interface Props extends BaseComponentProps {
         label?: string;
@@ -3831,7 +3784,6 @@ export { FileInput };
  * <RangeSlider label="Brightness" value={75} disabled={true} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace RangeSlider {
     interface Props extends BaseComponentProps {
         value?: number | Signal<number>;
@@ -3887,7 +3839,6 @@ export { RangeSlider };
  * <ColorPicker label="Color" value="#ef4444" disabled={true} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace ColorPicker {
     interface Props extends BaseComponentProps {
         value?: string | Signal<string>;
@@ -3945,7 +3896,6 @@ export { ColorPicker };
  * <TimePicker disabled={true} value="09:00" />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace TimePicker {
     interface Props extends BaseComponentProps {
         value?: string | Signal<string>;
@@ -4021,7 +3971,6 @@ export { TimePicker };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace TogglePassword {
     interface Props extends BaseComponentProps {
         value?: string | Signal<string>;
@@ -4113,7 +4062,6 @@ export { TogglePassword };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace InputNumber {
     interface Props extends BaseComponentProps {
         value?: number | Signal<number>;
@@ -4236,7 +4184,6 @@ export { InputNumber };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace PinInput {
     interface Props extends BaseComponentProps {
         length?: number;
@@ -4353,7 +4300,6 @@ export { PinInput };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace CopyMarkup {
     interface Props extends BaseComponentProps {
         template: Pulse.JSX.Element;
@@ -4457,7 +4403,6 @@ export { CopyMarkup };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace StrongPassword {
     interface Props extends BaseComponentProps {
         value?: string | Signal<string>;
@@ -4584,7 +4529,6 @@ export { StrongPassword };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace ComboBox {
     interface Option {
         [key: string]: any;
@@ -4704,7 +4648,6 @@ export { ComboBox };
  * <SearchBox options={data} size="lg" />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace SearchBox {
     interface Option {
         [key: string]: any;
@@ -4826,7 +4769,6 @@ export { SearchBox };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace ToggleCount {
     interface Props extends BaseComponentProps {
         type?: "radio" | "switch";
@@ -4900,7 +4842,6 @@ export { ToggleCount };
  * </FormGroup>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace FormGroup {
     interface Props extends BaseComponentProps {
         label?: string;
@@ -4978,7 +4919,6 @@ export { FormGroup };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace InputGroup {
     interface Addon {
         type: "text" | "icon" | "button" | "checkbox" | "radio" | "select";
@@ -5079,7 +5019,6 @@ export { InputGroup };
  * </Modal>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Modal {
     interface Props extends BaseComponentProps {
         isOpen?: boolean | Signal<boolean>;
@@ -5175,7 +5114,6 @@ export { Modal };
  * </Offcanvas>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Offcanvas {
     type Placement = "left" | "right" | "top" | "bottom";
     interface Props extends BaseComponentProps {
@@ -5242,7 +5180,6 @@ export { Offcanvas };
  * </Tooltip>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Tooltip {
     interface Props extends BaseComponentProps {
         content: string | HTMLElement;
@@ -5333,7 +5270,6 @@ export { Tooltip };
  * </Popover>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Popover {
     interface Props extends Omit<Tooltip.Props, "content"> {
         header?: string | Pulse.JSX.Element;
@@ -5406,7 +5342,6 @@ export { Popover };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Dropdown {
     interface Item {
         label?: string | HTMLElement;
@@ -5476,7 +5411,6 @@ export { Dropdown };
  * </ContextMenu>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace ContextMenu {
     interface Props extends BaseComponentProps {
         items: Dropdown.Item[];
@@ -5492,7 +5426,6 @@ export { ContextMenu };
  * Accordion Component
  * A collapsible content panel component with multiple variants
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Accordion {
     interface Item {
         id: string;
@@ -5583,7 +5516,6 @@ export { Accordion };
  * <Tabs variant="vertical" items={[...]} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Tabs {
     interface Item {
         id: string;
@@ -5663,7 +5595,6 @@ export { Tabs };
  * <TreeView nodes={nodes} selectable multiSelect selected={selectedSignal} />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace TreeView {
     interface Node {
         value: string;
@@ -5805,7 +5736,6 @@ export { TreeView };
  * </Navbar>
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Navbar {
     interface Item {
         id?: string;
@@ -5928,7 +5858,6 @@ export { Navbar };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Breadcrumb {
     interface Item {
         id?: string;
@@ -6030,7 +5959,6 @@ export { Breadcrumb };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Pagination {
     type Variant = "default" | "bordered" | "bordered-group";
     type Shape = "default" | "pilled";
@@ -6148,7 +6076,6 @@ export { Pagination };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Stepper {
     type Mode = "linear" | "non-linear";
     type Orientation = "horizontal" | "vertical";
@@ -6237,7 +6164,6 @@ export { Stepper };
  * <StepIndicator index={1} status="pending" avatar="https://example.com/avatar.jpg" />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace StepIndicator {
     type Status = "pending" | "active" | "success" | "completed" | "error" | "processed";
     type Variant = "default" | "white" | "solid";
@@ -6357,7 +6283,6 @@ export { StepIndicator };
  * />
  * ```
  */
-import Pulse from "@odyssee-software/pulse-framework";
 declare namespace Table {
     interface Column<T = any> {
         key: string;
