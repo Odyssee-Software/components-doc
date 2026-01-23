@@ -238,7 +238,7 @@ const generateIframeDocument = () => {
                             setTimeout(() => {
                                 window.HSStaticMethods["autoInit"]();
                                 console.log('✅ components.initComponents called');
-                            }, 1000 );
+                            }, 100 );
                         } else if (typeof result === "string") {
                             console.log('✅ Rendering string result');
                             preview.textContent = result;

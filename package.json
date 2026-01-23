@@ -27,7 +27,7 @@
   "dependencies": {
     "@babel/standalone": "^7.28.6",
     "@floating-ui/dom": "^1.7.4",
-    "@odyssee-software/components": "^1.0.0-rc.4.5",
+    "@odyssee-software/components": "file:../odyssee-components",
     "@odyssee-software/pulse-framework": "^0.1.0-rc.2-7",
     "monaco-editor": "^0.55.1"
   }
