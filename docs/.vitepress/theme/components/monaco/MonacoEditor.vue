@@ -11,7 +11,6 @@ import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 // Import type definitions as raw strings
 import pulseTypeDefs from "./pulse-framework.d.ts?raw";
 import componentsTypeDefs from "./odyssee-components.d.ts?raw";
-import globalTypeDefs from "./globals.d.ts?raw";
 
 interface Props {
     modelValue: string;
@@ -72,12 +71,6 @@ onMounted(() => {
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
         componentsTypeDefs,
         "file:///node_modules/@odyssee-software/components/dist/index.d.ts",
-    );
-
-    // Add global declarations for easier access (auto-generated)
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        globalTypeDefs,
-        "file:///globals.d.ts",
     );
 
     // Set diagnostic options
