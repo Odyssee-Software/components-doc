@@ -647,19 +647,55 @@ export {
 
 export {};
 
+
+
 // ============================================
 // Global declarations for Monaco Editor
 // ============================================
 
-/**
- * Pulse is available globally in the editor
- * Use it to create signals, computed values, effects, and JSX
- *
- * @example
- * const count = Pulse.signal(0);
- *
- * <button onclick={() => count(count() + 1)}>
- *   Count: {count()}
- * </button>
- */
-declare const Pulse: typeof import("./pulse-framework").default;
+declare global {
+  /**
+   * Pulse is available globally in the editor
+   * Use it to create signals, computed values, effects, and JSX
+   *
+   * @example
+   * const count = Pulse.signal(0);
+   *
+   * <button onclick={() => count(count() + 1)}>
+   *   Count: {count()}
+   * </button>
+   */
+  declare const Pulse: {
+	signal: typeof signal;
+	computed: typeof computed;
+	effect: typeof effect;
+	batch: typeof batch;
+	bindEffectToElement: typeof bindEffectToElement;
+	flush: typeof flush;
+	render: ((template: RenderTemplate, parentIsSVG?: boolean) => HTMLElement | SVGElement) & {
+		fragment: (props?: {
+			children?: any;
+		}) => DocumentFragment;
+	};
+	Fragment: (props?: {
+		children?: any;
+	} | undefined) => DocumentFragment;
+	jsx: typeof jsx;
+	jsxs: typeof jsx;
+	scanDSL: typeof scanDSL;
+	createDSLScope: typeof createDSLScope;
+	__DEBUG__: {
+		enable: typeof enableDebug;
+		disable: typeof disableDebug;
+		graph: typeof debugGraph;
+		tree: typeof debugGraphTree;
+		stats: typeof debugStats;
+		dirty: typeof debugDirtyPropagation;
+		findNode: typeof findNode;
+		findByType: typeof findNodesByType;
+		clear: typeof clearRegistry;
+		readonly enabled: boolean;
+		readonly nodeCount: number;
+	};
+};
+}

@@ -2707,86 +2707,150 @@ export {
 
 export {};
 
+
+
 // ============================================
 // Global declarations for Monaco Editor
 // ============================================
 
-/**
- * All Odyssee components are available globally in the editor
- * No need to import them - just use them directly!
- *
- * @example
- * <Button variant="solid" color="primary">Click me</Button>
- */
-declare const Button: typeof import("./odyssee-components").Button;
-declare const Input: typeof import("./odyssee-components").Input;
-declare const Select: typeof import("./odyssee-components").Select;
-declare const Checkbox: typeof import("./odyssee-components").Checkbox;
-declare const Radio: typeof import("./odyssee-components").Radio;
-declare const RadioGroup: typeof import("./odyssee-components").RadioGroup;
-declare const Toggle: typeof import("./odyssee-components").Toggle;
-declare const Textarea: typeof import("./odyssee-components").Textarea;
-declare const FileInput: typeof import("./odyssee-components").FileInput;
-declare const Alert: typeof import("./odyssee-components").Alert;
-declare const Badge: typeof import("./odyssee-components").Badge;
-declare const Card: typeof import("./odyssee-components").Card;
-declare const Avatar: typeof import("./odyssee-components").Avatar;
-declare const AvatarGroup: typeof import("./odyssee-components").AvatarGroup;
-declare const Blockquote: typeof import("./odyssee-components").Blockquote;
-declare const Progress: typeof import("./odyssee-components").Progress;
-declare const ButtonGroup: typeof import("./odyssee-components").ButtonGroup;
-declare const Collapse: typeof import("./odyssee-components").Collapse;
-declare const Divider: typeof import("./odyssee-components").Divider;
-declare const Icon: typeof import("./odyssee-components").Icon;
-declare const Spinner: typeof import("./odyssee-components").Spinner;
-declare const ButtonSpinner: typeof import("./odyssee-components").ButtonSpinner;
-declare const Skeleton: typeof import("./odyssee-components").Skeleton;
-declare const Modal: typeof import("./odyssee-components").Modal;
-declare const Tooltip: typeof import("./odyssee-components").Tooltip;
-declare const Dropdown: typeof import("./odyssee-components").Dropdown;
-declare const Popover: typeof import("./odyssee-components").Popover;
-declare const Tabs: typeof import("./odyssee-components").Tabs;
-declare const Accordion: typeof import("./odyssee-components").Accordion;
-declare const Table: typeof import("./odyssee-components").Table;
-declare const Pagination: typeof import("./odyssee-components").Pagination;
-declare const Breadcrumb: typeof import("./odyssee-components").Breadcrumb;
-declare const Navbar: typeof import("./odyssee-components").Navbar;
-declare const Container: typeof import("./odyssee-components").Container;
-declare const Grid: typeof import("./odyssee-components").Grid;
-declare const Columns: typeof import("./odyssee-components").Columns;
-declare const H1: typeof import("./odyssee-components").H1;
-declare const H2: typeof import("./odyssee-components").H2;
-declare const H3: typeof import("./odyssee-components").H3;
-declare const H4: typeof import("./odyssee-components").H4;
-declare const H5: typeof import("./odyssee-components").H5;
-declare const H6: typeof import("./odyssee-components").H6;
-declare const Text: typeof import("./odyssee-components").Text;
-declare const Link: typeof import("./odyssee-components").Link;
-declare const Image: typeof import("./odyssee-components").Image;
-declare const Offcanvas: typeof import("./odyssee-components").Offcanvas;
-declare const ContextMenu: typeof import("./odyssee-components").ContextMenu;
-declare const TreeView: typeof import("./odyssee-components").TreeView;
-declare const Stepper: typeof import("./odyssee-components").Stepper;
-declare const FormGroup: typeof import("./odyssee-components").FormGroup;
-declare const InputGroup: typeof import("./odyssee-components").InputGroup;
-declare const RangeSlider: typeof import("./odyssee-components").RangeSlider;
-declare const ColorPicker: typeof import("./odyssee-components").ColorPicker;
-declare const TimePicker: typeof import("./odyssee-components").TimePicker;
-declare const DatePicker: typeof import("./odyssee-components").DatePicker;
-declare const InputNumber: typeof import("./odyssee-components").InputNumber;
-declare const PinInput: typeof import("./odyssee-components").PinInput;
-declare const ComboBox: typeof import("./odyssee-components").ComboBox;
-declare const SearchBox: typeof import("./odyssee-components").SearchBox;
-declare const StrongPassword: typeof import("./odyssee-components").StrongPassword;
-declare const TogglePassword: typeof import("./odyssee-components").TogglePassword;
-declare const Carousel: typeof import("./odyssee-components").Carousel;
-declare const ChatBubble: typeof import("./odyssee-components").ChatBubble;
-declare const Device: typeof import("./odyssee-components").Device;
-declare const Rating: typeof import("./odyssee-components").Rating;
-declare const Timeline: typeof import("./odyssee-components").Timeline;
-declare const Toast: typeof import("./odyssee-components").Toast;
-declare const List: typeof import("./odyssee-components").List;
-declare const ListGroup: typeof import("./odyssee-components").ListGroup;
-declare const Kbd: typeof import("./odyssee-components").Kbd;
-declare const FormLabel: typeof import("./odyssee-components").FormLabel;
-declare const FormHelperText: typeof import("./odyssee-components").FormHelperText;
+declare global {
+  /**
+   * All Odyssee components are available globally in the editor
+   * No need to import them - just use them directly!
+   *
+   * @example
+   * <Button variant="solid" color="primary">Click me</Button>
+   */
+  const Button: Pulse.Fn<Button.Props>;
+  const Input: Pulse.Fn<Input.Props>;
+  const Select: Pulse.Fn<Select.Props>;
+  const Checkbox: Pulse.Fn<Checkbox.Props>;
+  const Radio: Pulse.Fn<Radio.Props>;
+  const RadioGroup: Pulse.Fn<RadioGroup.Props>;
+  const Toggle: Pulse.Fn<Toggle.Props>;
+  const Textarea: Pulse.Fn<Textarea.Props>;
+  const FileInput: Pulse.Fn<FileInput.Props>;
+  const Alert: Pulse.Fn<Alert.Props>;
+  const Badge: Pulse.Fn<Badge.Props>;
+  const Card: Pulse.Fn<Card.Props>;
+  const Avatar: Pulse.Fn<Avatar.Props>;
+  const AvatarGroup: Pulse.Fn<AvatarGroup.Props> & {
+	Stack: Pulse.Fn<AvatarGroup.Props>;
+	Grid: Pulse.Fn<AvatarGroup.Props>;
+};
+  const Blockquote: Pulse.Fn<Blockquote.Props> & {
+	Bordered: Pulse.Fn<Blockquote.Props>;
+	Minimal: Pulse.Fn<Blockquote.Props>;
+};
+  const Progress: Pulse.Fn<Progress.Props>;
+  const ButtonGroup: Pulse.Fn<ButtonGroup.Props> & {
+	Horizontal: Pulse.Fn<ButtonGroup.Props>;
+	Vertical: Pulse.Fn<ButtonGroup.Props>;
+	Toolbar: Pulse.Fn<ButtonGroup.Props>;
+	Responsive: Pulse.Fn<ButtonGroup.Props>;
+};
+  const Collapse: Pulse.Fn<Collapse.Props> & {
+	Content: Pulse.Fn<CollapseContent.Props>;
+	Trigger: Pulse.Fn<CollapseTrigger.Props>;
+	ReadMore: Pulse.Fn<Collapse.Props>;
+};
+  const Divider: Pulse.Fn<Divider.Props> & {
+	Vertical: Pulse.Fn<Divider.Props>;
+	WithText: Pulse.Fn<Omit<Divider.Props, "labelPosition">>;
+};
+  const Icon: Pulse.Fn<Icon.Props>;
+  const Spinner: Pulse.Fn<Spinner.Props>;
+  const ButtonSpinner: Pulse.Fn<Omit<Spinner.Props, "size">>;
+  const Skeleton: any;
+  const Modal: Pulse.Fn<Modal.Props>;
+  const Tooltip: Pulse.Fn<Tooltip.Props>;
+  const Dropdown: Pulse.Fn<Dropdown.Props> & {
+	Item: Pulse.Fn<Dropdown.ItemProps>;
+	Divider: Pulse.Fn<Dropdown.DividerProps>;
+};
+  const Popover: Pulse.Fn<Popover.Props>;
+  const Tabs: Pulse.Fn<Tabs.Props> & {
+	Panel: Pulse.Fn<Tabs.PanelProps>;
+};
+  const Accordion: Pulse.Fn<Accordion.Props> & {
+	Basic: Pulse.Fn<Accordion.Props>;
+	NoArrow: Pulse.Fn<Accordion.Props>;
+	Arrow: Pulse.Fn<Accordion.Props>;
+	Stretched: Pulse.Fn<Accordion.Props>;
+	Bordered: Pulse.Fn<Accordion.Props>;
+	ActiveBordered: Pulse.Fn<Accordion.Props>;
+	Nested: Pulse.Fn<NestedAccordionProps>;
+};
+  const Table: <T extends Record<string, any> = Record<string, any>>(props: Table.Props<T>) => Pulse.JSX.Element;
+  const Pagination: Pulse.Fn<Pagination.Props>;
+  const Breadcrumb: Pulse.Fn<Breadcrumb.Props> & {
+	Chevron: Pulse.Fn<Omit<Breadcrumb.Props, "separator">>;
+	Slash: Pulse.Fn<Omit<Breadcrumb.Props, "separator">>;
+	Bordered: Pulse.Fn<Omit<Breadcrumb.Props, "bordered">>;
+};
+  const Navbar: Pulse.Fn<Navbar.Props> & {
+	Link: Pulse.Fn<Navbar.LinkProps>;
+	Dark: Pulse.Fn<Navbar.Props>;
+	Primary: Pulse.Fn<Navbar.Props>;
+	Sticky: Pulse.Fn<Navbar.Props>;
+};
+  const Container: Pulse.Fn<Container.Props>;
+  const Grid: any;
+  const Columns: any;
+  const H1: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+  const H2: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+  const H3: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+  const H4: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+  const H5: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+  const H6: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+  const Text: any;
+  const Link: Pulse.Fn<Link.Props>;
+  const Image: any;
+  const Offcanvas: Pulse.Fn<Offcanvas.Props>;
+  const ContextMenu: Pulse.Fn<ContextMenu.Props>;
+  const TreeView: Pulse.Fn<TreeView.Props> & {
+	Node: Pulse.Fn<TreeView.NodeProps>;
+};
+  const Stepper: Pulse.Fn<Stepper.Props> & {
+	Item: Pulse.Fn<Stepper.ItemProps>;
+};
+  const FormGroup: Pulse.Fn<FormGroup.Props>;
+  const InputGroup: Pulse.Fn<InputGroup.Props>;
+  const RangeSlider: Pulse.Fn<RangeSlider.Props>;
+  const ColorPicker: Pulse.Fn<ColorPicker.Props>;
+  const TimePicker: Pulse.Fn<TimePicker.Props>;
+  const DatePicker: Pulse.Fn<DatePicker.Props>;
+  const InputNumber: Pulse.Fn<InputNumber.Props>;
+  const PinInput: Pulse.Fn<PinInput.Props>;
+  const ComboBox: Pulse.Fn<ComboBox.Props>;
+  const SearchBox: Pulse.Fn<SearchBox.Props>;
+  const StrongPassword: Pulse.Fn<StrongPassword.Props>;
+  const TogglePassword: Pulse.Fn<TogglePassword.Props>;
+  const Carousel: Pulse.Fn<Carousel.Props> & {
+	AutoPlay: Pulse.Fn<Carousel.Props>;
+	Thumbnail: Pulse.Fn<Carousel.Props>;
+};
+  const ChatBubble: any;
+  const Device: Pulse.Fn<Device.Props>;
+  const Rating: Pulse.Fn<Rating.Props>;
+  const Timeline: any;
+  const Toast: Pulse.Fn<Toast.Props>;
+  const List: Pulse.Fn<List.Props> & {
+	Check: Pulse.Fn<Omit<List.Props, "type"> & {
+		color?: List.Props["checkColor"];
+		variant?: List.Props["checkVariant"];
+	}>;
+	Inline: Pulse.Fn<Omit<List.Props, "type">>;
+	Ordered: Pulse.Fn<Omit<List.Props, "type">>;
+	Unordered: Pulse.Fn<Omit<List.Props, "type">>;
+};
+  const ListGroup: Pulse.Fn<ListGroup.Props> & {
+	Link: Pulse.Fn<Omit<ListGroup.Props, "as">>;
+	Button: Pulse.Fn<Omit<ListGroup.Props, "as">>;
+	Flush: Pulse.Fn<Omit<ListGroup.Props, "variant">>;
+	Horizontal: Pulse.Fn<Omit<ListGroup.Props, "variant">>;
+};
+  const Kbd: any;
+  const FormLabel: any;
+  const FormHelperText: any;
+}
