@@ -58,20 +58,6 @@ count(count() + 1);
 console.log(count()); // 6
 ```
 
-<LiveCodeEditor :defaultCode="`export default () => {
-  const count = Pulse.signal(0);
-  return <div>
-    <h2>Signal Example</h2>
-    <p>Count: {count}</p>
-    <Button onClick={() => count(count() + 1)}>
-      Increment
-    </Button>
-    <Button onClick={() => count(count() - 1)}>
-      Decrement
-    </Button>
-  </div>;
-}`" />
-
 ### Signals in JSX
 
 ::: warning Important: Signal Syntax in JSX
@@ -98,6 +84,18 @@ const Counter: Pulse.Fn = () => {
   );
 };
 ```
+
+<LiveCodeEditor :defaultCode="`export default () => {
+  const count = Pulse.signal(0);
+  return <div>
+    <h2>Signal Example</h2>
+    <p>Count: {count}</p>
+    <ButtonGroup buttons={[
+      { label: '-', onClick: () => count(count() - 1) },
+      { label: '+', onClick: () => count(count() + 1) }
+    ]}/>
+  </div>;
+}`" />
 
 ### When to Use `()` vs Not
 
@@ -162,6 +160,23 @@ const UserProfile: Pulse.Fn = () => {
   );
 };
 ```
+
+<LiveCodeEditor :defaultCode="`export default () => {
+  const firstName = Pulse.signal("John");
+  const lastName = Pulse.signal("Doe");
+  const fullName = Pulse.computed(() => firstName() + "" +  lastName());
+  return <div>
+    <h1>{fullName}</h1>
+    <input 
+      value={firstName}
+      onInput={(e) => firstName((e.target as HTMLInputElement).value)}
+    />
+    <input 
+      value={lastName}
+      onInput={(e) => lastName((e.target as HTMLInputElement).value)}
+    />
+  </div>;
+}`" />
 
 ### Complex Computed
 

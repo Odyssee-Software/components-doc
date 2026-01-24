@@ -195,7 +195,7 @@ const generateIframeDocument = () => {
                 console.log('🔍 User code:', userCode);
 
                 // Check if code uses export default pattern
-                const hasExportDefault = /export\s+default/.test(userCode);
+                const hasExportDefault = userCode.trimStart().startsWith('export default');
                 console.log('🔍 hasExportDefault:', hasExportDefault);
 
                 let codeToExecute;
@@ -209,7 +209,7 @@ const generateIframeDocument = () => {
                     // Virtual index.ts that imports and executes the component
                     const indexTs = 'import Component from "./code.ts"; return Component();';
 
-                    // Compile code.ts with Babel (transform export default to a variable)
+                    // Compile code.ts with Babel using transform-modules-commonjs
                     const transformedCode = Babel.transform(codeTs, {
                         presets: ["react"],
                         plugins: [
@@ -220,56 +220,63 @@ const generateIframeDocument = () => {
                                     pragmaFrag: "Pulse.render.fragment",
                                 },
                             ],
+                            // Transform ES modules to CommonJS to handle exports
+                            ["transform-modules-commonjs"]
                         ],
                     });
 
                     console.log('🔍 Transformed code:', transformedCode.code);
 
-                    // Transform "export default X" to "const __component = X"
-                    let compiledCode = transformedCode.code;
-                    compiledCode = compiledCode.replace(/export\s+default\s+/, 'const __component = ');
-
-                    // Create the final executable code
-                    codeToExecute = compiledCode + '; return __component();';
+                    // The code now uses module.exports instead of export default
+                    // Wrap it to capture the export and execute it
+                    codeToExecute =
+                        '(function() {' +
+                        '  var module = { exports: {} };' +
+                        '  var exports = module.exports;' +
+                        '  ' + transformedCode.code + ';' +
+                        '  return module.exports.default ? module.exports.default() : module.exports();' +
+                        '})()';
 
                     console.log('🔍 Final executable code:', codeToExecute);
                 } else {
-                    // Check if code is JSX (starts with <)
-                    const isJSX = userCode.startsWith("<");
+                    console.log('🔍 JSX direct mode, wrapping in function...');
 
-                    if (isJSX) {
-                        console.log('🔍 Compiling JSX...');
-                        // Compile JSX to JS
-                        const transformed = Babel.transform(userCode, {
-                            presets: ["react"],
-                            plugins: [
-                                [
-                                    "transform-react-jsx",
-                                    {
-                                        pragma: "Pulse.jsx",
-                                        pragmaFrag: "Pulse.render.fragment",
-                                    },
-                                ],
+                    // Wrap JSX in a function with export default
+                    const wrappedCode = 'export default () => { return ' + userCode + '; }';
+
+                    // Compile with Babel using transform-modules-commonjs
+                    const transformedCode = Babel.transform(wrappedCode, {
+                        presets: ["react"],
+                        plugins: [
+                            [
+                                "transform-react-jsx",
+                                {
+                                    pragma: "Pulse.jsx",
+                                    pragmaFrag: "Pulse.render.fragment",
+                                },
                             ],
-                        });
-                        codeToExecute = transformed.code || userCode;
-                        console.log('🔍 Compiled code:', codeToExecute);
-                    } else {
-                        codeToExecute = userCode;
-                    }
+                            // Transform ES modules to CommonJS to handle exports
+                            ["transform-modules-commonjs"]
+                        ],
+                    });
 
-                    // Wrap code to return result
+                    console.log('🔍 Transformed JSX code:', transformedCode.code);
+
+                    // The code now uses module.exports instead of export default
+                    // Wrap it to capture the export and execute it
                     codeToExecute =
-                        'try {' +
-                        '    const result = ' + codeToExecute + ';' +
-                        '    return result;' +
-                        '} catch (e) {' +
-                        '    throw new Error(e.message);' +
-                        '}';
+                        '(function() {' +
+                        '  var module = { exports: {} };' +
+                        '  var exports = module.exports;' +
+                        '  ' + transformedCode.code + ';' +
+                        '  return module.exports.default ? module.exports.default() : module.exports();' +
+                        '})()';
+
+                    console.log('🔍 Final JSX executable code:', codeToExecute);
                 }
 
-                // Execute code
-                const func = new Function(...scopeKeys, codeToExecute);
+                // Execute code - wrap in return statement
+                const func = new Function(...scopeKeys, 'return ' + codeToExecute);
                 const result = func(...scopeValues);
 
                 console.log('🔍 Result:', result);
