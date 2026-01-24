@@ -25,6 +25,7 @@
                 class="preview-iframe"
                 sandbox="allow-scripts allow-same-origin"
                 :srcdoc="iframeContent"
+                :key="iframeKey"
                 title="Component Preview"
             ></iframe>
             <div v-if="error" class="error-message">{{ error }}</div>
@@ -43,15 +44,23 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
     code: "",
-    defaultCode: `<Button variant="solid" color="primary">
-  Click me
-</Button>`,
+    defaultCode: `export default () => {
+  const count = Pulse.signal(0);
+
+  return <div>
+    <h2>Counter: {count}</h2>
+    <Button onClick={() => count(count() + 1)}>
+      Increment
+    </Button>
+  </div>;
+}`,
 });
 
 const iframeRef = ref<HTMLIFrameElement | null>(null);
 const currentCode = ref(props.code || props.defaultCode);
 const error = ref<string | null>(null);
 const iframeContent = ref("");
+const iframeKey = ref(Date.now());
 
 let debounceTimer: number | null = null;
 let iframeReady = false;
@@ -162,6 +171,7 @@ const generateIframeDocument = () => {
     <div id="preview"></div>
     <script>
         // Execute code with dependencies passed from parent
+        // Version: ${Date.now()}
         const executeCode = (code, Pulse, components, Babel) => {
         console.log({window})
             try {
@@ -171,7 +181,7 @@ const generateIframeDocument = () => {
                 console.log('🔍 Components:', Object.keys(components));
                 console.log('🔍 Babel:', Babel);
 
-                // Create scope with all components
+                // Create scope with all components and Pulse
                 const scope = {
                     Pulse,
                     ...components,
@@ -181,16 +191,26 @@ const generateIframeDocument = () => {
                 const scopeKeys = Object.keys(scope);
                 const scopeValues = Object.values(scope);
 
-                let codeToExecute = code.trim();
-                console.log('🔍 Code to execute:', codeToExecute);
+                let userCode = code.trim();
+                console.log('🔍 User code:', userCode);
 
-                // Check if code is JSX (starts with <)
-                const isJSX = codeToExecute.startsWith("<");
+                // Check if code uses export default pattern
+                const hasExportDefault = /export\s+default/.test(userCode);
+                console.log('🔍 hasExportDefault:', hasExportDefault);
 
-                if (isJSX) {
-                    console.log('🔍 Compiling JSX...');
-                    // Compile JSX to JS
-                    const transformed = Babel.transform(codeToExecute, {
+                let codeToExecute;
+
+                if (hasExportDefault) {
+                    console.log('🔍 Export default detected, using virtual module approach...');
+
+                    // Virtual code.ts (user's code with export default)
+                    const codeTs = userCode;
+
+                    // Virtual index.ts that imports and executes the component
+                    const indexTs = 'import Component from "./code.ts"; return Component();';
+
+                    // Compile code.ts with Babel (transform export default to a variable)
+                    const transformedCode = Babel.transform(codeTs, {
                         presets: ["react"],
                         plugins: [
                             [
@@ -202,22 +222,54 @@ const generateIframeDocument = () => {
                             ],
                         ],
                     });
-                    codeToExecute = transformed.code || codeToExecute;
-                    console.log('🔍 Compiled code:', codeToExecute);
+
+                    console.log('🔍 Transformed code:', transformedCode.code);
+
+                    // Transform "export default X" to "const __component = X"
+                    let compiledCode = transformedCode.code;
+                    compiledCode = compiledCode.replace(/export\s+default\s+/, 'const __component = ');
+
+                    // Create the final executable code
+                    codeToExecute = compiledCode + '; return __component();';
+
+                    console.log('🔍 Final executable code:', codeToExecute);
+                } else {
+                    // Check if code is JSX (starts with <)
+                    const isJSX = userCode.startsWith("<");
+
+                    if (isJSX) {
+                        console.log('🔍 Compiling JSX...');
+                        // Compile JSX to JS
+                        const transformed = Babel.transform(userCode, {
+                            presets: ["react"],
+                            plugins: [
+                                [
+                                    "transform-react-jsx",
+                                    {
+                                        pragma: "Pulse.jsx",
+                                        pragmaFrag: "Pulse.render.fragment",
+                                    },
+                                ],
+                            ],
+                        });
+                        codeToExecute = transformed.code || userCode;
+                        console.log('🔍 Compiled code:', codeToExecute);
+                    } else {
+                        codeToExecute = userCode;
+                    }
+
+                    // Wrap code to return result
+                    codeToExecute =
+                        'try {' +
+                        '    const result = ' + codeToExecute + ';' +
+                        '    return result;' +
+                        '} catch (e) {' +
+                        '    throw new Error(e.message);' +
+                        '}';
                 }
 
-                // Wrap code to return result
-                const wrappedCode = \`
-                    try {
-                        const result = \${codeToExecute};
-                        return result;
-                    } catch (e) {
-                        throw new Error(e.message);
-                    }
-                \`;
-
                 // Execute code
-                const func = new Function(...scopeKeys, wrappedCode);
+                const func = new Function(...scopeKeys, codeToExecute);
                 const result = func(...scopeValues);
 
                 console.log('🔍 Result:', result);
@@ -291,8 +343,9 @@ const executeCode = async () => {
         // Load modules if not already loaded
         await loadModules();
 
-        // If iframe is not ready yet, regenerate it
+        // If iframe is not ready yet, regenerate it with new key to force reload
         if (!iframeReady) {
+            iframeKey.value = Date.now();
             iframeContent.value = generateIframeDocument();
             return;
         }
@@ -365,6 +418,7 @@ onMounted(async () => {
 
     // Load modules first, then initialize iframe content
     await loadModules();
+    iframeKey.value = Date.now();
     iframeContent.value = generateIframeDocument();
 });
 

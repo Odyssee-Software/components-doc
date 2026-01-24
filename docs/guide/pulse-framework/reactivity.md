@@ -58,6 +58,20 @@ count(count() + 1);
 console.log(count()); // 6
 ```
 
+<LiveCodeEditor :defaultCode="`export default () => {
+  const count = Pulse.signal(0);
+  return <div>
+    <h2>Signal Example</h2>
+    <p>Count: {count}</p>
+    <Button onClick={() => count(count() + 1)}>
+      Increment
+    </Button>
+    <Button onClick={() => count(count() - 1)}>
+      Decrement
+    </Button>
+  </div>;
+}`" />
+
 ### Signals in JSX
 
 ::: warning Important: Signal Syntax in JSX

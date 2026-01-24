@@ -3,6 +3,7 @@ title: Advanced Patterns
 description: Master advanced patterns in Pulse Framework - stores, routing, forms, and more
 ---
 
+
 # Advanced Patterns
 
 Master advanced patterns for building complex applications with Pulse Framework.
