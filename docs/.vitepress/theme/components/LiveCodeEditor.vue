@@ -76,10 +76,27 @@ const loadModules = async () => {
     if (modulesLoaded) return;
 
     try {
-        Pulse = (await import("@odyssee-software/pulse-framework")).default;
+        const PulseModule = await import("@odyssee-software/pulse-framework");
+        console.log("🔍 PulseModule (full import):", PulseModule);
+        console.log("🔍 PulseModule keys:", Object.keys(PulseModule));
+        console.log("🔍 PulseModule.default:", PulseModule.default);
+        console.log(
+            "🔍 PulseModule.default keys:",
+            Object.keys(PulseModule.default || {}),
+        );
+
+        Pulse = PulseModule.default;
         components = await import("@odyssee-software/components");
         const BabelModule = await import("@babel/standalone");
         Babel = BabelModule.default || BabelModule;
+
+        console.log("🔍 Pulse object:", Pulse);
+        console.log("🔍 Pulse keys:", Object.keys(Pulse));
+        console.log("🔍 Pulse.dom:", Pulse.dom);
+        console.log(
+            "🔍 Pulse.dom keys:",
+            Pulse.dom ? Object.keys(Pulse.dom) : "undefined",
+        );
 
         // Load CSS content as string
         console.log("🔍 Loading CSS...");
@@ -178,6 +195,7 @@ const generateIframeDocument = () => {
                 console.log('🔍 Iframe: executeCode called');
                 console.log('🔍 Code:', code);
                 console.log('🔍 Pulse:', Pulse);
+                console.log({dom : Pulse.dom})
                 console.log('🔍 Components:', Object.keys(components));
                 console.log('🔍 Babel:', Babel);
 
@@ -357,6 +375,8 @@ const executeCode = async () => {
             return;
         }
 
+        console.log({ ICI: Pulse });
+
         // Serialize modules to transferable data
         const serializableData = {
             type: "EXECUTE_CODE",
@@ -366,7 +386,12 @@ const executeCode = async () => {
                 signal: Pulse.signal.toString(),
                 computed: Pulse.computed.toString(),
                 effect: Pulse.effect.toString(),
-                init: Pulse.init?.toString(),
+                dom: {
+                    bindProperty: Pulse.dom.bindProperty.toString(),
+                    bindEvent: Pulse.dom.bindEvent.toString(),
+                    bindConditional: Pulse.dom.bindConditional.toString(),
+                    bindList: Pulse.dom.bindList.toString(),
+                },
             },
             components: Object.keys(components).reduce((acc, key) => {
                 if (typeof components[key] === "function") {

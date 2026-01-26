@@ -120,6 +120,7 @@ export declare const Fragment: (props?: {
 	children?: any;
 } | undefined) => DocumentFragment;
 export declare const Pulse: {
+	dom: typeof dom;
 	signal: typeof signal;
 	computed: typeof computed;
 	effect: typeof effect;
@@ -640,6 +641,10 @@ export type Subscriber<T = any> = (value: T) => void;
 export type Task = () => void;
 export type Unsubscribe = () => void;
 
+declare namespace dom {
+	export { bindConditional, bindEvent, bindList, bindProperty };
+}
+
 export {
 	Pulse as default,
 	fragment as fragmentSpread,
@@ -666,6 +671,7 @@ declare global {
    * </button>
    */
   declare const Pulse: {
+	dom: typeof dom;
 	signal: typeof signal;
 	computed: typeof computed;
 	effect: typeof effect;

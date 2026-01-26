@@ -7,6 +7,36 @@ description: Master signals, computed values, and effects in Pulse Framework
 
 Pulse Framework's reactivity system is the foundation of its power. Unlike traditional frameworks that rely on component re-renders, Pulse uses **fine-grained reactivity** to update only what changed.
 
+::: tip Quick Navigation
+- **New to Pulse?** Start with [Signals](#signals-reactive-variables)
+- **Coming from React?** See [Comparison with React](/guide/pulse-framework/comparison)
+- **Need advanced features?** Jump to [Manual Subscription](#manual-subscription-advanced) or [Memory Management](/guide/pulse-framework/advanced#memory-management)
+:::
+
+## Overview
+
+Pulse's reactivity system has three main building blocks:
+
+1. **[Signals](#signals-reactive-variables)** — Reactive state containers
+2. **[Computed](#computed-derived-values)** — Automatically calculated values
+3. **[Effects](#effects-side-effects)** — Side effects that run when dependencies change
+
+```tsx
+// Simple example showing all three concepts
+const count = Pulse.signal(0);                    // Signal
+const doubled = Pulse.computed(() => count() * 2); // Computed
+Pulse.effect(() => console.log(count()));          // Effect
+```
+
+::: info Two Approaches
+Pulse supports both **DOM-first** and **JSX-first** development:
+
+- **JSX** (recommended): Declarative, type-safe, familiar syntax for building components
+- **DOM API**: Direct manipulation, useful for migrations or specific use cases
+
+All examples in this guide use **JSX**. For DOM API examples, see the [Pulse Framework repository guides](https://github.com/odyssee-software/pulse-framework/tree/main/guides).
+:::
+
 ## The Problem with Manual DOM Updates
 
 In vanilla JavaScript, keeping the UI in sync with data is tedious and error-prone:
@@ -58,6 +88,35 @@ count(count() + 1);
 console.log(count()); // 6
 ```
 
+<LiveCodeEditor :defaultCode="`export default () => {
+  //
+  const count = Pulse.signal(0);
+  //
+  const container = document.createElement('div');
+  const title = document.createElement('h2');
+  title.textContent = 'Signal Example';
+  container.appendChild(title);
+  const display = document.createElement('p');
+  Pulse.dom.bindProperty(display , 'textContent' , count);
+  container.appendChild(display);
+  //
+  const decrementBtn = document.createElement('button');
+  decrementBtn.textContent = 'Decrement';
+  decrementBtn.addEventListener('click', () => {
+    count(count() - 1);
+  });
+  container.appendChild(decrementBtn);
+  //
+  const incrementBtn = document.createElement('button');
+  incrementBtn.textContent = 'Increment';
+  incrementBtn.addEventListener('click', () => {
+    count(count() + 1);
+  });
+  container.appendChild(incrementBtn);
+  //
+  return container;
+}`" />
+
 ### Signals in JSX
 
 ::: warning Important: Signal Syntax in JSX
@@ -99,14 +158,14 @@ const Counter: Pulse.Fn = () => {
 
 ### When to Use `()` vs Not
 
-| Context | Syntax | Example | Why |
-|---------|--------|---------|-----|
-| **JSX display** | `{signal}` | `<p>{count}</p>` | Auto-binding |
-| **JSX props** | `signal` | `<input value={name} />` | Auto-binding |
-| **Event handlers** | `signal()` | `onClick={() => count(count() + 1)}` | Read/write logic |
-| **Computed** | `signal()` | `computed(() => count() * 2)` | Read to calculate |
-| **Effects** | `signal()` | `effect(() => log(count()))` | Read to track |
-| **Conditions** | `signal()` | `if (count() > 5)` | Read to test |
+| Context | Syntax | Example | Reason |
+|---------|--------|---------|--------|
+| **JSX display** | `{signal}` | `<p>{count}</p>` | Framework creates automatic binding |
+| **JSX props** | `signal` | `<input value={name} />` | Framework creates automatic binding |
+| **Event handlers** | `signal()` | `onClick={() => count(count() + 1)}` | Reading/writing the value in logic |
+| **Inside computed** | `signal()` | `computed(() => count() * 2)` | Reading value to calculate result |
+| **Inside effect** | `signal()` | `effect(() => log(count()))` | Reading value to track dependency |
+| **Conditions/Logic** | `signal()` | `if (count() > 5)` | Reading value for comparison |
 
 ### Typed Signals
 
@@ -162,18 +221,18 @@ const UserProfile: Pulse.Fn = () => {
 ```
 
 <LiveCodeEditor :defaultCode="`export default () => {
-  const firstName = Pulse.signal("John");
-  const lastName = Pulse.signal("Doe");
-  const fullName = Pulse.computed(() => firstName() + "" +  lastName());
+  const firstName = Pulse.signal('John');
+  const lastName = Pulse.signal('Doe');
+  const fullName = Pulse.computed(() => firstName() + ' ' +  lastName());
   return <div>
     <h1>{fullName}</h1>
     <input 
       value={firstName}
-      onInput={(e) => firstName((e.target as HTMLInputElement).value)}
+      onInput={(e) => firstName(e.target.value)}
     />
     <input 
       value={lastName}
-      onInput={(e) => lastName((e.target as HTMLInputElement).value)}
+      onInput={(e) => lastName(e.target.value)}
     />
   </div>;
 }`" />
@@ -342,39 +401,7 @@ isRunning(true);  // Starts timer
 isRunning(false); // Cleanup runs, stops timer
 ```
 
-### Effect for API Calls
 
-```tsx
-const userId = Pulse.signal<number | null>(null);
-const userData = Pulse.signal<User | null>(null);
-const loading = Pulse.signal(false);
-const error = Pulse.signal<string | null>(null);
-
-Pulse.effect(() => {
-  const id = userId();
-  if (!id) {
-    userData(null);
-    return;
-  }
-  
-  loading(true);
-  error(null);
-  
-  fetch(`/api/users/${id}`)
-    .then(res => res.json())
-    .then(data => {
-      userData(data);
-      loading(false);
-    })
-    .catch(err => {
-      error(err.message);
-      loading(false);
-    });
-});
-
-// Usage
-userId(123); // Automatically fetches user data
-```
 
 ### Effect in Components
 
@@ -403,6 +430,135 @@ const Timer: Pulse.Fn = () => {
   );
 };
 ```
+
+### Effect Lifecycle Control
+
+`effect()` returns an object that allows you to control the effect lifecycle:
+
+```tsx
+interface EffectHandle {
+  destroy(): void;
+  readonly isActive: boolean;
+}
+```
+
+**Manual Cleanup:**
+
+```tsx
+const effectHandle = Pulse.effect(() => {
+  console.log('Running effect...');
+});
+
+// Later... stop the effect manually
+effectHandle.destroy();
+
+// Check if still active
+console.log(effectHandle.isActive); // false
+```
+
+**Conditional Effects:**
+
+```tsx
+const shouldTrack = Pulse.signal(true);
+let tracker = null;
+
+function startTracking() {
+  if (!tracker) {
+    tracker = Pulse.effect(() => {
+      if (shouldTrack()) {
+        console.log('Tracking:', someValue());
+      }
+    });
+  }
+}
+
+function stopTracking() {
+  if (tracker) {
+    tracker.destroy();
+    tracker = null;
+  }
+}
+```
+
+::: tip
+Effects automatically clean up when their cleanup function is called. Use `.destroy()` only when you need programmatic control over effect lifecycle.
+:::
+
+## Manual Subscription (Advanced)
+
+Both signals and computed values expose a `.subscribe()` method for manual subscription. This is useful for integrating with third-party libraries or creating custom observers.
+
+### API
+
+```typescript
+const unsubscribe = signal.subscribe((value) => {
+  // Called whenever signal changes
+  console.log('New value:', value);
+});
+
+// Cleanup
+unsubscribe();
+```
+
+### Use Cases
+
+**Integration with RxJS:**
+
+```tsx
+import { fromEventPattern } from 'rxjs';
+
+const count = Pulse.signal(0);
+
+const count$ = fromEventPattern(
+  handler => count.subscribe(handler),
+  (handler, unsubscribe) => unsubscribe()
+);
+
+count$.subscribe(value => console.log('RxJS:', value));
+```
+
+**Custom Logger:**
+
+```tsx
+function createLogger(name: string) {
+  return (value: any) => {
+    console.log(`[${name}]`, new Date().toISOString(), value);
+  };
+}
+
+const count = Pulse.signal(0);
+const unsubscribe = count.subscribe(createLogger('count'));
+
+count(1); // Logs: [count] 2024-01-01T12:00:00.000Z 1
+count(5); // Logs: [count] 2024-01-01T12:00:01.000Z 5
+
+// Later... cleanup
+unsubscribe();
+```
+
+**State Synchronization:**
+
+```tsx
+// Sync Pulse signal with external state manager
+const pulseState = Pulse.signal(initialValue);
+const externalStore = createExternalStore();
+
+pulseState.subscribe(value => {
+  externalStore.setState(value);
+});
+```
+
+::: tip When to Use
+In most cases, use `effect()` instead of `.subscribe()`. Use `.subscribe()` only when you need:
+- Manual control over subscription lifecycle
+- Integration with external libraries (RxJS, Redux, etc.)
+- Custom observer patterns
+- Performance-critical scenarios where effect overhead matters
+:::
+
+::: warning
+Unlike `effect()`, `.subscribe()` does **not** automatically track dependencies. It only listens to changes on the specific signal or computed value you subscribe to.
+:::
 
 ## Automatic Dependency Tracking
 
@@ -471,7 +627,7 @@ doubled(); // Logs "Computing...", returns 30
 
 ### Batching Updates
 
-Pulse automatically batches multiple signal updates:
+Pulse automatically batches multiple signal updates using **microtasks** by default:
 
 ```tsx
 const a = Pulse.signal(1);
@@ -484,13 +640,33 @@ Pulse.effect(() => {
   computeCount++;
 });
 
-// Multiple updates are batched
+// Multiple updates are batched automatically
 a(10);
 b(20);
+// Both updates batched in the same microtask
 // sum computed only once, not twice!
 
 console.log(computeCount); // 2 (initial + batch), not 3
 ```
+
+**Explicit Batching:**
+
+For guaranteed synchronous batching, use `batch()`:
+
+```tsx
+import { batch } from 'pulse-framework';
+
+batch(() => {
+  a(10);
+  b(20);
+  c(30);
+});
+// All updates grouped, computed values update once
+```
+
+::: tip
+Pulse's default microtask batching handles most cases automatically. Use explicit `batch()` when you need guaranteed synchronous grouping or are making many rapid updates.
+:::
 
 ## Common Patterns
 
@@ -529,6 +705,40 @@ const loadData = async () => {
 };
 ```
 
+### API Calls with Effects
+
+```tsx
+const userId = Pulse.signal<number | null>(null);
+const userData = Pulse.signal<User | null>(null);
+const loading = Pulse.signal(false);
+const error = Pulse.signal<string | null>(null);
+
+Pulse.effect(() => {
+  const id = userId();
+  if (!id) {
+    userData(null);
+    return;
+  }
+  
+  loading(true);
+  error(null);
+  
+  fetch(`/api/users/${id}`)
+    .then(res => res.json())
+    .then(data => {
+      userData(data);
+      loading(false);
+    })
+    .catch(err => {
+      error(err.message);
+      loading(false);
+    });
+});
+
+// Usage
+userId(123); // Automatically fetches user data
+```
+
 ### Filtered Lists
 
 ```tsx
@@ -552,6 +762,8 @@ const filteredItems = Pulse.computed(() => {
 ```
 
 ### Debounced Search
+
+**Manual Pattern:**
 
 ```tsx
 const searchTerm = Pulse.signal('');
@@ -580,6 +792,28 @@ Pulse.effect(() => {
     .then(results => {
       // Handle results
     });
+});
+```
+
+**Using Utility Function:**
+
+```tsx
+import { debounce } from 'pulse-framework';
+
+const searchTerm = Pulse.signal('');
+
+const performSearch = debounce((term: string) => {
+  if (term.length < 3) return;
+  
+  fetch(`/api/search?q=${term}`)
+    .then(res => res.json())
+    .then(results => {
+      // Handle results
+    });
+}, 300);
+
+Pulse.effect(() => {
+  performSearch(searchTerm());
 });
 ```
 
@@ -626,6 +860,36 @@ function createValidation(value: Signal<string>, rules: ValidationRule[]) {
 const emailError = createValidation(email, [required, emailFormat]);
 ```
 
+### ✅ DO: Use Pulse.dom.bindEffectToElement for Dynamic Components
+
+```tsx
+import Pulse from 'pulse-framework';
+
+// ✅ Good - automatic cleanup when element is removed
+const Modal: Pulse.Fn = () => {
+  const element = <div class="modal">Content</div> as HTMLElement;
+  
+  Pulse.dom.bindEffectToElement(element, () => {
+    console.log('Modal mounted');
+    return () => console.log('Modal unmounted');
+  });
+  
+  return element;
+};
+
+// ❌ Avoid - may leak memory in dynamic components
+const Modal: Pulse.Fn = () => {
+  const element = <div class="modal">Content</div>;
+  
+  Pulse.effect(() => {
+    console.log('Modal mounted');
+    // Effect continues even after element is removed!
+  });
+  
+  return element;
+};
+```
+
 ### ❌ DON'T: Modify Signals in Computed
 
 ```tsx
@@ -644,6 +908,35 @@ Pulse.effect(() => {
     console.warn('Count is high!');
   }
 });
+```
+
+### ❌ DON'T: Forget to Cleanup Effects
+
+```tsx
+// ❌ BAD - memory leak
+const Timer: Pulse.Fn = () => {
+  Pulse.effect(() => {
+    const interval = setInterval(() => {
+      console.log('Tick');
+    }, 1000);
+    // Missing cleanup!
+  });
+  
+  return <div>Timer</div>;
+};
+
+// ✅ GOOD - proper cleanup
+const Timer: Pulse.Fn = () => {
+  Pulse.effect(() => {
+    const interval = setInterval(() => {
+      console.log('Tick');
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  });
+  
+  return <div>Timer</div>;
+};
 ```
 
 ## Next Steps

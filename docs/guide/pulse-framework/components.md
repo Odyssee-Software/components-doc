@@ -489,6 +489,165 @@ const Timer: Pulse.Fn = () => {
 };
 ```
 
+## DOM References with Refs
+
+### Creating Refs
+
+Use `createRef()` to get direct access to DOM elements for imperative operations:
+
+```tsx
+import Pulse, { createRef } from 'pulse-framework';
+
+const FocusInput: Pulse.Fn = () => {
+  const inputRef = createRef<HTMLInputElement>();
+  
+  const handleFocus = () => {
+    inputRef.current?.focus();
+  };
+  
+  return (
+    <div>
+      <input ref={inputRef.callback} type="text" placeholder="Enter text..." />
+      <button onClick={handleFocus}>Focus Input</button>
+    </div>
+  );
+};
+```
+
+### Ref API
+
+```typescript
+interface Ref<T extends HTMLElement = HTMLElement> {
+  current: T | null;        // The DOM element (null before mount)
+  callback: (el: T | null) => void;  // Pass to JSX ref attribute
+}
+```
+
+### When to Use Refs
+
+✅ **Use refs for:**
+- Focus management (`element.focus()`)
+- Measuring DOM (dimensions, scroll position)
+- Triggering animations
+- Integrating third-party libraries
+- Scrolling to elements
+
+❌ **Don't use refs for:**
+- Updating content (use signals instead)
+- Changing classes (use reactive bindings)
+- Managing state (use signals)
+
+### Scroll to Element
+
+```tsx
+const ScrollToSection: Pulse.Fn = () => {
+  const sectionRef = createRef<HTMLDivElement>();
+  
+  const scrollToSection = () => {
+    sectionRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+  
+  return (
+    <div>
+      <button onClick={scrollToSection}>Scroll Down</button>
+      
+      <div style={{ height: '150vh' }}>
+        <p>Scroll down to see the section...</p>
+      </div>
+      
+      <div ref={sectionRef.callback} style={{ padding: '2rem', background: '#f0f0f0' }}>
+        <h2>Target Section</h2>
+        <p>You scrolled here!</p>
+      </div>
+    </div>
+  );
+};
+```
+
+### Refs with Effects
+
+Combine refs with effects for advanced DOM interactions:
+
+```tsx
+const AutoFocusModal: Pulse.Fn<{ onClose: () => void }> = ({ onClose }) => {
+  const modalRef = createRef<HTMLDivElement>();
+  const closeButtonRef = createRef<HTMLButtonElement>();
+  
+  Pulse.effect(() => {
+    // Focus first button when modal mounts
+    closeButtonRef.current?.focus();
+    
+    // Trap focus inside modal
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+  
+  return (
+    <div ref={modalRef.callback} className="modal">
+      <div className="modal-content">
+        <h2>Modal Title</h2>
+        <p>Modal content here...</p>
+        <button ref={closeButtonRef.callback} onClick={onClose}>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+```
+
+### Measuring Elements
+
+```tsx
+const DimensionTracker: Pulse.Fn = () => {
+  const boxRef = createRef<HTMLDivElement>();
+  const dimensions = Pulse.signal({ width: 0, height: 0 });
+  
+  const measure = () => {
+    const element = boxRef.current;
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      dimensions({ width: rect.width, height: rect.height });
+    }
+  };
+  
+  return (
+    <div>
+      <div 
+        ref={boxRef.callback} 
+        style={{ 
+          width: '200px', 
+          height: '100px', 
+          background: '#e0e0e0',
+          padding: '1rem'
+        }}
+      >
+        Resize me!
+      </div>
+      <button onClick={measure}>Measure</button>
+      <p>
+        Width: {Pulse.computed(() => dimensions().width)}px, 
+        Height: {Pulse.computed(() => dimensions().height)}px
+      </p>
+    </div>
+  );
+};
+```
+
+::: tip
+For complete ref documentation including advanced patterns, see the [Pulse Framework Refs Guide](https://github.com/odyssee-software/pulse-framework/blob/main/guides/05-refs.md).
+:::
+
 ## Styling Components
 
 ### Static Classes

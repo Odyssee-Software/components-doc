@@ -21,7 +21,7 @@ export default defineConfig({
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
       { text: "Components", link: "/components/button" },
-      { text: "GitHub", link: "https://github.com/odyssee" },
+      { text: "GitHub", link: "https://github.com/odyssee-software" },
     ],
 
     // Sidebar navigation
@@ -120,7 +120,14 @@ export default defineConfig({
   // Vite configuration for Pulse Framework
   vite: {
     ssr: {
-      noExternal: ["@odyssee-software/components"],
+      noExternal: [
+        "@odyssee-software/components",
+        "@odyssee-software/pulse-framework",
+      ],
+    },
+    optimizeDeps: {
+      include: ["@odyssee-software/pulse-framework"],
+      force: true,
     },
     css: {
       postcss: {
@@ -130,6 +137,13 @@ export default defineConfig({
     // Force CSS injection order: load Odyssee components CSS after VitePress
     build: {
       cssCodeSplit: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            "pulse-framework": ["@odyssee-software/pulse-framework"],
+          },
+        },
+      },
     },
   },
 

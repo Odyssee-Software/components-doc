@@ -28,7 +28,7 @@
     "@babel/standalone": "^7.28.6",
     "@floating-ui/dom": "^1.7.4",
     "@odyssee-software/components": "file:../odyssee-components",
-    "@odyssee-software/pulse-framework": "^0.1.0-rc.2-7",
+    "@odyssee-software/pulse-framework": "file:../pulse-framework",
     "monaco-editor": "^0.55.1"
   }
 }

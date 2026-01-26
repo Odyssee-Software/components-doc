@@ -81,7 +81,11 @@ declare const Timeline$1: Pulse.Fn<Timeline.Props> & {
 	Heading: Pulse.Fn<Timeline.HeadingProps>;
 };
 declare function batch<T>(fn: () => T): T;
+declare function bindConditional(element: Element, condition: Signal<boolean> | Computed<boolean>, template: DocumentFragment): () => void;
 declare function bindEffectToElement(element: Element, effectFn: () => void | (() => void)): () => void;
+declare function bindEvent(element: Element, event: string, handler: (event: Event) => void): () => void;
+declare function bindList<T>(container: Element, items: Signal<T[]> | Computed<T[]>, template: (item: T, index: number) => DocumentFragment, keyFn?: (item: T, index: number) => string | number): () => void;
+declare function bindProperty(element: Element, property: string, signalOrComputed: Signal | Computed, transform?: (value: any) => any): () => void;
 declare function clearRegistry(): void;
 declare function computed<T>(computeFn: () => T, debugName?: string): {
 	(): T;
@@ -669,6 +673,7 @@ export declare const Popover: Pulse.Fn<Popover.Props>;
 export declare const Pre: Pulse.Fn<BaseComponentProps>;
 export declare const Progress: Pulse.Fn<Progress.Props>;
 export declare const Pulse: {
+	dom: typeof dom;
 	signal: typeof signal;
 	computed: typeof computed;
 	effect: typeof effect;
@@ -2689,6 +2694,10 @@ type Computed$1<T> = ReturnType<typeof Pulse.computed<T>>;
  * Pulse signal type
  */
 type Signal$1<T> = ReturnType<typeof Pulse.signal<T>>;
+
+declare namespace dom {
+	export { bindConditional, bindEvent, bindList, bindProperty };
+}
 
 export {
 	ChatBubble$1 as ChatBubble,
