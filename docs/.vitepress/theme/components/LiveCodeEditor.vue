@@ -126,6 +126,30 @@ const handleIframeMessage = (event: MessageEvent) => {
         executeCode();
     } else if (event.data.type === "ERROR") {
         error.value = event.data.error;
+    } else if (event.data.type === "CONTENT_RENDERED") {
+        // Resize iframe based on content height
+        resizeIframe();
+    }
+};
+
+// Resize iframe to fit content
+const resizeIframe = () => {
+    if (!iframeRef.value) return;
+
+    try {
+        const iframe = iframeRef.value;
+        const iframeDoc =
+            iframe.contentDocument || iframe.contentWindow?.document;
+
+        if (iframeDoc && iframeDoc.body) {
+            // Get content height (scrollHeight includes all content)
+            const contentHeight = iframeDoc.body.scrollHeight;
+
+            // Set iframe height with buffer for safety
+            iframe.style.height = `${contentHeight + 20}px`;
+        }
+    } catch (error) {
+        console.warn("Failed to resize iframe:", error);
     }
 };
 
@@ -315,10 +339,16 @@ const generateIframeDocument = () => {
                             setTimeout(() => {
                                 window.HSStaticMethods["autoInit"]();
                                 console.log('✅ components.initComponents called');
+
+                                // Notify parent that content is rendered
+                                window.parent.postMessage({ type: 'CONTENT_RENDERED' }, '*');
                             }, 100 );
                         } else if (typeof result === "string") {
                             console.log('✅ Rendering string result');
                             preview.textContent = result;
+
+                            // Notify parent that content is rendered
+                            window.parent.postMessage({ type: 'CONTENT_RENDERED' }, '*');
                         }
                     } else {
                         console.log('⚠️ Result is falsy:', result);
@@ -331,6 +361,11 @@ const generateIframeDocument = () => {
                 }
                 console.error("Preview error:", err);
                 window.parent.postMessage({ type: 'ERROR', error: err.message }, '*');
+            } finally {
+                // Always notify parent after execution attempt (even if empty result)
+                setTimeout(() => {
+                    window.parent.postMessage({ type: 'CONTENT_RENDERED' }, '*');
+                }, 150);
             }
         };
 
@@ -353,6 +388,18 @@ const generateIframeDocument = () => {
             console.log('✅ All external scripts loaded in iframe');
             window.parent.postMessage({ type: 'IFRAME_READY' }, '*');
         });
+
+        // Setup ResizeObserver to notify parent of height changes (with debounce)
+        if (typeof ResizeObserver !== 'undefined') {
+            let resizeTimeout;
+            const resizeObserver = new ResizeObserver(() => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    window.parent.postMessage({ type: 'CONTENT_RENDERED' }, '*');
+                }, 100);
+            });
+            resizeObserver.observe(document.body);
+        }
     <\/script>
 ` +
         bodyClose
@@ -530,9 +577,11 @@ onUnmounted(() => {
 .preview-iframe {
     width: 100%;
     min-height: 120px;
+    height: auto;
     border: none;
     display: block;
     background: transparent;
+    transition: height 0.2s ease;
 }
 
 .error-message {
