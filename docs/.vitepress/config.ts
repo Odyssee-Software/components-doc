@@ -95,6 +95,13 @@ export default defineConfig({
             { text: "ChatBubble", link: "/components/chat-bubble" },
             { text: "Collapse", link: "/components/collapse" },
             { text: "Progress", link: "/components/progress" },
+            { text: "Datepicker", link: "/components/datepicker" },
+            { text: "Device", link: "/components/device" },
+            { text: "Divider", link: "/components/divider" },
+            {
+              text: "File Upload Progress",
+              link: "/components/file-upload-progress",
+            },
           ],
         },
         {

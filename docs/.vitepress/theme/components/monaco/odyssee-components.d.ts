@@ -615,6 +615,10 @@ export declare const H5: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
  * H6 Component
  */
 export declare const H6: Pulse.Fn<Omit<Text$1.HeadingProps, "level">>;
+/**
+ * HorizontalSplitter - Quick horizontal layout splitter
+ */
+export declare const HorizontalSplitter: Pulse.Fn<LayoutSplitter.Props>;
 export declare const Icon: Pulse.Fn<Icon.Props>;
 export declare const Input: Pulse.Fn<Input.Props>;
 export declare const InputGroup: Pulse.Fn<InputGroup.Props>;
@@ -758,6 +762,10 @@ export declare const TreeView: Pulse.Fn<TreeView.Props> & {
  * Underline - Underlined text
  */
 export declare const Underline: Pulse.Fn<BaseComponentProps>;
+/**
+ * VerticalSplitter - Quick vertical layout splitter
+ */
+export declare const VerticalSplitter: Pulse.Fn<LayoutSplitter.Props>;
 /**
  * Common classes for interactive group items
  */
