@@ -46,13 +46,13 @@ import { ChatBubble } from '@odyssee-software/components';
 ### Image Avatar
 
 <LiveCodeEditor :defaultCode="`<ChatBubble.List>
-  <ChatBubble
+  <ChatBubble.Bot
     message='Hi there! Thanks for reaching out.'
     avatar='https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100'
     avatarAlt='Support Agent'
     align='left'
   />
-  <ChatBubble
+  <ChatBubble.User
     message='Hello! I have a question about my order.'
     avatar='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100'
     avatarAlt='User'
@@ -63,12 +63,12 @@ import { ChatBubble } from '@odyssee-software/components';
 ### Initials Avatar
 
 <LiveCodeEditor :defaultCode="`<ChatBubble.List>
-  <ChatBubble
+  <ChatBubble.Bot
     message='Hello! How may I assist you?'
     avatarInitials='CS'
     align='left'
   />
-  <ChatBubble
+  <ChatBubble.User
     message='I need help with billing'
     avatarInitials='JD'
     align='right'
@@ -252,92 +252,7 @@ const ChatInterface = () => {
 };
 ```
 
-## Complete Example: Customer Support Chat
 
-```tsx
-import { ChatBubble, Card, Badge, Pulse } from '@odyssee-software/components';
-
-const SupportChat = () => {
-  const chatHistory = [
-    {
-      id: 1,
-      sender: 'bot',
-      message: 'Hello! Welcome to our support center. How can I assist you today?',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
-      timestamp: '10:00 AM',
-      status: 'read'
-    },
-    {
-      id: 2,
-      sender: 'user',
-      message: 'Hi! I am having trouble accessing my account.',
-      timestamp: '10:02 AM',
-      status: 'read'
-    },
-    {
-      id: 3,
-      sender: 'bot',
-      title: 'Account Recovery Options',
-      content: [
-        { type: 'text', content: 'I can help with that! Here are your options:' },
-        { type: 'link', content: 'Reset your password', href: '/reset-password' },
-        { type: 'link', content: 'Verify your email', href: '/verify-email' },
-        { type: 'link', content: 'Contact support team', href: '/contact' }
-      ],
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
-      timestamp: '10:02 AM',
-      status: 'read'
-    },
-    {
-      id: 4,
-      sender: 'user',
-      message: 'I will try resetting my password. Thank you!',
-      timestamp: '10:05 AM',
-      status: 'delivered'
-    },
-    {
-      id: 5,
-      sender: 'bot',
-      message: 'You are welcome! If you need further assistance, feel free to ask.',
-      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
-      timestamp: '10:05 AM',
-      status: 'sent'
-    }
-  ];
-
-  return (
-    <Card title='Customer Support' size='lg'>
-      <div class='flex items-center gap-2 mb-4 pb-4 border-b dark:border-neutral-700'>
-        <Badge variant='soft' color='success' dot>Online</Badge>
-        <span class='text-sm text-gray-600 dark:text-gray-400'>
-          Typically responds in a few minutes
-        </span>
-      </div>
-
-      <div class='h-96 overflow-y-auto pr-2'>
-        <ChatBubble.List spacing='md'>
-          {chatHistory.map(chat => (
-            <ChatBubble
-              key={chat.id}
-              message={chat.message}
-              title={chat.title}
-              content={chat.content}
-              sender={chat.sender}
-              align={chat.sender === 'user' ? 'right' : 'left'}
-              variant={chat.sender === 'user' ? 'primary' : 'default'}
-              avatar={chat.avatar}
-              timestamp={chat.timestamp}
-              showTimestamp={true}
-              status={chat.status}
-              showStatus={chat.sender === 'user'}
-            />
-          ))}
-        </ChatBubble.List>
-      </div>
-    </Card>
-  );
-};
-```
 
 ## Props
 

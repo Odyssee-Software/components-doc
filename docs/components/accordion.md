@@ -40,7 +40,7 @@ import { Accordion, BasicAccordion, BorderedAccordion, type AccordionItem } from
 
 The default variant with plus/minus icons.
 
-<LiveCodeEditor :defaultCode="`<BasicAccordion items={[
+<LiveCodeEditor :defaultCode="`<Accordion.Basic items={[
   {
     id: 'basic-1',
     title: 'Accordion Item #1',
@@ -63,7 +63,7 @@ The default variant with plus/minus icons.
 
 Clean accordion without any icons.
 
-<LiveCodeEditor :defaultCode="`<NoArrowAccordion items={[
+<LiveCodeEditor :defaultCode="`<Accordion.NoArrow items={[
   {
     id: 'no-arrow-1',
     title: 'Clean Design',
@@ -81,7 +81,7 @@ Clean accordion without any icons.
 
 Accordion with chevron up/down icons.
 
-<LiveCodeEditor :defaultCode="`<ArrowAccordion items={[
+<LiveCodeEditor :defaultCode="`<Accordion.Arrow items={[
   {
     id: 'arrow-1',
     title: 'Modern Style',
@@ -99,7 +99,7 @@ Accordion with chevron up/down icons.
 
 Title and arrow stretched to opposite ends.
 
-<LiveCodeEditor :defaultCode="`<StretchedAccordion items={[
+<LiveCodeEditor :defaultCode="`<Accordion.Stretched items={[
   {
     id: 'stretched-1',
     title: 'Full Width Layout',
@@ -117,7 +117,7 @@ Title and arrow stretched to opposite ends.
 
 Accordion with borders around each item.
 
-<LiveCodeEditor :defaultCode="`<BorderedAccordion items={[
+<LiveCodeEditor :defaultCode="`<Accordion.Bordered items={[
   {
     id: 'bordered-1',
     title: 'Bordered Design',
@@ -140,7 +140,7 @@ Accordion with borders around each item.
 
 Borders appear only on active (expanded) items.
 
-<LiveCodeEditor :defaultCode="`<ActiveBorderedAccordion items={[
+<LiveCodeEditor :defaultCode="`<Accordion.ActiveBordered items={[
   {
     id: 'active-bordered-1',
     title: 'Dynamic Borders',
@@ -296,102 +296,10 @@ const richItems: AccordionItem[] = [
   }
 ];
 
-<BorderedAccordion items={richItems} />
+<Accordion.Bordered items={richItems} />
 ```
 
-## Complete Example: FAQ Section
 
-A comprehensive FAQ section with multiple features.
-
-```tsx
-import { Accordion, Badge, Card, Input, Pulse } from '@odyssee-software/components';
-import type { AccordionItem } from '@odyssee-software/components';
-
-const FAQSection = () => {
-  const searchQuery = Pulse.signal('');
-  
-  const allFAQs: AccordionItem[] = [
-    {
-      id: 'faq-1',
-      title: 'What payment methods do you accept?',
-      content: (
-        <div>
-          <p class="mb-2">We accept all major payment methods:</p>
-          <ul class="list-disc list-inside space-y-1 text-gray-600">
-            <li>Credit Cards (Visa, MasterCard, Amex)</li>
-            <li>PayPal</li>
-            <li>Bank Transfer</li>
-            <li>Apple Pay & Google Pay</li>
-          </ul>
-        </div>
-      ),
-      open: true
-    },
-    {
-      id: 'faq-2',
-      title: 'How long does shipping take?',
-      content: (
-        <div>
-          <p class="mb-2">Shipping times vary by location:</p>
-          <ul class="list-disc list-inside space-y-1 text-gray-600">
-            <li>Domestic: 2-5 business days</li>
-            <li>International: 7-14 business days</li>
-            <li>Express: 1-2 business days (extra cost)</li>
-          </ul>
-          <p class="mt-2 text-sm text-gray-500">
-            Free shipping on orders over $50!
-          </p>
-        </div>
-      )
-    },
-    {
-      id: 'faq-3',
-      title: 'What is your return policy?',
-      content: 'We offer a 30-day money-back guarantee. Items must be returned in original condition with tags attached.'
-    },
-    {
-      id: 'faq-4',
-      title: 'Do you ship internationally?',
-      content: 'Yes! We ship to over 50 countries worldwide. Shipping costs and times vary by destination.'
-    },
-    {
-      id: 'faq-5',
-      title: 'How can I track my order?',
-      content: 'Once your order ships, you\'ll receive a tracking number via email. You can track your package on our website or the carrier\'s website.'
-    }
-  ];
-
-  // Filter FAQs based on search
-  const filteredFAQs = Pulse.computed(() => {
-    const query = searchQuery().toLowerCase();
-    if (!query) return allFAQs;
-    
-    return allFAQs.filter(faq => 
-      faq.title.toLowerCase().includes(query)
-    );
-  });
-
-  const resultCount = Pulse.computed(() => filteredFAQs().length);
-
-  return (
-    <Card title="Frequently Asked Questions" size="lg">
-      <div class="mb-6">
-        <Input
-          type="search"
-          placeholder="Search FAQs..."
-          value={searchQuery}
-          onChange={(value) => searchQuery(value)}
-        />
-        <p class="mt-2 text-sm text-gray-600">
-          Showing {resultCount()} {resultCount() === 1 ? 'question' : 'questions'}
-        </p>
-      </div>
-
-      <BorderedAccordion items={filteredFAQs} />
-    </Card>
-  );
-};
-```
 
 ## Props
 

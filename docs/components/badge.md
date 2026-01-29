@@ -170,60 +170,7 @@ const categoryTags = (
 );
 ```
 
-## Complete Example
 
-Here's a comprehensive example with multiple features:
-
-```tsx
-import { Badge, Pulse } from '@odyssee-software/components';
-
-const ArticleCard = () => {
-  const tags = Pulse.signal(['JavaScript', 'TypeScript', 'Pulse Framework']);
-  const views = Pulse.signal(1542);
-  const isNew = Pulse.signal(true);
-  
-  return (
-    <div class="p-6 bg-white rounded-lg shadow">
-      {/* Header with status badges */}
-      <div class="flex items-center gap-2 mb-3">
-        {isNew() && (
-          <Badge variant="solid" color="success" size="sm">
-            New
-          </Badge>
-        )}
-        <Badge dot={true} color="success" size="sm">
-          Published
-        </Badge>
-        <Badge variant="outline" color="info" size="sm">
-          {views()} views
-        </Badge>
-      </div>
-
-      {/* Title */}
-      <h3 class="text-xl font-bold mb-2">
-        Getting Started with Pulse Framework
-      </h3>
-
-      {/* Tags */}
-      <div class="flex flex-wrap gap-2 mt-4">
-        {tags().map(tag => (
-          <Badge
-            variant="soft"
-            color="primary"
-            size="sm"
-            removable={true}
-            onRemove={() => {
-              tags(tags().filter(t => t !== tag));
-            }}
-          >
-            {tag}
-          </Badge>
-        ))}
-      </div>
-    </div>
-  );
-};
-```
 
 ## Props
 

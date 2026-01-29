@@ -181,59 +181,7 @@ const reactiveAvatar = (
 );
 ```
 
-## Complete Example
 
-Here's a comprehensive example with multiple features:
-
-```tsx
-import { Avatar, Badge, Pulse } from '@odyssee-software/components';
-
-const UserProfile = () => {
-  const user = Pulse.signal({
-    name: 'Mark Wanner',
-    avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5',
-    status: 'online' as const,
-    role: 'Admin',
-    initials: 'MW'
-  });
-
-  const handleAvatarClick = () => {
-    console.log('Navigate to profile:', user().name);
-  };
-
-  return (
-    <div class="flex items-center gap-4 p-6 bg-white rounded-lg shadow">
-      {/* Avatar with status */}
-      <Avatar
-        src={user().avatar}
-        alt={user().name}
-        status={user().status}
-        statusPosition="bottom"
-        size="lg"
-        onClick={handleAvatarClick}
-        tooltip={`${user().name} is ${user().status}`}
-      />
-
-      {/* User info */}
-      <div class="flex-1">
-        <div class="flex items-center gap-2">
-          <h3 class="text-lg font-semibold">{user().name}</h3>
-          <Badge
-            variant="soft"
-            color="primary"
-            size="sm"
-          >
-            {user().role}
-          </Badge>
-        </div>
-        <p class="text-sm text-gray-500">
-          Status: <span class="capitalize">{user().status}</span>
-        </p>
-      </div>
-    </div>
-  );
-};
-```
 
 ## Props
 

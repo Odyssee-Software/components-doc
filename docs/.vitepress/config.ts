@@ -54,6 +54,33 @@ export default defineConfig({
       ],
       "/components/": [
         {
+          text: "Layouts",
+          items: [
+            { text: "Container", link: "/components/layouts/container" },
+            { text: "Columns", link: "/components/layouts/columns" },
+            {
+              text: "Grids",
+              link: "/components/layouts/grid",
+            },
+            {
+              text: "CustomScrollbar",
+              link: "/components/layouts/custom-scrollbar",
+            },
+            {
+              text: "Images",
+              link: "/components/layouts/image",
+            },
+            {
+              text: "Layout Splitter",
+              link: "/components/layouts/layout-splitter",
+            },
+            {
+              text: "Typography",
+              link: "/components/layouts/typography",
+            },
+          ],
+        },
+        {
           text: "Base Components",
           items: [
             { text: "Alert", link: "/components/alert" },
