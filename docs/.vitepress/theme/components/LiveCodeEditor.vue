@@ -435,6 +435,8 @@ const executeCode = async () => {
                 effect: Pulse.effect.toString(),
                 dom: {
                     bindProperty: Pulse.dom.bindProperty.toString(),
+                    bindEffectToElement:
+                        Pulse.dom.bindEffectToElement.toString(),
                     bindEvent: Pulse.dom.bindEvent.toString(),
                     bindConditional: Pulse.dom.bindConditional.toString(),
                     bindList: Pulse.dom.bindList.toString(),

@@ -125,7 +125,6 @@ export declare const Pulse: {
 	computed: typeof computed;
 	effect: typeof effect;
 	batch: typeof batch;
-	bindEffectToElement: typeof bindEffectToElement;
 	flush: typeof flush;
 	render: ((template: RenderTemplate, parentIsSVG?: boolean) => HTMLElement | SVGElement) & {
 		fragment: (props?: {
@@ -642,7 +641,7 @@ export type Task = () => void;
 export type Unsubscribe = () => void;
 
 declare namespace dom {
-	export { bindConditional, bindEvent, bindList, bindProperty };
+	export { bindConditional, bindEffectToElement, bindEvent, bindList, bindProperty };
 }
 
 export {
@@ -676,7 +675,6 @@ declare global {
 	computed: typeof computed;
 	effect: typeof effect;
 	batch: typeof batch;
-	bindEffectToElement: typeof bindEffectToElement;
 	flush: typeof flush;
 	render: ((template: RenderTemplate, parentIsSVG?: boolean) => HTMLElement | SVGElement) & {
 		fragment: (props?: {

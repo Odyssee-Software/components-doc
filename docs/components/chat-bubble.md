@@ -1,4 +1,4 @@
----
+--- 
 title: ChatBubble
 description: Display chat messages with various layouts, avatars, and status indicators
 ---
@@ -10,36 +10,34 @@ Display chat messages in a conversational interface with support for user/bot me
 ## Import
 
 ```ts
-import { ChatBubble, UserChatBubble, BotChatBubble, ChatBubbleList } from '@odyssee-software/components';
+import { ChatBubble } from '@odyssee-software/components';
 ```
 
 ## Basic Usage
 
-<LiveCodeEditor :defaultCode="`<ChatBubbleList>
-  <ChatBubble
+<LiveCodeEditor :defaultCode="`<ChatBubble.List>
+  <ChatBubble.Bot
     message='Hello! How can I help you today?'
-    sender='bot'
     align='left'
   />
-  <ChatBubble
+  <ChatBubble.User
     message='I need help with my account'
-    sender='user'
     align='right'
   />
-</ChatBubbleList>`" />
+</ChatBubble.List>`" />
 
 ## User vs Bot Messages
 
 ### Bot Message (Left-aligned)
 
-<LiveCodeEditor :defaultCode="`<BotChatBubble
+<LiveCodeEditor :defaultCode="`<ChatBubble.Bot
   message='Welcome! I am here to assist you with any questions.'
   avatarInitials='AI'
 />`" />
 
 ### User Message (Right-aligned)
 
-<LiveCodeEditor :defaultCode="`<UserChatBubble
+<LiveCodeEditor :defaultCode="`<ChatBubble.User
   message='Thanks! Can you explain how this works?'
 />`" />
 
@@ -47,7 +45,7 @@ import { ChatBubble, UserChatBubble, BotChatBubble, ChatBubbleList } from '@odys
 
 ### Image Avatar
 
-<LiveCodeEditor :defaultCode="`<ChatBubbleList>
+<LiveCodeEditor :defaultCode="`<ChatBubble.List>
   <ChatBubble
     message='Hi there! Thanks for reaching out.'
     avatar='https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=100'
@@ -60,11 +58,11 @@ import { ChatBubble, UserChatBubble, BotChatBubble, ChatBubbleList } from '@odys
     avatarAlt='User'
     align='right'
   />
-</ChatBubbleList>`" />
+</ChatBubble.List>`" />
 
 ### Initials Avatar
 
-<LiveCodeEditor :defaultCode="`<ChatBubbleList>
+<LiveCodeEditor :defaultCode="`<ChatBubble.List>
   <ChatBubble
     message='Hello! How may I assist you?'
     avatarInitials='CS'
@@ -76,7 +74,7 @@ import { ChatBubble, UserChatBubble, BotChatBubble, ChatBubbleList } from '@odys
     align='right'
     variant='primary'
   />
-</ChatBubbleList>`" />
+</ChatBubble.List>`" />
 
 ## With Title
 
@@ -89,43 +87,43 @@ import { ChatBubble, UserChatBubble, BotChatBubble, ChatBubbleList } from '@odys
 
 ## Message Status
 
-<LiveCodeEditor :defaultCode="`<ChatBubbleList>
-  <UserChatBubble
+<LiveCodeEditor :defaultCode="`<ChatBubble.List>
+  <ChatBubble.User
     message='Message sent successfully'
     status='sent'
     showStatus={true}
   />
-  <UserChatBubble
+  <ChatBubble.User
     message='Message delivered'
     status='delivered'
     showStatus={true}
   />
-  <UserChatBubble
+  <ChatBubble.User
     message='Message read by recipient'
     status='read'
     showStatus={true}
   />
-  <UserChatBubble
+  <ChatBubble.User
     message='Failed to send'
     status='error'
     showStatus={true}
   />
-</ChatBubbleList>`" />
+</ChatBubble.List>`" />
 
 ## With Timestamps
 
-<LiveCodeEditor :defaultCode="`<ChatBubbleList>
-  <BotChatBubble
+<LiveCodeEditor :defaultCode="`<ChatBubble.List>
+  <ChatBubble.Bot
     message='Good morning! How can I help you?'
     timestamp='09:00 AM'
     showTimestamp={true}
   />
-  <UserChatBubble
+  <ChatBubble.User
     message='I have a question about pricing'
     timestamp='09:02 AM'
     showTimestamp={true}
   />
-</ChatBubbleList>`" />
+</ChatBubble.List>`" />
 
 ## Rich Content
 
@@ -151,7 +149,7 @@ const richBubble = (
 
 ## Custom Styling
 
-<LiveCodeEditor :defaultCode="`<ChatBubbleList>
+<LiveCodeEditor :defaultCode="`<ChatBubble.List>
   <ChatBubble
     message='Standard width message'
     align='left'
@@ -169,14 +167,14 @@ const richBubble = (
     avatarInitials='AI'
     maxWidth='max-w-md'
   />
-</ChatBubbleList>`" />
+</ChatBubble.List>`" />
 
 ## Reactive Chat
 
 Create interactive chat interfaces with Pulse signals.
 
 ```tsx
-import { ChatBubble, ChatBubbleList, Input, Button, Pulse } from '@odyssee-software/components';
+import { ChatBubble, Input, Button, Pulse } from '@odyssee-software/components';
 
 const ChatInterface = () => {
   const messages = Pulse.signal([
@@ -224,7 +222,7 @@ const ChatInterface = () => {
   return (
     <div class='flex flex-col h-96'>
       <div class='flex-1 overflow-y-auto p-4 bg-gray-50 dark:bg-neutral-800'>
-        <ChatBubbleList>
+        <ChatBubble.List>
           {messages().map(msg => (
             <ChatBubble
               key={msg.id}
@@ -237,7 +235,7 @@ const ChatInterface = () => {
               avatarInitials={msg.sender === 'bot' ? 'AI' : 'You'}
             />
           ))}
-        </ChatBubbleList>
+        </ChatBubble.List>
       </div>
       
       <div class='p-4 border-t dark:border-neutral-700 flex gap-2'>
@@ -257,7 +255,7 @@ const ChatInterface = () => {
 ## Complete Example: Customer Support Chat
 
 ```tsx
-import { ChatBubble, ChatBubbleList, Card, Badge, Pulse } from '@odyssee-software/components';
+import { ChatBubble, Card, Badge, Pulse } from '@odyssee-software/components';
 
 const SupportChat = () => {
   const chatHistory = [
@@ -317,7 +315,7 @@ const SupportChat = () => {
       </div>
 
       <div class='h-96 overflow-y-auto pr-2'>
-        <ChatBubbleList spacing='md'>
+        <ChatBubble.List spacing='md'>
           {chatHistory.map(chat => (
             <ChatBubble
               key={chat.id}
@@ -334,7 +332,7 @@ const SupportChat = () => {
               showStatus={chat.sender === 'user'}
             />
           ))}
-        </ChatBubbleList>
+        </ChatBubble.List>
       </div>
     </Card>
   );
@@ -394,251 +392,3 @@ The ChatBubble component follows accessibility best practices:
 - ✅ Keyboard-accessible links in content
 - ✅ High contrast text in all variants
 - ✅ Screen reader friendly timestamps
-
-```tsx
-// Accessibility features are built-in
-const accessibleChat = (
-  <ChatBubble
-    message='Accessible message'
-    avatarAlt='Customer Support Agent John'
-    status='read'
-    showStatus={true}
-    // All ARIA and semantic HTML handled automatically
-  />
-);
-```
-
-## Best Practices
-
-### ✅ Do
-
-- Use appropriate alignment (left for bot, right for user)
-- Provide avatar images or initials for context
-- Show timestamps for important conversations
-- Use status indicators for user messages
-- Keep message widths reasonable with maxWidth
-
-```tsx
-// Good: Clear sender identification and context
-const goodChat = (
-  <ChatBubbleList>
-    <BotChatBubble
-      message='How can I help you?'
-      avatarInitials='CS'
-      timestamp='2:30 PM'
-      showTimestamp={true}
-    />
-    <UserChatBubble
-      message='I need assistance'
-      timestamp='2:32 PM'
-      showTimestamp={true}
-      status='read'
-      showStatus={true}
-    />
-  </ChatBubbleList>
-);
-```
-
-### ❌ Don't
-
-- Don't mix alignment conventions (bot right, user left)
-- Don't omit avatars in multi-participant chats
-- Don't use very long messages without line breaks
-- Don't forget to handle error states
-- Don't overflow container widths
-
-```tsx
-// Bad: Inconsistent alignment and no context
-const badChat = (
-  <ChatBubbleList>
-    <ChatBubble message='Message' align='right' /> {/* Bot on right? */}
-    <ChatBubble message='Another message' align='left' /> {/* User on left? */}
-    <ChatBubble message='Very very very long message that goes on and on without any consideration for readability or layout' />
-  </ChatBubbleList>
-);
-
-// Better: Consistent and clear
-const betterChat = (
-  <ChatBubbleList>
-    <BotChatBubble message='Bot message' avatarInitials='AI' />
-    <UserChatBubble message='User message' />
-  </ChatBubbleList>
-);
-```
-
-## Use Cases
-
-### Customer Support
-
-```tsx
-const SupportWidget = () => {
-  return (
-    <div class='fixed bottom-4 right-4 w-96 shadow-xl rounded-lg overflow-hidden'>
-      <div class='bg-blue-600 text-white p-4'>
-        <h3 class='font-semibold'>Customer Support</h3>
-        <p class='text-sm'>We typically reply in a few minutes</p>
-      </div>
-      <div class='bg-white dark:bg-neutral-900 h-96 overflow-y-auto p-4'>
-        <ChatBubbleList>
-          <BotChatBubble
-            message='Hello! How can we help you today?'
-            avatarInitials='CS'
-          />
-        </ChatBubbleList>
-      </div>
-    </div>
-  );
-};
-```
-
-### Team Chat
-
-```tsx
-const TeamChat = ({ messages }) => {
-  return (
-    <ChatBubbleList spacing='lg'>
-      {messages.map(msg => (
-        <ChatBubble
-          key={msg.id}
-          message={msg.text}
-          avatar={msg.user.avatar}
-          avatarAlt={msg.user.name}
-          timestamp={msg.createdAt}
-          showTimestamp={true}
-          align={msg.userId === currentUserId ? 'right' : 'left'}
-          variant={msg.userId === currentUserId ? 'primary' : 'default'}
-        />
-      ))}
-    </ChatBubbleList>
-  );
-};
-```
-
-### AI Assistant
-
-```tsx
-const AIChat = () => {
-  const conversation = [
-    {
-      sender: 'bot',
-      title: 'AI Assistant',
-      content: [
-        { type: 'text', content: 'I can help you with:' },
-        { type: 'list', content: 'Writing and editing content' },
-        { type: 'list', content: 'Answering questions' },
-        { type: 'list', content: 'Providing recommendations' }
-      ],
-      avatarInitials: 'AI'
-    },
-    {
-      sender: 'user',
-      message: 'Can you help me write a blog post?',
-      avatarInitials: 'You'
-    },
-    {
-      sender: 'bot',
-      message: 'Of course! I would be happy to help. What topic would you like to write about?',
-      avatarInitials: 'AI'
-    }
-  ];
-
-  return (
-    <Card title='AI Assistant' size='lg'>
-      <ChatBubbleList>
-        {conversation.map((msg, idx) => (
-          <ChatBubble
-            key={idx}
-            message={msg.message}
-            title={msg.title}
-            content={msg.content}
-            sender={msg.sender}
-            align={msg.sender === 'user' ? 'right' : 'left'}
-            variant={msg.sender === 'user' ? 'primary' : 'default'}
-            avatarInitials={msg.avatarInitials}
-          />
-        ))}
-      </ChatBubbleList>
-    </Card>
-  );
-};
-```
-
-## Styling & Theming
-
-All chat bubble styles use Tailwind CSS and support dark mode automatically.
-
-### Custom Colors
-
-```tsx
-// Custom variant with Tailwind classes
-const customBubble = (
-  <ChatBubble
-    message='Custom styled message'
-    className='[&_.rounded-2xl]:bg-purple-600 [&_.text-sm]:text-white'
-    align='right'
-  />
-);
-```
-
-### Dark Mode
-
-```tsx
-// Dark mode support is automatic
-const darkModeChat = (
-  <ChatBubbleList>
-    <BotChatBubble
-      message='Dark mode enabled'
-      avatarInitials='AI'
-      // Automatically uses dark:bg-neutral-900, dark:border-neutral-700, etc.
-    />
-  </ChatBubbleList>
-);
-```
-
-## TypeScript
-
-Full TypeScript support with complete type definitions.
-
-```tsx
-import type { ChatBubbleProps, ChatContentItem, ChatStatus } from '@odyssee-software/components';
-
-// Type-safe content items
-const contentItems: ChatContentItem[] = [
-  { type: 'text', content: 'Hello!' },
-  { type: 'link', content: 'Click here', href: '/link' },
-  { type: 'list', content: 'List item' }
-];
-
-// Type-safe props
-const props: ChatBubbleProps = {
-  message: 'Hello',
-  sender: 'bot',
-  align: 'left',
-  status: 'delivered',
-  showStatus: true,
-  variant: 'default',
-  avatarInitials: 'AI',
-  timestamp: '10:00 AM',
-  showTimestamp: true
-};
-
-const bubble = <ChatBubble {...props} />;
-
-// Type-safe status
-const status: ChatStatus = 'read';
-const statusBubble = (
-  <ChatBubble message='Message' status={status} showStatus={true} />
-);
-```
-
-## Related Components
-
-- [Avatar](/components/avatar) - Avatar component for users
-- [Card](/components/card) - Container for chat interfaces
-- [Input](/components/input) - Message input field
-- [Badge](/components/badge) - Online status indicators
-
----
-
-**Version**: 1.0.0  
-**Last Updated**: January 2025

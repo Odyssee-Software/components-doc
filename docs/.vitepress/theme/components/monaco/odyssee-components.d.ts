@@ -678,7 +678,6 @@ export declare const Pulse: {
 	computed: typeof computed;
 	effect: typeof effect;
 	batch: typeof batch;
-	bindEffectToElement: typeof bindEffectToElement;
 	flush: typeof flush;
 	render: ((template: RenderTemplate, parentIsSVG?: boolean) => HTMLElement | SVGElement) & {
 		fragment: (props?: {
@@ -2696,7 +2695,7 @@ type Computed$1<T> = ReturnType<typeof Pulse.computed<T>>;
 type Signal$1<T> = ReturnType<typeof Pulse.signal<T>>;
 
 declare namespace dom {
-	export { bindConditional, bindEvent, bindList, bindProperty };
+	export { bindConditional, bindEffectToElement, bindEvent, bindList, bindProperty };
 }
 
 export {
