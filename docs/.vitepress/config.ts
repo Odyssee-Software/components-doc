@@ -55,6 +55,7 @@ export default defineConfig({
       "/components/": [
         {
           text: "Layouts",
+          collapsed: false,
           items: [
             { text: "Container", link: "/components/layouts/container" },
             { text: "Columns", link: "/components/layouts/columns" },
@@ -82,6 +83,7 @@ export default defineConfig({
         },
         {
           text: "Base Components",
+          collapsed: false,
           items: [
             { text: "Alert", link: "/components/base/alert" },
             { text: "Avatar", link: "/components/base/avatar" },
@@ -160,16 +162,19 @@ export default defineConfig({
             { text: "FileInput", link: "/components/file-input" },
             { text: "FormGroup", link: "/components/form-group" },
             { text: "RangeSlider", link: "/components/range-slider" },
+            { text: "ComboBox", link: "/components/combobox" },
           ],
         },
         {
           text: "Navigation Components",
+          collapsed: false,
           items: [
             { text: "Accordion", link: "/components/navigation/accordion" },
           ],
         },
         {
           text: "Overlay Components",
+          collapsed: false,
           items: [
             { text: "Modal", link: "/components/overlay/modal" },
             { text: "Tooltip", link: "/components/overlay/tooltip" },
