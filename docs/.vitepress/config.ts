@@ -185,6 +185,10 @@ export default defineConfig({
           collapsed: false,
           items: [
             { text: "Accordion", link: "/components/navigation/accordion" },
+            { text: "Navbar", link: "/components/navigation/navbar" },
+            { text: "Pagination", link: "/components/navigation/pagination" },
+            { text: "Tabs", link: "/components/navigation/tabs" },
+            { text: "TreeView", link: "/components/navigation/treeview" },
           ],
         },
         {
