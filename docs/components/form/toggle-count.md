@@ -17,7 +17,7 @@ import { ToggleCount } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <ToggleCount
         id='basic-pricing'
         type='radio'
@@ -33,7 +33,7 @@ import { ToggleCount } from '@odyssee/components';
           suffix='/mo'
         />
       </div>
-    </>
+    </Container>
   );
 }`" />
 
@@ -41,7 +41,7 @@ import { ToggleCount } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <ToggleCount
         id='switch-pricing'
         type='switch'
@@ -56,7 +56,7 @@ import { ToggleCount } from '@odyssee/components';
           prefix='$'
         />
       </div>
-    </>
+    </Container>
   );
 }`" />
 
@@ -64,7 +64,7 @@ import { ToggleCount } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <ToggleCount
         id='radio-pills'
         type='radio'
@@ -81,7 +81,7 @@ import { ToggleCount } from '@odyssee/components';
           suffix='/mo'
         />
       </div>
-    </>
+    </Container>
   );
 }`" />
 
@@ -89,7 +89,7 @@ import { ToggleCount } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <ToggleCount
         id='format-decimals'
         type='radio'
@@ -122,7 +122,7 @@ import { ToggleCount } from '@odyssee/components';
           formatter={value => '€' + (value / 100).toFixed(2)}
         />
       </div>
-    </>
+    </Container>
   );
 }`" />
 
@@ -130,7 +130,7 @@ import { ToggleCount } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <ToggleCount
         id='multi-pricing'
         type='radio'
@@ -152,7 +152,7 @@ import { ToggleCount } from '@odyssee/components';
           <ToggleCount.Value target='multi-pricing' min={149} max={119} prefix='$' suffix='/mo' />
         </div>
       </div>
-    </>
+    </Container>
   );
 }`" />
 
