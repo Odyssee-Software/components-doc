@@ -169,6 +169,9 @@ export default defineConfig({
             { text: "PinInput", link: "/components/pin-input" },
             { text: "SearchBox", link: "/components/search-box" },
             { text: "StrongPassword", link: "/components/strong-password" },
+            { text: "TimePicker", link: "/components/time-picker" },
+            { text: "ToggleCount", link: "/components/toggle-count" },
+            { text: "TogglePassword", link: "/components/toggle-password" },
           ],
         },
         {
