@@ -20,7 +20,7 @@ export default defineConfig({
     // Navigation menu
     nav: [
       { text: "Guide", link: "/guide/getting-started" },
-      { text: "Components", link: "/components/button" },
+      { text: "Components", link: "/components/overview" },
       { text: "GitHub", link: "https://github.com/odyssee-software" },
     ],
 
@@ -53,6 +53,11 @@ export default defineConfig({
         },
       ],
       "/components/": [
+        {
+          text: "Overview",
+          collapsed: false,
+          items: [{ text: "Overview", link: "/components/overview" }],
+        },
         {
           text: "Layouts",
           collapsed: false,
@@ -201,7 +206,7 @@ export default defineConfig({
               text: "ContextMenu ❌",
               link: "/components/overlay/context-menu",
             },
-            { text: "DropDown ❌", link: "/components/overlay/drop-down" },
+            { text: "DropDown ❌", link: "/components/overlay/dropdown" },
             { text: "Modal", link: "/components/overlay/modal" },
             { text: "Offcanvas ❌", link: "/components/overlay/offcanvas" },
             { text: "Popover ❌", link: "/components/overlay/popover" },
@@ -211,7 +216,7 @@ export default defineConfig({
         {
           text: "Tables",
           collapsed: false,
-          items: [{ text: "Table ❌", link: "/components/tables/table" }],
+          items: [{ text: "Table ❌", link: "/components/table/table" }],
         },
       ],
     },
