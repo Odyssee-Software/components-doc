@@ -16,10 +16,12 @@ import { TogglePassword } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <TogglePassword
-      placeholder='Enter password'
-      onChange={value => console.log('Password:', value)}
-    />
+    <Container>
+      <TogglePassword
+        placeholder='Enter password'
+        onChange={value => console.log('Password:', value)}
+      />
+    </Container>
   );
 }`" />
 
@@ -27,7 +29,7 @@ import { TogglePassword } from '@odyssee/components';
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <TogglePassword
         label='Password'
         hint='Must be at least 8 characters'
@@ -39,26 +41,25 @@ import { TogglePassword } from '@odyssee/components';
         required={true}
         placeholder='Enter your password'
       />
-    </>
+    </Container>
   );
 }`" />
 
 ### Controlled value with signal
 
-<LiveCodeEditor :defaultCode="`import Pulse from '@odyssee-software/pulse-framework';
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   const password = Pulse.signal('');
   return (
-    <>
+    <Container>
       <TogglePassword
         label='Password'
         value={password}
         onChange={val => password(val)}
       />
       <div style={{ marginTop: 8, fontSize: 12, color: '#888' }}>
-        Value: {password()}
+        Value: {Pulse.computed(() => password())}
       </div>
-    </>
+    </Container>
   );
 }`" />
 
@@ -66,13 +67,13 @@ export default function Demo() {
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <TogglePassword label='Extra Small (xs)' size='xs' placeholder='Enter password' />
       <TogglePassword label='Small (sm)' size='sm' placeholder='Enter password' />
       <TogglePassword label='Medium (md)' size='md' placeholder='Enter password' />
       <TogglePassword label='Large (lg)' size='lg' placeholder='Enter password' />
       <TogglePassword label='Extra Large (xl)' size='xl' placeholder='Enter password' />
-    </>
+    </Container>
   );
 }`" />
 
@@ -80,56 +81,57 @@ export default function Demo() {
 
 <LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <>
+    <Container>
       <TogglePassword label='Disabled' disabled={true} value='locked123' />
       <TogglePassword label='Readonly' readonly={true} value='readonly123' />
       <TogglePassword label='Default Visible' defaultVisible={true} placeholder='Enter password' />
       <TogglePassword label='No Toggle Button' showToggleButton={false} placeholder='Enter password' />
-    </>
+    </Container>
   );
 }`" />
 
 ### Login form use case
 
-<LiveCodeEditor :defaultCode="`import Pulse from '@odyssee-software/pulse-framework';
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   const password = Pulse.signal('');
   return (
-    <form>
-      <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Email</label>
-      <input
-        type='email'
-        placeholder='you@example.com'
-        style={{
-          width: '100%',
-          padding: '8px 12px',
-          marginBottom: 12,
-          borderRadius: 6,
-          border: '1px solid #ddd'
-        }}
-      />
-      <TogglePassword
-        label='Password'
-        placeholder='Enter your password'
-        value={password}
-        onChange={val => password(val)}
-      />
-      <button
-        type='submit'
-        style={{
-          marginTop: 16,
-          width: '100%',
-          padding: '10px 0',
-          background: '#2563eb',
-          color: '#fff',
-          border: 'none',
-          borderRadius: 6,
-          fontWeight: 600
-        }}
-      >
-        Sign In
-      </button>
-    </form>
+    <Container>
+      <form>
+        <label style={{ display: 'block', marginBottom: 4, fontWeight: 500 }}>Email</label>
+        <input
+          type='email'
+          placeholder='you@example.com'
+          style={{
+            width: '100%',
+            padding: '8px 12px',
+            marginBottom: 12,
+            borderRadius: 6,
+            border: '1px solid #ddd'
+          }}
+        />
+        <TogglePassword
+          label='Password'
+          placeholder='Enter your password'
+          value={password}
+          onChange={val => password(val)}
+        />
+        <Button
+          type='submit'
+          style={{
+            marginTop: 16,
+            width: '100%',
+            padding: '10px 0',
+            background: '#2563eb',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 6,
+            fontWeight: 600
+          }}
+        >
+          Sign In
+        </Button>
+      </form>
+    </Container>
   );
 }`" />
 
