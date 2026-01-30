@@ -102,6 +102,42 @@ export default defineConfig({
               text: "File Upload Progress",
               link: "/components/file-upload-progress",
             },
+            {
+              text: "Icon",
+              link: "/components/icon",
+            },
+            {
+              text: "Kbd",
+              link: "/components/kbd",
+            },
+            {
+              text: "LegendIndicator",
+              link: "/components/legend-indicator",
+            },
+            {
+              text: "List",
+              link: "/components/list",
+            },
+            {
+              text: "ListGroup",
+              link: "/components/list-group",
+            },
+            {
+              text: "Rating",
+              link: "/components/rating",
+            },
+            {
+              text: "Skeleton",
+              link: "/components/skeleton",
+            },
+            {
+              text: "Spinner",
+              link: "/components/spinner",
+            },
+            {
+              text: "Timeline",
+              link: "/components/timeline",
+            },
           ],
         },
         {
