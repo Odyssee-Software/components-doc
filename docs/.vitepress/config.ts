@@ -163,6 +163,12 @@ export default defineConfig({
             { text: "FormGroup", link: "/components/form-group" },
             { text: "RangeSlider", link: "/components/range-slider" },
             { text: "ComboBox", link: "/components/combobox" },
+            { text: "CopyMarkup", link: "/components/copy-markup" },
+            { text: "InputGroup", link: "/components/input-group" },
+            { text: "InputNumber", link: "/components/input-number" },
+            { text: "PinInput", link: "/components/pin-input" },
+            { text: "SearchBox", link: "/components/search-box" },
+            { text: "StrongPassword", link: "/components/strong-password" },
           ],
         },
         {
