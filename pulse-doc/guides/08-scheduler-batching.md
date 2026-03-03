@@ -2,6 +2,97 @@
 
 Le scheduler de Pulse permet de regrouper intelligemment les mises à jour réactives pour éviter les recalculs redondants et améliorer les performances.
 
+## Architecture : Propagation Asynchrone par Défaut
+
+**Point critique :** Pulse utilise des **microtasks** par défaut pour propager les changements de manière asynchrone. Cela signifie que les mises à jour ne se produisent pas immédiatement, mais sont regroupées et exécutées à la fin du tick actuel.
+
+### Signals : Propagation via Microtasks
+
+```typescript
+const count = signal(0);
+
+effect(() => {
+  console.log('Effect executed:', count());
+});
+
+count(1);
+count(2);
+count(3);
+console.log('After signals updated');
+
+// Output:
+// "After signals updated"
+// "Effect executed: 3"
+// ⚡ L'effect ne s'exécute qu'UNE FOIS après les 3 mises à jour !
+```
+
+**Comment ça fonctionne :**
+
+```typescript
+// Dans signal()
+function notifySubscribers(): void {
+  schedule(() => {  // ← Utilise le scheduler (microtask par défaut)
+    for (const subscriber of subscribers) {
+      subscriber(value);
+    }
+  });
+}
+```
+
+Les notifications sont **planifiées** via `schedule()` qui utilise `queueMicrotask()` par défaut.
+
+### Computed : Propagation Asynchrone
+
+Les `computed` propagent aussi de manière asynchrone pour éviter les cascades synchrones :
+
+```typescript
+const firstName = signal('John');
+const lastName = signal('Doe');
+const fullName = computed(() => `${firstName()} ${lastName()}`);
+
+effect(() => {
+  console.log('Full name:', fullName());
+});
+
+// Ces changements sont groupés
+firstName('Jane');
+lastName('Smith');
+
+// L'effect ne s'exécute qu'une fois avec "Jane Smith"
+```
+
+**Avantages de la propagation asynchrone :**
+- ✅ **Performance** : Évite les recalculs multiples
+- ✅ **Stabilité** : Prévient les cascades infinies
+- ✅ **Prévisibilité** : Ordre d'exécution cohérent
+
+### Microtasks vs Macrotasks
+
+```typescript
+const count = signal(0);
+
+// Microtask (défaut Pulse)
+count(1);
+queueMicrotask(() => console.log('Microtask'));
+console.log('Sync');
+
+// Output:
+// "Sync"
+// "Microtask"
+// Effect de Pulse s'exécute ici
+
+// vs Macrotask (setTimeout)
+setTimeout(() => console.log('Macrotask'), 0);
+
+// Les microtasks s'exécutent AVANT les macrotasks
+```
+
+**Ordre d'exécution :**
+1. Code synchrone
+2. Microtasks (Pulse effects, Promises)
+3. Render du navigateur
+4. Macrotasks (setTimeout, setInterval)
+
 ## Le Problème
 
 Sans batching, chaque modification de signal déclenche immédiatement tous les computed et effects :
@@ -71,21 +162,51 @@ count(3)
 flush()
 ```
 
-### Mode de Scheduling
+### Modes de Scheduling
 
-Par défaut, Pulse utilise des **microtasks** pour le batching automatique. Vous pouvez changer ce comportement :
+Par défaut, Pulse utilise des **microtasks** pour le batching automatique. Vous pouvez changer ce comportement selon vos besoins :
 
 ```typescript
 import { setDefaultScheduleMode } from 'pulse-framework'
 
-// Mode synchrone - pas de batching automatique
+// Mode synchrone - propagation immédiate, pas de batching
 setDefaultScheduleMode('sync')
 
-// Mode microtask - batching automatique (défaut)
+// Mode microtask - batching automatique via queueMicrotask() (DÉFAUT)
 setDefaultScheduleMode('micro')
 
-// Mode manuel - vous contrôlez avec flush()
+// Mode manuel - vous contrôlez l'exécution avec flush()
 setDefaultScheduleMode('manual')
+```
+
+#### Mode Synchrone vs Microtask
+
+```typescript
+// Mode SYNC
+setDefaultScheduleMode('sync');
+
+const count = signal(0);
+effect(() => console.log('Count:', count()));
+
+count(1);  // → "Count: 1" (immédiat)
+count(2);  // → "Count: 2" (immédiat)
+count(3);  // → "Count: 3" (immédiat)
+// ❌ 3 exécutions !
+
+// Mode MICRO (défaut)
+setDefaultScheduleMode('micro');
+
+const count2 = signal(0);
+effect(() => console.log('Count2:', count2()));
+
+count2(1);
+count2(2);
+count2(3);
+console.log('After updates');
+// Output:
+// "After updates"
+// "Count2: 3" (une seule fois)
+// ✅ 1 exécution !
 ```
 
 ## Exemples Pratiques
@@ -341,13 +462,127 @@ Utile pour :
 - Animations synchronisées
 - Contrôle précis du timing
 
+## Propagation Asynchrone et Effects Détruits
+
+Un pattern important : les computed vérifient si un effect est toujours actif avant de le notifier :
+
+```typescript
+import { bindEffectToElement } from 'pulse-framework';
+
+const Carousel: Pulse.Fn = () => {
+  const currentSlide = signal(0);
+  
+  const carouselElement = <div class="carousel" /> as HTMLElement;
+  
+  // Effect lié au lifecycle de l'élément
+  bindEffectToElement(carouselElement, () => {
+    console.log('Slide changed to:', currentSlide());
+  });
+  
+  return carouselElement;
+};
+
+// Quand l'élément est supprimé du DOM :
+// 1. bindEffectToElement marque l'effect comme inactif
+// 2. Les computed vérifient si l'effect est actif avant de propager
+// 3. Les notifications sont ignorées pour les effects inactifs
+// ✅ Pas de fuites mémoire !
+```
+
+**Implémentation interne :**
+
+```typescript
+// Le computed propage de manière asynchrone
+schedule(() => {
+  for (const subscriber of subscribers) {
+    // Vérifie si l'effect est toujours actif
+    if (activeEffects.has(subscriber)) {
+      subscriber(newValue);
+    }
+    // Sinon, ignore silencieusement
+  }
+});
+```
+
+Cette approche asynchrone permet au cleanup de s'exécuter AVANT que les notifications soient envoyées, évitant ainsi les appels à des effects détruits.
+
+## Microtasks et Event Loop
+
+### Comprendre le Timing
+
+```typescript
+console.log('1. Sync start');
+
+const count = signal(0);
+effect(() => {
+  console.log('3. Effect:', count());
+});
+
+count(1);  // Planifie une microtask
+
+console.log('2. Sync end');
+
+// Output:
+// "1. Sync start"
+// "2. Sync end"
+// "3. Effect: 1"
+
+// ⚡ L'effect s'exécute après le code synchrone mais avant le render
+```
+
+### Interaction avec les Promises
+
+```typescript
+const data = signal(null);
+
+fetch('/api/data')
+  .then(response => response.json())
+  .then(result => {
+    data(result);  // Planifie une microtask
+    console.log('Data updated');
+  });
+
+effect(() => {
+  console.log('Effect sees:', data());
+});
+
+// Les deux s'exécutent dans la même "vague" de microtasks
+```
+
+### Best Practice : Batching dans les Async
+
+```typescript
+async function loadUserData(userId: number) {
+  const user = await fetchUser(userId);
+  const posts = await fetchPosts(userId);
+  const comments = await fetchComments(userId);
+  
+  // ✅ Grouper les updates
+  batch(() => {
+    currentUser(user);
+    userPosts(posts);
+    userComments(comments);
+    loading(false);
+  });
+  // Une seule propagation pour tout !
+}
+```
+
 ## Conclusion
 
 Le scheduler de Pulse offre :
 - ⚡ **Performance** : 10-50x plus rapide avec batching
-- 🎯 **Automatique** : Fonctionne sans configuration
+- 🎯 **Automatique** : Propagation asynchrone par défaut via microtasks
 - 🔧 **Contrôle** : API `batch()` pour contrôle explicite
 - 🐛 **Debuggable** : Stats et modes pour diagnostic
 - 🚀 **Flexible** : Modes sync/micro/manual selon les besoins
+- 🛡️ **Sûr** : Vérifie les effects actifs avant propagation
 
-Le batching est essentiel pour des applications Pulse performantes !
+**Points clés à retenir :**
+1. Les mises à jour sont **asynchrones** par défaut (microtasks)
+2. Les computed propagent aussi de manière **asynchrone**
+3. Utilisez `batch()` pour **grouper explicitement** les updates
+4. Le mode `sync` désactive le batching (utile pour debug)
+5. Les microtasks s'exécutent **avant le render** du navigateur
+
+Le batching et la propagation asynchrone sont essentiels pour des applications Pulse performantes et sans fuites mémoire !

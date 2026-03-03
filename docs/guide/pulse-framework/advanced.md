@@ -3,6 +3,7 @@ title: Advanced Patterns
 description: Master advanced patterns in Pulse Framework - stores, routing, forms, and more
 ---
 
+
 # Advanced Patterns
 
 Master advanced patterns for building complex applications with Pulse Framework.
@@ -825,6 +826,170 @@ const InfiniteList: Pulse.Fn = () => {
   );
 };
 ```
+
+## Memory Management
+
+### Binding Effects to DOM Elements
+
+When creating effects inside components that may be dynamically added or removed from the DOM, use `Pulse.dom.bindEffectToElement()` to automatically clean up when the element is garbage collected.
+
+```typescript
+import Pulse from 'pulse-framework';
+
+Pulse.dom.bindEffectToElement(
+  element: Element,
+  effectFn: () => void | (() => void)
+): () => void
+```
+
+**Basic Usage:**
+
+```tsx
+const DynamicComponent: Pulse.Fn = () => {
+  const element = <div>Dynamic Content</div>;
+  
+  // Effect bound to element lifecycle
+  Pulse.dom.bindEffectToElement(element, () => {
+    console.log('Element is in DOM');
+    
+    return () => {
+      console.log('Element removed from DOM');
+    };
+  });
+  
+  return element;
+};
+```
+
+**How It Works:**
+
+1. Uses `WeakRef` to track the element without preventing garbage collection
+2. Uses `FinalizationRegistry` for automatic cleanup when element is collected
+3. Effect stops running when element is removed and garbage collected
+4. Prevents memory leaks in dynamic UIs
+
+**Modal Example:**
+
+```tsx
+const Modal: Pulse.Fn<{ onClose: () => void }> = ({ onClose }) => {
+  const modalElement = (
+    <div class="modal">
+      <div class="modal-content">
+        <h2>Modal Title</h2>
+        <p>Modal content here...</p>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  ) as HTMLElement;
+  
+  // Bind effect to modal lifecycle
+  Pulse.dom.bindEffectToElement(modalElement, () => {
+    // Focus trap
+    const focusableElements = modalElement.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    const firstElement = focusableElements[0] as HTMLElement;
+    firstElement?.focus();
+    
+    // Handle escape key
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+  
+  return modalElement;
+};
+```
+
+**Dynamic List Example:**
+
+```tsx
+const TodoList: Pulse.Fn = () => {
+  const todos = Pulse.signal([
+    { id: 1, text: 'Learn Pulse' },
+    { id: 2, text: 'Build app' }
+  ]);
+  
+  return (
+    <ul>
+      {Pulse.computed(() =>
+        todos().map(todo => {
+          const item = <li>{todo.text}</li> as HTMLElement;
+          
+          // Each list item has its own effect
+          Pulse.dom.bindEffectToElement(item, () => {
+            console.log(`Todo ${todo.id} mounted`);
+            
+            return () => {
+              console.log(`Todo ${todo.id} unmounted`);
+            };
+          });
+          
+          return item;
+        })
+      )}
+    </ul>
+  );
+};
+```
+
+**When to Use:**
+
+- ✅ Components created/destroyed dynamically (modals, tooltips, dropdowns)
+- ✅ List items that can be added/removed
+- ✅ Route-based components (SPA navigation)
+- ✅ Any effect that depends on DOM element existence
+- ✅ Third-party library integrations that need cleanup
+
+**When NOT to Use:**
+
+- ❌ Top-level app effects (use regular `effect()`)
+- ❌ Effects not tied to specific DOM elements
+- ❌ Global state management effects
+- ❌ Effects that should persist regardless of DOM state
+
+**Comparison with Regular Effects:**
+
+```tsx
+// ❌ Regular effect - may leak memory
+const DynamicComponent: Pulse.Fn = () => {
+  const element = <div>Content</div>;
+  
+  Pulse.effect(() => {
+    console.log('Effect running');
+    // This effect continues even after element is removed!
+  });
+  
+  return element;
+};
+
+// ✅ Bound effect - automatic cleanup
+const DynamicComponent: Pulse.Fn = () => {
+  const element = <div>Content</div> as HTMLElement;
+  
+  Pulse.dom.bindEffectToElement(element, () => {
+    console.log('Effect running');
+    // Automatically stops when element is garbage collected
+  });
+  
+  return element;
+};
+```
+
+::: warning Browser Support
+`WeakRef` and `FinalizationRegistry` are supported in all modern browsers (Chrome 84+, Firefox 79+, Safari 14.1+). For older browsers, use regular `effect()` with manual cleanup via `.destroy()`.
+:::
+
+::: tip Performance
+`Pulse.dom.bindEffectToElement` has minimal overhead compared to regular effects. The WeakRef and FinalizationRegistry are native browser features optimized for memory management.
+:::
 
 ## Optimistic Updates
 
