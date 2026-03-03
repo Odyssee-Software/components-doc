@@ -449,6 +449,161 @@ const TodoApp: Pulse.Fn = () => {
 };
 ```
 
+## Composants Conditionnels Réactifs
+
+### ⚠️ Pattern Critique : `Pulse.Fn` pour Composants Conditionnels
+
+Quand vous créez des composants qui doivent se cacher/afficher dynamiquement en fonction d'une prop réactive, vous devez utiliser le pattern `Pulse.Fn` qui **retourne un `computed`** :
+
+```tsx
+// ❌ MAUVAIS - Ne fonctionne pas avec les props réactives
+const Controls = Pulse.computed(() => {
+  if (!showControls) return null;  // showControls est un signal, toujours truthy !
+  
+  return (
+    <div>
+      <button>Previous</button>
+      <button>Next</button>
+    </div>
+  );
+});
+
+// ✅ BON - Pattern correct pour composants conditionnels
+const Controls: Pulse.Fn = () =>
+  Pulse.computed(() => {
+    const showControlsValue = Pulse.isReactive(showControls) 
+      ? showControls() 
+      : showControls;
+    
+    if (!showControlsValue) return <></>;  // Retourner fragment vide, pas null !
+    
+    return (
+      <div>
+        <button>Previous</button>
+        <button>Next</button>
+      </div>
+    );
+  });
+
+// Utilisation
+<Controls />  // Se met à jour automatiquement quand showControls change
+```
+
+**Points clés :**
+1. **`Pulse.Fn` retourne un `Pulse.computed()`** - pas directement du JSX
+2. **Utiliser `Pulse.isReactive()`** pour vérifier si une prop est un signal/computed
+3. **Retourner `<></>`** (fragment vide) au lieu de `null` pour les cas cachés
+4. **Lire la valeur avec `()`** si c'est réactif : `showControls()`
+
+### Vérifier les Props Réactives
+
+```tsx
+import { isReactive } from 'pulse-framework';
+
+interface ComponentProps {
+  visible?: boolean | Signal<boolean> | Computed<boolean>;
+  data?: any | Signal<any>;
+}
+
+const ConditionalComponent: Pulse.Fn<ComponentProps> = ({ visible, data }) =>
+  Pulse.computed(() => {
+    // Extraire les valeurs réactives
+    const isVisible = isReactive(visible) ? visible() : visible;
+    const content = isReactive(data) ? data() : data;
+    
+    if (!isVisible) return <></>;
+    
+    return <div>{content}</div>;
+  });
+```
+
+### Exemple Complet : Composant avec Contrôles Conditionnels
+
+```tsx
+interface CarouselProps {
+  showControls?: Signal<boolean> | boolean;
+  showPagination?: Signal<boolean> | boolean;
+}
+
+const Carousel: Pulse.Fn<CarouselProps> = ({ showControls, showPagination }) => {
+  const currentSlide = signal(0);
+  
+  // Composant Controls conditionnel
+  const Controls: Pulse.Fn = () =>
+    Pulse.computed(() => {
+      const visible = isReactive(showControls) ? showControls() : showControls;
+      if (!visible) return <></>;
+      
+      return (
+        <div className="controls">
+          <button onClick={() => currentSlide(Math.max(0, currentSlide() - 1))}>
+            Previous
+          </button>
+          <button onClick={() => currentSlide(currentSlide() + 1)}>
+            Next
+          </button>
+        </div>
+      );
+    });
+  
+  // Composant Pagination conditionnel
+  const Pagination: Pulse.Fn = () =>
+    Pulse.computed(() => {
+      const visible = isReactive(showPagination) ? showPagination() : showPagination;
+      if (!visible) return <></>;
+      
+      return (
+        <div className="pagination">
+          <span>Slide {currentSlide() + 1}</span>
+        </div>
+      );
+    });
+  
+  return (
+    <div className="carousel">
+      <div className="slides">
+        {/* Slides content */}
+      </div>
+      <Controls />
+      <Pagination />
+    </div>
+  );
+};
+
+// Utilisation avec signals réactifs
+const showControlsSignal = signal(true);
+const showPaginationSignal = signal(false);
+
+<Carousel 
+  showControls={showControlsSignal} 
+  showPagination={showPaginationSignal} 
+/>
+
+// Changer dynamiquement
+showControlsSignal(false);  // Les contrôles disparaissent automatiquement !
+showPaginationSignal(true); // La pagination apparaît automatiquement !
+```
+
+### Pourquoi `<></>` et pas `null` ?
+
+```tsx
+// ❌ MAUVAIS - null peut causer des problèmes de réconciliation
+const Component: Pulse.Fn = () =>
+  Pulse.computed(() => {
+    if (!visible()) return null;
+    return <div>Content</div>;
+  });
+
+// ✅ BON - Fragment vide se réconcilie correctement
+const Component: Pulse.Fn = () =>
+  Pulse.computed(() => {
+    if (!visible()) return <></>;
+    return <div>Content</div>;
+  });
+```
+
+Le fragment vide (`<></>`) permet à Pulse de gérer correctement la réconciliation DOM quand le composant passe de visible à caché et vice-versa.
+
 ## Listes et Rendu Conditionnel
 
 ### Listes Dynamiques
@@ -675,6 +830,134 @@ src/
   ├── App.tsx        ← Composants JSX
   ├── Button.tsx
   └── main.ts
+```
+
+## Gestion de la Mémoire et Lifecycle DOM
+
+### `bindEffectToElement()` - Éviter les Fuites Mémoire
+
+Quand vous créez des effects dans des composants qui peuvent être dynamiquement ajoutés/retirés du DOM (modales, tooltips, éléments de liste, routes SPA), utilisez **`bindEffectToElement()`** pour un nettoyage automatique :
+
+```tsx
+import { bindEffectToElement } from 'pulse-framework';
+
+const AutoPlayCarousel: Pulse.Fn = () => {
+  const currentSlide = signal(0);
+  const autoPlay = signal(true);
+  
+  // ❌ MAUVAIS - Effect global qui continue après suppression du composant
+  effect(() => {
+    if (!autoPlay()) return;
+    
+    const timer = setInterval(() => {
+      currentSlide((currentSlide() + 1) % 3);
+    }, 3000);
+    
+    return () => clearInterval(timer);
+  });
+  
+  // ✅ BON - Effect lié au lifecycle de l'élément
+  const carouselElement = (
+    <div className="carousel">
+      {/* Content */}
+    </div>
+  ) as HTMLElement;
+  
+  bindEffectToElement(carouselElement, () => {
+    if (!autoPlay()) return;
+    
+    const timer = setInterval(() => {
+      currentSlide((currentSlide() + 1) % 3);
+    }, 3000);
+    
+    return () => clearInterval(timer);
+  });
+  
+  return carouselElement;
+};
+```
+
+**Comment ça marche :**
+1. Utilise `WeakRef` pour tracker l'élément sans empêcher le garbage collection
+2. Utilise `FinalizationRegistry` pour un nettoyage automatique quand l'élément est collecté
+3. L'effect s'arrête automatiquement quand l'élément est supprimé du DOM
+
+**Quand l'utiliser :**
+- ✅ Composants créés/détruits dynamiquement (modales, tooltips, dropdowns)
+- ✅ Items de liste qui peuvent être ajoutés/retirés
+- ✅ Composants basés sur des routes (navigation SPA)
+- ✅ Tout effect qui dépend de l'existence d'un élément DOM
+
+**Quand NE PAS l'utiliser :**
+- ❌ Effects au niveau de l'app (utiliser `effect()` normal)
+- ❌ Effects non liés à des éléments DOM spécifiques
+- ❌ Gestion d'état global
+
+### Pattern avec Ref Handler
+
+```tsx
+const Component: Pulse.Fn = () => {
+  let rootElement: HTMLElement | null = null;
+  
+  const handleRef = (el: HTMLElement | null) => {
+    if (!el || rootElement) return;
+    rootElement = el;
+    
+    // Lier les effects à l'élément
+    bindEffectToElement(el, () => {
+      // Effect 1 : auto-play
+      if (autoPlay()) {
+        const timer = setInterval(() => {
+          // Logic
+        }, interval);
+        return () => clearInterval(timer);
+      }
+    });
+    
+    bindEffectToElement(el, () => {
+      // Effect 2 : event listeners
+      const handleResize = () => {
+        // Logic
+      };
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    });
+  };
+  
+  return (
+    <div ref={handleRef}>
+      {/* Content */}
+    </div>
+  );
+};
+```
+
+## Helper `Pulse.isReactive()`
+
+Pour vérifier si une valeur est un signal ou computed :
+
+```tsx
+import { isReactive, isSignal, isComputed } from 'pulse-framework';
+
+// Vérifier si réactif (signal OU computed)
+if (isReactive(value)) {
+  const actualValue = value();  // Lire la valeur
+}
+
+// Vérifier spécifiquement signal
+if (isSignal(value)) {
+  value(newValue);  // Peut écrire
+}
+
+// Vérifier spécifiquement computed
+if (isComputed(value)) {
+  const result = value();  // Read-only
+}
+
+// Pattern pratique pour props
+const getValue = (prop: any) => {
+  return isReactive(prop) ? prop() : prop;
+};
 ```
 
 ## Prochaine Étape

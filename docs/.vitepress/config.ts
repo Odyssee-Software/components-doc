@@ -218,6 +218,17 @@ export default defineConfig({
           collapsed: false,
           items: [{ text: "Table ❌", link: "/components/table/table" }],
         },
+        {
+          text: "Third-Party Plugins",
+          collapsed: false,
+          items: [
+            {
+              text: "Pulse-lucid",
+              link: "/components/third-party-plugins/pulse-lucid",
+            },
+            { text: "Pjsf", link: "/components/third-party-plugins/pjsf" },
+          ],
+        },
       ],
     },
 

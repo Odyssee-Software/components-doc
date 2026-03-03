@@ -1,6 +1,94 @@
 // Auto-generated type definitions
 // Do not edit manually - run npm run generate:types
 
+declare class StepperStore {
+	/**
+	 * Internal ComponentStateStorage
+	 */
+	private storage;
+	/**
+	 * Cached steps data (static)
+	 */
+	private stepsData;
+	constructor(currentStep: Signal<number>, steps: StepperStore.StepData[], mode?: Reactive$1<StepperStore.Mode>);
+	/**
+	 * Get the currentStep signal
+	 */
+	get currentStep(): Signal<number>;
+	/**
+	 * Get the totalSteps signal
+	 */
+	get totalSteps(): Signal<number>;
+	/**
+	 * Get the mode signal
+	 */
+	get mode(): Signal<StepperStore.Mode> | Pulse.Computed<StepperStore.Mode>;
+	/**
+	 * Get steps data (static, not reactive)
+	 */
+	get steps(): StepperStore.StepData[];
+	/**
+	 * Calculate the status of a given step index
+	 * This is NOT a computed - it's a helper function that reads the signal when called
+	 *
+	 * Usage in a computed:
+	 * ```
+	 * const classes = Pulse.computed(() => {
+	 *   const status = store.getStatus(stepIndex);  // Reads currentStep signal
+	 *   return status === 'active' ? 'active-class' : 'inactive-class';
+	 * });
+	 * ```
+	 */
+	getStatus(stepIndex: number): StepperStore.Status;
+	/**
+	 * Check if a step is clickable
+	 * In linear mode, only previous steps and current step are clickable
+	 * In non-linear mode, all steps are clickable
+	 */
+	isClickable(stepIndex: number): boolean;
+	/**
+	 * Get step data by index
+	 */
+	getStepData(stepIndex: number): StepperStore.StepData | undefined;
+	/**
+	 * Set current step (updates the signal)
+	 */
+	setCurrentStep(step: number): void;
+	/**
+	 * Move to next step
+	 */
+	next(): void;
+	/**
+	 * Move to previous step
+	 */
+	previous(): void;
+	/**
+	 * Check if current step is the first step
+	 */
+	isFirstStep(): boolean;
+	/**
+	 * Check if current step is the last step
+	 */
+	isLastStep(): boolean;
+	/**
+	 * Check if all steps are completed
+	 */
+	isCompleted(): boolean;
+	/**
+	 * Create a computed that derives state from the store
+	 * Ensures proper subscription to store signals
+	 */
+	derive<R>(computeFn: (store: this) => R): Pulse.Computed<R>;
+	/**
+	 * Get a snapshot of the current state (for debugging)
+	 */
+	getSnapshot(): {
+		currentStep: number;
+		totalSteps: number;
+		mode: StepperStore.Mode;
+		steps: StepperStore.StepData[];
+	};
+}
 declare const ChatBubble$1: Pulse.Fn<ChatBubble.Props> & {
 	List: Pulse.Fn<ChatBubble.ListProps>;
 	User: Pulse.Fn<ChatBubble.Props>;
@@ -80,6 +168,11 @@ declare const Timeline$1: Pulse.Fn<Timeline.Props> & {
 	Item: Pulse.Fn<Timeline.ItemProps>;
 	Heading: Pulse.Fn<Timeline.HeadingProps>;
 };
+/**
+ * Re-export Pulse's native reactive type guards for convenience
+ * These are the official helpers from Pulse Framework
+ */
+declare const isSignal$1: typeof isSignal, isComputed$1: typeof isComputed, isReactive$1: typeof isReactive;
 declare function batch<T>(fn: () => T): T;
 declare function bindConditional(element: Element, condition: Signal<boolean> | Computed<boolean>, template: DocumentFragment): () => void;
 declare function bindEffectToElement(element: Element, effectFn: () => void | (() => void)): () => void;
@@ -87,16 +180,12 @@ declare function bindEvent(element: Element, event: string, handler: (event: Eve
 declare function bindList<T>(container: Element, items: Signal<T[]> | Computed<T[]>, template: (item: T, index: number) => DocumentFragment, keyFn?: (item: T, index: number) => string | number): () => void;
 declare function bindProperty(element: Element, property: string, signalOrComputed: Signal | Computed, transform?: (value: any) => any): () => void;
 declare function clearRegistry(): void;
-declare function computed<T>(computeFn: () => T, debugName?: string): {
-	(): T;
-	subscribe: (subscriber: Subscriber<T>) => Unsubscribe;
-} & {
-	readonly value: T;
-};
+declare function computed<T>(computeFn: () => T, debugName?: string): Computed<T>;
 declare function createDSLScope(root: Element, context: Record<string, any>): {
 	cleanup: () => void;
 	update: (newContext: Record<string, any>) => () => void;
 };
+declare function createRef<T extends HTMLElement = HTMLElement>(): Ref<T>;
 declare function debugDirtyPropagation(rootNode: ReactiveNode): void;
 declare function debugGraph(): void;
 declare function debugGraphTree(): void;
@@ -110,9 +199,14 @@ declare function enableDebug(): void;
 declare function findNode(id: number): ReactiveNode | undefined;
 declare function findNodesByType(type: "signal" | "computed" | "effect"): ReactiveNode[];
 declare function flush(): void;
+declare function isComputed(value: any): value is Computed;
+declare function isReactive(value: any): value is Signal & Computed;
+declare function isSignal(value: any): value is Signal;
 declare function jsx(type: string | Function, props: any, ...children: any[]): HTMLElement | SVGElement | DocumentFragment;
+declare function onMount(callback: () => void | (() => void)): void;
 declare function scanDSL(root?: Element, context?: Record<string, any>): () => void;
 declare function signal<T>(initialValue: T, debugName?: string): Signal<T>;
+declare function untrack<T>(fn: () => T): T;
 declare namespace ChatBubble {
 	interface ContentItem {
 		type: "text" | "link" | "list";
@@ -120,21 +214,21 @@ declare namespace ChatBubble {
 		href?: string;
 	}
 	interface Props extends BaseComponentProps {
-		message?: string;
-		content?: HTMLElement | string | ContentItem[];
-		title?: string;
-		sender?: "user" | "bot" | "other";
-		avatar?: string;
-		avatarAlt?: string;
-		avatarInitials?: string;
-		status?: ChatStatus;
-		statusText?: string;
-		showStatus?: boolean;
-		align?: "left" | "right";
-		variant?: "default" | "primary";
-		maxWidth?: string;
-		timestamp?: string;
-		showTimestamp?: boolean;
+		message?: Reactive$1<string>;
+		content?: Reactive$1<HTMLElement | string | ContentItem[]>;
+		title?: Reactive$1<string>;
+		sender?: Reactive$1<"user" | "bot" | "other">;
+		avatar?: Reactive$1<string>;
+		avatarAlt?: Reactive$1<string>;
+		avatarInitials?: Reactive$1<string>;
+		status?: Reactive$1<ChatStatus>;
+		statusText?: Reactive$1<string>;
+		showStatus?: Reactive$1<boolean>;
+		align?: Reactive$1<"left" | "right">;
+		variant?: Reactive$1<"default" | "primary">;
+		maxWidth?: Reactive$1<string>;
+		timestamp?: Reactive$1<string>;
+		showTimestamp?: Reactive$1<boolean>;
 	}
 	interface ListProps extends BaseComponentProps {
 		children?: HTMLElement | HTMLElement[];
@@ -143,7 +237,7 @@ declare namespace ChatBubble {
 }
 declare namespace CollapseContent {
 	interface Props extends BaseComponentProps {
-		isOpen?: boolean | Signal$1<boolean>;
+		isOpen?: boolean | Reactive$1<boolean>;
 		children?: HTMLElement | HTMLElement[] | string;
 		duration?: number;
 		triggerId?: string;
@@ -151,7 +245,7 @@ declare namespace CollapseContent {
 }
 declare namespace CollapseTrigger {
 	interface Props extends BaseComponentProps {
-		isOpen?: boolean | Signal$1<boolean>;
+		isOpen?: boolean | Reactive$1<boolean>;
 		targetId: string;
 		children?: HTMLElement | string;
 		showIcon?: boolean;
@@ -165,36 +259,36 @@ declare namespace Columns {
 	 */
 	interface Props extends BaseComponentProps {
 		/** Content to render inside columns */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Number of columns (can be responsive) */
-		count?: number | ResponsiveColumns;
+		count?: Reactive$1<number | ResponsiveColumns>;
 		/** Column width (t-shirt sizes) */
-		width?: "3xs" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl";
+		width?: Reactive$1<"3xs" | "2xs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl">;
 		/** Gap between columns */
-		gap?: number | string;
+		gap?: Reactive$1<number | string>;
 		/** Column rule (divider line between columns) */
-		rule?: boolean;
-		ruleWidth?: "thin" | "medium" | "thick" | number;
-		ruleColor?: string;
-		ruleStyle?: "solid" | "dashed" | "dotted" | "double";
+		rule?: Reactive$1<boolean>;
+		ruleWidth?: Reactive$1<"thin" | "medium" | "thick" | number>;
+		ruleColor?: Reactive$1<string>;
+		ruleStyle?: Reactive$1<"solid" | "dashed" | "dotted" | "double">;
 		/** Auto-fill columns */
-		auto?: boolean;
+		auto?: Reactive$1<boolean>;
 	}
 	interface SpanProps extends BaseComponentProps {
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
-		span?: "all" | number;
+		children?: Pulse.JSX.Child;
+		span?: Reactive$1<"all" | number>;
 	}
 }
 declare namespace GradientText {
 	interface Props extends Omit<Text$1.Props, "color"> {
 		/** Gradient start color */
-		from: string;
+		from: Reactive$1<string>;
 		/** Gradient end color */
-		to: string;
+		to: Reactive$1<string>;
 		/** Gradient via color (optional middle) */
-		via?: string;
+		via?: Reactive$1<string>;
 		/** Gradient direction */
-		direction?: "tl" | "tr" | "br" | "bl" | "t" | "r" | "b" | "l";
+		direction?: Reactive$1<"tl" | "tr" | "br" | "bl" | "t" | "r" | "b" | "l">;
 	}
 }
 declare namespace Grid {
@@ -203,56 +297,56 @@ declare namespace Grid {
 	 */
 	interface Props extends BaseComponentProps {
 		/** Content to render inside grid */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Number of columns (responsive) */
-		cols?: number | ResponsiveValue<number>;
+		cols?: Reactive$1<number | ResponsiveValue<number>>;
 		/** Number of rows (responsive) */
-		rows?: number | ResponsiveValue<number>;
+		rows?: Reactive$1<number | ResponsiveValue<number>>;
 		/** Gap between grid items */
-		gap?: number | string;
+		gap?: Reactive$1<number | string>;
 		/** Gap between columns */
-		gapX?: number | string;
+		gapX?: Reactive$1<number | string>;
 		/** Gap between rows */
-		gapY?: number | string;
+		gapY?: Reactive$1<number | string>;
 		/** Grid auto flow direction */
-		autoFlow?: "row" | "col" | "dense" | "row-dense" | "col-dense";
+		autoFlow?: Reactive$1<"row" | "col" | "dense" | "row-dense" | "col-dense">;
 		/** Align items */
-		alignItems?: "start" | "center" | "end" | "stretch" | "baseline";
+		alignItems?: Reactive$1<"start" | "center" | "end" | "stretch" | "baseline">;
 		/** Justify items */
-		justifyItems?: "start" | "center" | "end" | "stretch";
+		justifyItems?: Reactive$1<"start" | "center" | "end" | "stretch">;
 		/** Align content */
-		alignContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
+		alignContent?: Reactive$1<"start" | "center" | "end" | "between" | "around" | "evenly">;
 		/** Justify content */
-		justifyContent?: "start" | "center" | "end" | "between" | "around" | "evenly";
+		justifyContent?: Reactive$1<"start" | "center" | "end" | "between" | "around" | "evenly">;
 		/** Auto columns sizing */
-		autoColumns?: "auto" | "min" | "max" | "fr";
+		autoColumns?: Reactive$1<"auto" | "min" | "max" | "fr">;
 		/** Auto rows sizing */
-		autoRows?: "auto" | "min" | "max" | "fr";
+		autoRows?: Reactive$1<"auto" | "min" | "max" | "fr">;
 	}
 	/**
 	 * GridItem props
 	 */
 	interface ItemProps extends BaseComponentProps {
 		/** Content to render inside grid item */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Column span */
-		colSpan?: number | "full" | "auto";
+		colSpan?: Reactive$1<number | "full" | "auto">;
 		/** Row span */
-		rowSpan?: number | "full" | "auto";
+		rowSpan?: Reactive$1<number | "full" | "auto">;
 		/** Column start */
-		colStart?: number | "auto";
+		colStart?: Reactive$1<number | "auto">;
 		/** Column end */
-		colEnd?: number | "auto";
+		colEnd?: Reactive$1<number | "auto">;
 		/** Row start */
-		rowStart?: number | "auto";
+		rowStart?: Reactive$1<number | "auto">;
 		/** Row end */
-		rowEnd?: number | "auto";
+		rowEnd?: Reactive$1<number | "auto">;
 		/** Align self */
-		alignSelf?: "auto" | "start" | "center" | "end" | "stretch";
+		alignSelf?: Reactive$1<"auto" | "start" | "center" | "end" | "stretch">;
 		/** Justify self */
-		justifySelf?: "auto" | "start" | "center" | "end" | "stretch";
+		justifySelf?: Reactive$1<"auto" | "start" | "center" | "end" | "stretch">;
 		/** Place self (shorthand for align-self and justify-self) */
-		placeSelf?: "auto" | "start" | "center" | "end" | "stretch";
+		placeSelf?: Reactive$1<"auto" | "start" | "center" | "end" | "stretch">;
 	}
 }
 declare namespace Image$1 {
@@ -261,46 +355,46 @@ declare namespace Image$1 {
 	 */
 	interface Props extends BaseComponentProps {
 		/** Image source URL */
-		src: string;
+		src: Reactive$1<string>;
 		/** Alt text for accessibility */
-		alt: string;
+		alt: Reactive$1<string>;
 		/** Image width */
-		width?: string | number;
+		width?: Reactive$1<string | number>;
 		/** Image height */
-		height?: string | number;
+		height?: Reactive$1<string | number>;
 		/** Object fit behavior */
-		objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
+		objectFit?: Reactive$1<"contain" | "cover" | "fill" | "none" | "scale-down">;
 		/** Object position */
-		objectPosition?: "center" | "top" | "right" | "bottom" | "left" | "left-top" | "left-bottom" | "right-top" | "right-bottom";
+		objectPosition?: Reactive$1<"center" | "top" | "right" | "bottom" | "left" | "left-top" | "left-bottom" | "right-top" | "right-bottom">;
 		/** Border radius */
-		rounded?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
+		rounded?: Reactive$1<"none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full">;
 		/** Loading strategy */
-		loading?: "eager" | "lazy";
+		loading?: Reactive$1<"eager" | "lazy">;
 		/** Image will be block or inline */
-		display?: "block" | "inline" | "inline-block";
+		display?: Reactive$1<"block" | "inline" | "inline-block">;
 		/** Aspect ratio */
-		aspectRatio?: "square" | "video" | "4/3" | "16/9" | "21/9" | "auto";
+		aspectRatio?: Reactive$1<"square" | "video" | "4/3" | "16/9" | "21/9" | "auto">;
 		/** On load callback */
 		onLoad?: () => void;
 		/** On error callback */
 		onError?: () => void;
 		/** Fallback image source on error */
-		fallbackSrc?: string;
+		fallbackSrc?: Reactive$1<string>;
 	}
 }
 declare namespace Kbd {
 	interface Props extends BaseComponentProps {
-		children?: string | HTMLElement;
-		variant?: "text" | "text-dark" | "solid" | "bordered" | "shadow";
-		size?: "xs" | "sm" | "md" | "lg";
-		icon?: HTMLElement | string;
-		square?: boolean;
+		children?: Pulse.JSX.Child;
+		variant?: Reactive$1<"text" | "text-dark" | "solid" | "bordered" | "shadow">;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg">;
+		icon?: Reactive$1<HTMLElement | string>;
+		square?: Reactive$1<boolean>;
 	}
 	interface GroupProps extends BaseComponentProps {
-		keys: (string | HTMLElement | Kbd.Props)[];
-		separator?: string;
-		variant?: "text" | "text-dark" | "solid" | "bordered" | "shadow";
-		size?: "xs" | "sm" | "md" | "lg";
+		keys: Reactive$1<(string | HTMLElement | Kbd.Props)[]>;
+		separator?: Reactive$1<string>;
+		variant?: Reactive$1<"text" | "text-dark" | "solid" | "bordered" | "shadow">;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg">;
 	}
 }
 declare namespace LayoutSplitter {
@@ -309,64 +403,84 @@ declare namespace LayoutSplitter {
 	 */
 	interface Props extends BaseComponentProps {
 		/** Content (SplitterPanel components) */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[];
+		children?: Pulse.JSX.Child;
 		/** Split direction */
-		direction?: "horizontal" | "vertical";
+		direction?: Reactive$1<"horizontal" | "vertical">;
 		/** Custom handle template */
-		handleTemplate?: Pulse.JSX.Element | string;
+		handleTemplate?: Pulse.JSX.Child;
 		/** Custom handle classes */
-		handleClasses?: string;
+		handleClasses?: Reactive$1<string>;
 		/** Manual handle placement */
-		manualHandles?: boolean;
+		manualHandles?: Reactive$1<boolean>;
+		/** Enable/disable resizing */
+		disabled?: Reactive$1<boolean>;
 		/** Callback when sizes change */
 		onResize?: (sizes: number[]) => void;
-		/** Enable/disable resizing */
-		disabled?: boolean;
 	}
 	/**
 	 * SplitterPanel props
 	 */
 	interface PanelProps extends BaseComponentProps {
 		/** Content to render inside panel */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Initial size (percentage 0-100) */
-		size: number | Signal$1<number>;
+		size: Reactive$1<number>;
 		/** Minimum size (percentage) */
-		minSize?: number;
+		minSize?: Reactive$1<number>;
 		/** Maximum size (percentage) */
-		maxSize?: number;
+		maxSize?: Reactive$1<number>;
 		/** Custom class when min limit reached */
-		limitReachedClass?: string;
+		limitReachedClass?: Reactive$1<string>;
 	}
 	/**
 	 * SplitterHandle props
 	 */
 	interface HandleProps extends BaseComponentProps {
 		/** Handle direction (inherited from parent if not specified) */
-		direction?: "horizontal" | "vertical";
+		direction?: Reactive$1<"horizontal" | "vertical">;
 		/** Custom handle content */
-		children?: Pulse.JSX.Element | string;
+		children?: Pulse.JSX.Child;
 	}
 }
 declare namespace Skeleton {
 	interface Props extends BaseComponentProps {
-		variant?: "text" | "circular" | "rectangular";
-		width?: string | number;
-		height?: string | number;
-		animate?: boolean;
-		lines?: number;
-		gap?: "sm" | "md" | "lg";
+		variant?: Reactive$1<"text" | "circular" | "rectangular">;
+		width?: Reactive$1<string | number>;
+		height?: Reactive$1<string | number>;
+		animate?: Reactive$1<boolean>;
+		lines?: Reactive$1<number>;
+		gap?: Reactive$1<"sm" | "md" | "lg">;
 	}
 	interface AvatarProps extends BaseComponentProps {
-		size?: "xs" | "sm" | "md" | "lg" | "xl";
-		animate?: boolean;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg" | "xl">;
+		animate?: Reactive$1<boolean>;
 	}
 	interface CardProps extends BaseComponentProps {
-		avatar?: boolean;
-		avatarSize?: "xs" | "sm" | "md" | "lg" | "xl";
-		lines?: number;
-		animate?: boolean;
-		titleWidth?: string;
+		avatar?: Reactive$1<boolean>;
+		avatarSize?: Reactive$1<"xs" | "sm" | "md" | "lg" | "xl">;
+		lines?: Reactive$1<number>;
+		animate?: Reactive$1<boolean>;
+		titleWidth?: Reactive$1<string>;
+	}
+}
+declare namespace StepperStore {
+	type Mode = "linear" | "non-linear";
+	type Status = "pending" | "active" | "completed" | "error" | "success";
+	interface StepData {
+		index: number;
+		label: string;
+		description?: string;
+		content?: () => Pulse.JSX.Element;
+		icon?: Pulse.JSX.Element;
+		avatar?: string;
+		hasError?: boolean;
+		isCompleted?: boolean;
+	}
+	interface State {
+		currentStep: number;
+		totalSteps: number;
+		mode: Mode;
+		steps: StepData[];
 	}
 }
 /**
@@ -375,68 +489,68 @@ declare namespace Skeleton {
 declare namespace Text$1 {
 	interface Props extends BaseComponentProps {
 		/** Content to render */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Text alignment */
-		align?: "left" | "center" | "right" | "justify";
+		align?: Reactive$1<"left" | "center" | "right" | "justify">;
 		/** Text color */
-		color?: string;
+		color?: Reactive$1<string>;
 		/** Font weight */
-		weight?: "thin" | "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold" | "black";
+		weight?: Reactive$1<"thin" | "light" | "normal" | "medium" | "semibold" | "bold" | "extrabold" | "black">;
 		/** Font size */
-		size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl" | "9xl";
+		size?: Reactive$1<"xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl" | "8xl" | "9xl">;
 		/** Truncate text with ellipsis */
-		truncate?: boolean;
+		truncate?: Reactive$1<boolean>;
 		/** Make text uppercase */
-		uppercase?: boolean;
+		uppercase?: Reactive$1<boolean>;
 		/** Make text lowercase */
-		lowercase?: boolean;
+		lowercase?: Reactive$1<boolean>;
 		/** Capitalize first letter */
-		capitalize?: boolean;
+		capitalize?: Reactive$1<boolean>;
 		/** Line clamp (max lines before truncating) */
-		lineClamp?: number;
+		lineClamp?: Reactive$1<number>;
 		/** Element tag to render */
-		as?: keyof HTMLElementTagNameMap;
+		as?: Reactive$1<keyof HTMLElementTagNameMap>;
 	}
 	interface HeadingProps extends Omit<Text$1.Props, "size" | "as"> {
 		/** Heading level */
-		level?: 1 | 2 | 3 | 4 | 5 | 6;
+		level?: Reactive$1<1 | 2 | 3 | 4 | 5 | 6>;
 	}
 }
 declare namespace Timeline {
 	interface ItemData {
-		title: string | Pulse.JSX.Element;
-		description?: string | Pulse.JSX.Element;
-		icon?: TimelineItemIcon;
+		title: Reactive$1<string> | Pulse.JSX.Element;
+		description?: Reactive$1<string> | Pulse.JSX.Element;
+		icon?: Reactive$1<TimelineItemIcon>;
 		iconContent?: Pulse.JSX.Element;
-		avatar?: string;
-		initials?: string;
-		user?: TimelineItemUser;
-		time?: string;
-		href?: string;
+		avatar?: Reactive$1<string>;
+		initials?: Reactive$1<string>;
+		user?: Reactive$1<TimelineItemUser>;
+		time?: Reactive$1<string>;
+		href?: Reactive$1<string>;
 		onClick?: () => void;
-		hoverable?: boolean;
+		hoverable?: Reactive$1<boolean>;
 	}
 	interface Group {
-		heading: string;
-		items: Timeline.ItemData[];
+		heading: Reactive$1<string>;
+		items: Reactive$1<Timeline.ItemData[]>;
 	}
 	interface Props extends BaseComponentProps {
-		items?: Timeline.ItemData[];
-		grouped?: boolean;
-		groups?: Timeline.Group[];
-		showTime?: boolean;
-		timePosition?: "left" | "right";
-		hoverable?: boolean;
-		collapsible?: boolean;
-		collapsedItemsCount?: number;
-		collapseLabel?: string;
-		lineColor?: string;
-		dotColor?: string;
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[];
+		items?: Reactive$1<Timeline.ItemData[]>;
+		grouped?: Reactive$1<boolean>;
+		groups?: Reactive$1<Timeline.Group[]>;
+		showTime?: Reactive$1<boolean>;
+		timePosition?: Reactive$1<"left" | "right">;
+		hoverable?: Reactive$1<boolean>;
+		collapsible?: Reactive$1<boolean>;
+		collapsedItemsCount?: Reactive$1<number>;
+		collapseLabel?: Reactive$1<string>;
+		lineColor?: Reactive$1<string>;
+		dotColor?: Reactive$1<string>;
+		children?: Pulse.JSX.Child;
 	}
 	interface ItemProps extends BaseComponentProps {
-		title: string | Pulse.JSX.Element;
-		description?: string | Pulse.JSX.Element;
+		title: Reactive$1<string> | Pulse.JSX.Element;
+		description?: Reactive$1<string> | Pulse.JSX.Element;
 		icon?: TimelineItemIcon;
 		iconContent?: Pulse.JSX.Element;
 		avatar?: string;
@@ -455,6 +569,91 @@ declare namespace Timeline {
 	interface HeadingProps extends BaseComponentProps {
 		children: string | Pulse.JSX.Element;
 	}
+}
+/**
+ * Generic ComponentStateStorage class
+ */
+export declare class ComponentStateStorage<T extends Record<string, any> = Record<string, any>> {
+	/**
+	 * Internal map storing signals/computeds by key
+	 */
+	private store;
+	/**
+	 * Set a signal or computed in the store
+	 */
+	set<K extends keyof T>(key: K, value: Signal<T[K]> | Computed<T[K]>): void;
+	/**
+	 * Get a signal or computed from the store
+	 * Throws if the key doesn't exist
+	 */
+	get<K extends keyof T>(key: K): Signal<T[K]> | Computed<T[K]>;
+	/**
+	 * Get a signal/computed if it exists, otherwise return undefined
+	 */
+	getOptional<K extends keyof T>(key: K): Signal<T[K]> | Computed<T[K]> | undefined;
+	/**
+	 * Check if a key exists in the store
+	 */
+	has<K extends keyof T>(key: K): boolean;
+	/**
+	 * Read the current value of a signal/computed
+	 * Shorthand for store.get(key)()
+	 */
+	getValue<K extends keyof T>(key: K): T[K];
+	/**
+	 * Read the current value if key exists, otherwise return default
+	 */
+	getValueOr<K extends keyof T>(key: K, defaultValue: T[K]): T[K];
+	/**
+	 * Update a signal value (only works for signals, not computeds)
+	 */
+	setValue<K extends keyof T>(key: K, value: T[K]): void;
+	/**
+	 * Delete a key from the store
+	 */
+	delete<K extends keyof T>(key: K): boolean;
+	/**
+	 * Clear all entries from the store
+	 */
+	clear(): void;
+	/**
+	 * Get all keys in the store
+	 */
+	keys(): string[];
+	/**
+	 * Get the size of the store
+	 */
+	get size(): number;
+	/**
+	 * Create a computed that reads multiple values from the store
+	 * This ensures the computed subscribes to all the signals it reads
+	 */
+	createComputed<R>(computeFn: (store: this) => R): Computed<R>;
+	/**
+	 * Batch update multiple signals
+	 */
+	setValues(values: Partial<{
+		[K in keyof T]: T[K];
+	}>): void;
+	/**
+	 * Get a snapshot of all current values (for debugging)
+	 */
+	getSnapshot(): Partial<T>;
+	/**
+	 * Create a derived computed from the store
+	 * Alias for createComputed for better readability
+	 */
+	derive<R>(computeFn: (store: this) => R): Computed<R>;
+	/**
+	 * Static factory: Create store from an object of signals/computeds
+	 */
+	static fromSignals<T extends Record<string, any>>(signals: {
+		[K in keyof T]: Signal<T[K]> | Computed<T[K]>;
+	}): ComponentStateStorage<T>;
+	/**
+	 * Static factory: Create store from an object of values (creates signals)
+	 */
+	static fromValues<T extends Record<string, any>>(values: T): ComponentStateStorage<T>;
 }
 export declare const Accordion: Pulse.Fn<Accordion.Props> & {
 	Basic: Pulse.Fn<Accordion.Props>;
@@ -681,8 +880,14 @@ export declare const Pulse: {
 	signal: typeof signal;
 	computed: typeof computed;
 	effect: typeof effect;
+	createRef: typeof createRef;
+	onMount: typeof onMount;
+	untrack: typeof untrack;
 	batch: typeof batch;
 	flush: typeof flush;
+	isSignal: typeof isSignal;
+	isComputed: typeof isComputed;
+	isReactive: typeof isReactive;
 	render: ((template: RenderTemplate, parentIsSVG?: boolean) => HTMLElement | SVGElement) & {
 		fragment: (props?: {
 			children?: any;
@@ -690,7 +895,8 @@ export declare const Pulse: {
 	};
 	Fragment: (props?: {
 		children?: any;
-	} | undefined) => DocumentFragment;
+		key?: string | number;
+	} | undefined) => DocumentFragment | HTMLElement;
 	jsx: typeof jsx;
 	jsxs: typeof jsx;
 	scanDSL: typeof scanDSL;
@@ -866,10 +1072,6 @@ export declare function formatDate(date: Date | string | number, format?: string
  */
 export declare function formatNumber(num: number, decimals?: number): string;
 /**
- * Utility functions for Odyssee Components
- * Helper functions used across components
- */
-/**
  * Generate a unique ID
  */
 export declare function generateId(prefix?: string): string;
@@ -885,6 +1087,13 @@ export declare function getElementOffset(element: HTMLElement): {
  */
 export declare function getFileExtension(filename: string): string;
 /**
+ * Safely get array length from Reactive<T[]>
+ *
+ * @example
+ * if (getLength(props.items) > 0) { ... }
+ */
+export declare function getLength<T>(arr: Reactive$1<T[]>): number;
+/**
  * Get orientation classes for interactive groups
  */
 export declare function getOrientationClasses(orientation: "horizontal" | "vertical"): string;
@@ -896,13 +1105,34 @@ export declare function getScrollPosition(): {
 	y: number;
 };
 /**
- * Get value from signal or static value
+ * Get value from Reactive<T> (static value, Signal, or Computed)
+ * This is the primary helper for extracting values in Zone B (static logic)
+ *
+ * Uses Pulse's native isReactive() for type checking
+ *
+ * @example
+ * const size: Reactive<"sm" | "md" | "lg"> = props.size;
+ * const sizeValue = getValue(size); // Type: "sm" | "md" | "lg"
  */
-export declare function getValue<T>(value: T | (() => T)): T;
+export declare function getValue<T>(value: Reactive$1<T> | undefined): T | undefined;
 /**
  * Check if element has class
  */
 export declare function hasClass(element: HTMLElement, className: string): boolean;
+/**
+ * Safely check if reactive value is defined (not null/undefined)
+ *
+ * @example
+ * if (isDefined(props.icon)) { ... }
+ */
+export declare function isDefined<T>(value: Reactive$1<T | undefined | null>): boolean;
+/**
+ * Safely check if reactive string is empty
+ *
+ * @example
+ * if (!isEmpty(props.label)) { ... }
+ */
+export declare function isEmpty(value: Reactive$1<string | undefined | null>): boolean;
 /**
  * Check if file is image
  */
@@ -916,11 +1146,6 @@ export declare function isInViewport(element: HTMLElement): boolean;
  * Handles both single and multiple selection
  */
 export declare function isSelectedValue<T = string | number>(value: T, selected: T | T[] | undefined): boolean;
-/**
- * Check if value is a Pulse signal
- * Pulse signals are functions with specific characteristics
- */
-export declare function isSignal(value: any): boolean;
 /**
  * Convert to kebab case
  */
@@ -937,6 +1162,25 @@ export declare function parseQueryString(query: string): Record<string, string>;
  * Random number between min and max
  */
 export declare function random(min: number, max: number): number;
+/**
+ * Helper for conditional class with reactive boolean
+ *
+ * @example
+ * const classes = clsx(
+ *   "base-class",
+ *   reactiveClass(props.disabled, "opacity-50")
+ * );
+ */
+export declare function reactiveClass(condition: Reactive$1<boolean>, className: string): string | undefined;
+/**
+ * Helper for class mapping based on reactive enum values
+ * Useful for size/variant/color class mappings
+ *
+ * @example
+ * const sizeClasses = { sm: "py-1", md: "py-2", lg: "py-3" };
+ * const className = reactiveClassMap(props.size, sizeClasses);
+ */
+export declare function reactiveClassMap<T extends string>(value: Reactive$1<T>, map: Record<T, string>): string;
 /**
  * Remove class from element
  */
@@ -980,45 +1224,45 @@ export declare function truncate(text: string, length: number, suffix?: string):
 export declare function wait(ms: number): Promise<void>;
 export declare namespace Accordion {
 	interface Item {
-		id: string;
-		title: string;
-		content: HTMLElement | string;
-		disabled?: boolean;
-		open?: boolean;
+		id: Reactive$1<string>;
+		title: Reactive$1<string>;
+		content: Reactive$1<Pulse.JSX.Child>;
+		disabled?: Reactive$1<boolean>;
+		open?: Reactive$1<boolean>;
 	}
 	interface Props extends BaseComponentProps {
-		items: Accordion.Item[];
-		multiple?: boolean;
-		bordered?: boolean;
+		items: Reactive$1<Accordion.Item[]>;
+		multiple?: Reactive$1<boolean>;
+		bordered?: Reactive$1<boolean>;
 	}
 }
 export declare namespace Alert {
 	interface Props extends BaseComponentProps {
-		variant?: "solid" | "soft" | "bordered";
-		color?: Color;
-		title?: string | HTMLElement;
-		children?: string | HTMLElement | HTMLElement[];
-		icon?: string;
-		dismissible?: boolean;
-		isVisible?: boolean | Signal$1<boolean>;
-		actions?: HTMLElement | HTMLElement[];
+		variant?: Reactive$1<"solid" | "soft" | "bordered">;
+		color?: Reactive$1<Color>;
+		title?: Reactive$1<string> | Pulse.JSX.Child;
+		children?: Pulse.JSX.Child;
+		icon?: Reactive$1<string>;
+		dismissible?: Reactive$1<boolean>;
+		isVisible?: Reactive$1<boolean>;
+		actions?: Pulse.JSX.Child;
 		onDismiss?: EventCallback;
 	}
 }
 export declare namespace Avatar {
 	interface Props extends BaseComponentProps {
-		src?: string;
-		alt?: string;
-		name?: string;
-		initials?: string;
-		variant?: "image" | "initials" | "icon";
-		size?: Size;
-		rounded?: boolean | "full" | "lg";
-		color?: "gray" | "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "white";
-		colorVariant?: "solid" | "soft" | "outline";
-		status?: "online" | "offline" | "away" | "busy" | "none";
-		statusPosition?: "top" | "bottom";
-		statusColor?: string;
+		src?: Reactive$1<string>;
+		alt?: Reactive$1<string>;
+		name?: Reactive$1<string>;
+		initials?: Reactive$1<string>;
+		variant?: Reactive$1<"image" | "initials" | "icon">;
+		size?: Reactive$1<Size>;
+		rounded?: Reactive$1<boolean | "full" | "lg">;
+		color?: Reactive$1<"gray" | "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "white">;
+		colorVariant?: Reactive$1<"solid" | "soft" | "outline">;
+		status?: Reactive$1<"online" | "offline" | "away" | "busy" | "none">;
+		statusPosition?: Reactive$1<"top" | "bottom">;
+		statusColor?: Reactive$1<string>;
 		badge?: string | number;
 		badgePosition?: "top" | "bottom";
 		icon?: HTMLElement | string;
@@ -1039,35 +1283,35 @@ export declare namespace AvatarGroup {
 		onClick?: () => void;
 	}
 	interface Props extends BaseComponentProps {
-		avatars: Item[];
-		layout?: "stack" | "grid";
-		size?: Size;
-		max?: number;
-		showCounter?: boolean;
-		counterText?: string;
-		spacing?: "none" | "sm" | "md" | "lg";
-		ringColor?: "white" | "gray" | "transparent";
-		rounded?: boolean | "full" | "lg";
-		enableTooltips?: boolean;
-		dropdownItems?: Array<{
+		avatars: Reactive$1<Item[]>;
+		layout?: Reactive$1<"stack" | "grid">;
+		size?: Reactive$1<Size>;
+		max?: Reactive$1<number>;
+		showCounter?: Reactive$1<boolean>;
+		counterText?: Reactive$1<string>;
+		spacing?: Reactive$1<"none" | "sm" | "md" | "lg">;
+		ringColor?: Reactive$1<"white" | "gray" | "transparent">;
+		rounded?: Reactive$1<boolean | "full" | "lg">;
+		enableTooltips?: Reactive$1<boolean>;
+		dropdownItems?: Reactive$1<Array<{
 			name: string;
 			href?: string;
 			onClick?: () => void;
-		}>;
-		hoverEffect?: boolean;
+		}>>;
+		hoverEffect?: Reactive$1<boolean>;
 	}
 }
 export declare namespace Badge {
 	interface Props extends BaseComponentProps {
-		variant?: Variant;
-		color?: Color;
-		size?: Size;
-		rounded?: boolean | "full";
-		dot?: boolean;
-		icon?: HTMLElement | string;
-		dismissible?: boolean;
+		variant?: Reactive$1<Variant>;
+		color?: Reactive$1<Color>;
+		size?: Reactive$1<Size>;
+		rounded?: Reactive$1<boolean | "full">;
+		dot?: Reactive$1<boolean>;
+		icon?: Reactive$1<HTMLElement | string>;
+		dismissible?: Reactive$1<boolean>;
 		onDismiss?: EventCallback;
-		children?: string | HTMLElement;
+		children?: Pulse.JSX.Child;
 	}
 }
 export declare namespace Blockquote {
@@ -1078,34 +1322,34 @@ export declare namespace Blockquote {
 		avatarAlt?: string;
 	}
 	interface Props extends BaseComponentProps {
-		quote: string | HTMLElement;
-		children?: string | HTMLElement;
-		author?: Author | string;
-		size?: "sm" | "md" | "lg";
-		align?: "left" | "center" | "right";
-		variant?: "default" | "bordered" | "minimal";
-		showIcon?: boolean;
-		borderColor?: string;
+		quote: Reactive$1<string | HTMLElement>;
+		children?: Pulse.JSX.Child;
+		author?: Reactive$1<Author | string>;
+		size?: Reactive$1<"sm" | "md" | "lg">;
+		align?: Reactive$1<"left" | "center" | "right">;
+		variant?: Reactive$1<"default" | "bordered" | "minimal">;
+		showIcon?: Reactive$1<boolean>;
+		borderColor?: Reactive$1<string>;
 	}
 }
 export declare namespace Breadcrumb {
 	interface Item {
-		id?: string;
-		label: string | HTMLElement;
-		href?: string;
-		icon?: HTMLElement | string;
-		active?: boolean;
+		id?: Reactive$1<string>;
+		label: Reactive$1<Pulse.JSX.Child>;
+		href?: Reactive$1<string>;
+		icon?: Reactive$1<Pulse.JSX.Child>;
+		active?: Reactive$1<boolean>;
 		onClick?: ClickCallback;
 	}
 	interface Props extends BaseComponentProps {
-		items: (string | Breadcrumb.Item)[];
-		separator?: "chevron" | "slash" | "custom";
-		customSeparator?: HTMLElement | string;
-		bordered?: boolean;
-		showMore?: boolean;
-		maxItems?: number;
-		collapsedItems?: (string | Breadcrumb.Item)[];
-		size?: "xs" | "sm" | "md" | "lg";
+		items: Reactive$1<(string | Breadcrumb.Item)[]>;
+		separator?: Reactive$1<"chevron" | "slash" | "custom">;
+		customSeparator?: Reactive$1<Pulse.JSX.Child>;
+		bordered?: Reactive$1<boolean>;
+		showMore?: Reactive$1<boolean>;
+		maxItems?: Reactive$1<number>;
+		collapsedItems?: Reactive$1<(string | Breadcrumb.Item)[]>;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg">;
 		onItemClick?: (item: Breadcrumb.Item | string, index: number) => void;
 	}
 }
@@ -1118,67 +1362,67 @@ export declare namespace Button {
 		isActive?: boolean;
 	}
 	interface Props extends BaseComponentProps {
-		type?: "button" | "submit" | "reset";
-		variant?: Variant;
-		color?: Color;
-		size?: Size;
-		disabled?: boolean;
-		loading?: boolean;
-		icon?: string | Pulse.JSX.Element;
-		iconPosition?: "left" | "right";
-		fullWidth?: boolean;
+		type?: Reactive$1<"button" | "submit" | "reset">;
+		variant?: Reactive$1<Variant>;
+		color?: Reactive$1<Color>;
+		size?: Reactive$1<Size>;
+		disabled?: Reactive$1<boolean>;
+		loading?: Reactive$1<boolean>;
+		icon?: Reactive$1<string> | Pulse.JSX.Element;
+		iconPosition?: Reactive$1<"left" | "right">;
+		fullWidth?: Reactive$1<boolean>;
 		onClick?: ClickCallback;
-		children?: string | HTMLElement | HTMLElement[];
+		children?: Pulse.JSX.Child;
 		spinnerProps?: Partial<Spinner.Props>;
 		grouped?: GroupedProps;
 	}
 }
 export declare namespace ButtonGroup {
 	interface Item {
-		label: string | HTMLElement;
-		value?: string | number;
+		label: Reactive$1<string> | HTMLElement;
+		value?: Reactive$1<string | number>;
 		icon?: HTMLElement;
-		disabled?: boolean;
-		active?: boolean;
+		disabled?: Reactive$1<boolean>;
+		active?: Reactive$1<boolean>;
 		onClick?: () => void;
-		type?: "button" | "submit" | "reset";
-		className?: string;
-		ariaLabel?: string;
+		type?: Reactive$1<"button" | "submit" | "reset">;
+		className?: Reactive$1<string>;
+		ariaLabel?: Reactive$1<string>;
 	}
 	interface Props extends BaseComponentProps {
-		buttons: Item[];
-		orientation?: "horizontal" | "vertical";
-		size?: "sm" | "md" | "lg";
-		variant?: "default" | "toolbar" | "pagination";
-		shape?: "default" | "pilled";
-		responsive?: boolean;
-		allowMultiple?: boolean;
-		selected?: string | number | (string | number)[];
-		fullWidth?: boolean;
-		useAriaCurrent?: boolean;
+		buttons: Reactive$1<Item[]>;
+		orientation?: Reactive$1<"horizontal" | "vertical">;
+		size?: Reactive$1<"sm" | "md" | "lg">;
+		variant?: Reactive$1<"default" | "toolbar" | "pagination">;
+		shape?: Reactive$1<"default" | "pilled">;
+		responsive?: Reactive$1<boolean>;
+		allowMultiple?: Reactive$1<boolean>;
+		selected?: Reactive$1<string | number | (string | number)[]>;
+		fullWidth?: Reactive$1<boolean>;
+		useAriaCurrent?: Reactive$1<boolean>;
 		onChange?: (value: string | number | (string | number)[]) => void;
 	}
 }
 export declare namespace Card {
 	interface Props extends BaseComponentProps {
-		title?: string;
-		subtitle?: string;
-		children?: HTMLElement | HTMLElement[] | string;
-		header?: HTMLElement | string;
-		headerBordered?: boolean;
-		footer?: HTMLElement | string;
-		footerBordered?: boolean;
-		image?: string;
-		imageAlt?: string;
-		imagePosition?: "top" | "bottom";
-		imageOverlay?: boolean;
-		imageRounded?: boolean;
-		variant?: "default" | "bordered" | "shadow" | "primary";
-		size?: "sm" | "md" | "lg";
-		horizontal?: boolean;
-		centered?: boolean;
-		clickable?: boolean;
-		href?: string;
+		title?: Reactive$1<string>;
+		subtitle?: Reactive$1<string>;
+		children?: Pulse.JSX.Child;
+		header?: Pulse.JSX.Child;
+		headerBordered?: Reactive$1<boolean>;
+		footer?: Pulse.JSX.Child;
+		footerBordered?: Reactive$1<boolean>;
+		image?: Reactive$1<string>;
+		imageAlt?: Reactive$1<string>;
+		imagePosition?: Reactive$1<"top" | "bottom">;
+		imageOverlay?: Reactive$1<boolean>;
+		imageRounded?: Reactive$1<boolean>;
+		variant?: Reactive$1<"default" | "bordered" | "shadow" | "primary">;
+		size?: Reactive$1<"sm" | "md" | "lg">;
+		horizontal?: Reactive$1<boolean>;
+		centered?: Reactive$1<boolean>;
+		clickable?: Reactive$1<boolean>;
+		href?: Reactive$1<string>;
 		onClick?: ClickCallback;
 		scrollable?: boolean;
 		scrollHeight?: string;
@@ -1191,57 +1435,54 @@ export declare namespace Card {
 export declare namespace Carousel {
 	interface Slide {
 		id?: string;
-		content: HTMLElement | string;
-		thumbnail?: HTMLElement | string;
+		content: Pulse.JSX.Child;
+		thumbnail?: Pulse.JSX.Child;
 	}
 	interface Props extends BaseComponentProps {
-		slides: Slide[];
-		currentSlide?: number | Signal$1<number>;
-		autoPlay?: boolean;
-		interval?: number;
-		loop?: boolean;
-		showControls?: boolean;
-		showPagination?: boolean;
-		showInfo?: boolean;
-		showThumbnails?: boolean;
-		thumbnailsPosition?: "bottom" | "right";
-		minHeight?: string;
-		controlsVariant?: "default" | "overlay";
-		draggable?: boolean;
-		rtl?: boolean;
-		slidesPerView?: number;
+		slides: Reactive$1<Slide[]>;
+		currentSlide?: Reactive$1<number>;
+		autoPlay?: Reactive$1<boolean>;
+		interval?: Reactive$1<number>;
+		loop?: Reactive$1<boolean>;
+		showControls?: Reactive$1<boolean>;
+		showPagination?: Reactive$1<boolean>;
+		showInfo?: Reactive$1<boolean>;
+		showThumbnails?: Reactive$1<boolean>;
+		thumbnailsPosition?: Reactive$1<"bottom" | "right">;
+		minHeight?: Reactive$1<string>;
+		controlsVariant?: Reactive$1<"default" | "overlay">;
+		draggable?: Reactive$1<boolean>;
 		onChange?: (index: number) => void;
-		onSlideChange?: (index: number) => void;
 	}
 }
 export declare namespace Checkbox {
 	interface Props extends BaseComponentProps {
-		checked?: boolean | Signal$1<boolean>;
-		indeterminate?: boolean | Signal$1<boolean>;
-		disabled?: boolean;
-		required?: boolean;
-		label?: string;
-		description?: string;
-		error?: string | boolean;
-		success?: string | boolean;
-		size?: Size;
-		labelPosition?: "left" | "right";
-		name?: string;
-		value?: string | number;
+		checked?: Reactive$1<boolean>;
+		indeterminate?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		description?: Reactive$1<string>;
+		error?: Reactive$1<string | boolean>;
+		success?: Reactive$1<string | boolean>;
+		size?: Reactive$1<Size>;
+		labelPosition?: Reactive$1<"left" | "right">;
+		name?: Reactive$1<string>;
+		value?: Reactive$1<string | number>;
 		onChange?: ChangeCallback<boolean>;
 	}
 }
 export declare namespace Collapse {
 	interface Props extends BaseComponentProps {
-		isOpen?: boolean | Signal$1<boolean>;
-		trigger?: HTMLElement | string;
-		children?: HTMLElement | HTMLElement[] | string;
-		openText?: string;
-		closedText?: string;
-		showIcon?: boolean;
-		triggerClassName?: string;
-		triggerVariant?: "button" | "link";
-		duration?: number;
+		isOpen?: Reactive$1<boolean>;
+		trigger?: Pulse.JSX.Child;
+		children?: Pulse.JSX.Child;
+		openText?: Reactive$1<string>;
+		closedText?: Reactive$1<string>;
+		showIcon?: Reactive$1<boolean>;
+		triggerClassName?: Reactive$1<string>;
+		triggerVariant?: Reactive$1<"button" | "link">;
+		duration?: Reactive$1<number>;
 		onToggle?: (isOpen: boolean) => void;
 		onOpen?: () => void;
 		onClose?: () => void;
@@ -1249,16 +1490,16 @@ export declare namespace Collapse {
 }
 export declare namespace ColorPicker {
 	interface Props extends BaseComponentProps {
-		value?: string | Signal$1<string>;
-		label?: string;
-		hint?: string;
-		error?: string;
-		disabled?: boolean;
-		required?: boolean;
-		size?: Size;
-		showValue?: boolean;
+		value?: Reactive$1<string>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		size?: Reactive$1<Size>;
+		showValue?: Reactive$1<boolean>;
 		onChange?: ChangeCallback<string>;
-		name?: string;
+		name?: Reactive$1<string>;
 	}
 }
 export declare namespace ComboBox {
@@ -1266,30 +1507,30 @@ export declare namespace ComboBox {
 		[key: string]: any;
 	}
 	interface Props extends BaseComponentProps {
-		options?: ComboBox.Option[];
-		value?: string | Signal$1<string>;
-		placeholder?: string;
-		disabled?: boolean;
-		readonly?: boolean;
-		required?: boolean;
-		label?: string;
-		hint?: string;
-		error?: string;
-		size?: Size;
-		displayField?: string;
-		valueField?: string;
-		searchFields?: string[];
-		minSearchLength?: number;
-		showCloseButton?: boolean;
-		maxHeight?: string;
-		apiUrl?: string;
-		apiSearchQuery?: string;
+		options?: Reactive$1<ComboBox.Option[]>;
+		value?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		readonly?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		size?: Reactive$1<Size>;
+		displayField?: Reactive$1<string>;
+		valueField?: Reactive$1<string>;
+		searchFields?: Reactive$1<string[]>;
+		minSearchLength?: Reactive$1<number>;
+		showCloseButton?: Reactive$1<boolean>;
+		maxHeight?: Reactive$1<string>;
+		apiUrl?: Reactive$1<string>;
+		apiSearchQuery?: Reactive$1<string>;
 		onChange?: (item: ComboBox.Option | null) => void;
 		onSearch?: ChangeCallback<string>;
 		onFocus?: EventCallback;
 		onBlur?: EventCallback;
-		dropdownClassName?: string;
-		name?: string;
+		dropdownClassName?: Reactive$1<string>;
+		name?: Reactive$1<string>;
 		renderItem?: (item: ComboBox.Option) => Pulse.JSX.Element;
 	}
 }
@@ -1299,22 +1540,22 @@ export declare namespace Container {
 	 */
 	interface Props extends BaseComponentProps {
 		/** Content to render inside container */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Center the container (applies mx-auto) */
-		centered?: boolean;
+		centered?: Reactive$1<boolean>;
 		/** Add horizontal padding */
-		padding?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
+		padding?: Reactive$1<"none" | "sm" | "md" | "lg" | "xl" | "2xl">;
 		/** Apply container only at specific breakpoint and up */
-		breakpoint?: "sm" | "md" | "lg" | "xl" | "2xl";
+		breakpoint?: Reactive$1<"sm" | "md" | "lg" | "xl" | "2xl">;
 		/** Use fluid container (no max-width constraints) */
-		fluid?: boolean;
+		fluid?: Reactive$1<boolean>;
 	}
 }
 export declare namespace ContextMenu {
 	interface Props extends BaseComponentProps {
-		items: Dropdown.Item[];
-		children: HTMLElement | HTMLElement[];
-		menuClassName?: string;
+		items: Reactive$1<Dropdown.Item[]>;
+		children: Pulse.JSX.Child;
+		menuClassName?: Reactive$1<string>;
 		onOpen?: () => void;
 		onClose?: () => void;
 	}
@@ -1322,21 +1563,21 @@ export declare namespace ContextMenu {
 export declare namespace CopyMarkup {
 	interface Props extends BaseComponentProps {
 		template: Pulse.JSX.Element;
-		buttonText?: string;
+		buttonText?: Reactive$1<string>;
 		buttonIcon?: Pulse.JSX.Element;
-		buttonVariant?: "outline" | "solid" | "ghost" | "danger";
-		buttonPosition?: "left" | "center" | "right";
-		limit?: number;
-		initialCount?: number;
-		showRemoveButton?: boolean;
-		removeButtonText?: string;
-		spacing?: "sm" | "md" | "lg" | "xl";
+		buttonVariant?: Reactive$1<"outline" | "solid" | "ghost" | "danger">;
+		buttonPosition?: Reactive$1<"left" | "center" | "right">;
+		limit?: Reactive$1<number>;
+		initialCount?: Reactive$1<number>;
+		showRemoveButton?: Reactive$1<boolean>;
+		removeButtonText?: Reactive$1<string>;
+		spacing?: Reactive$1<"sm" | "md" | "lg" | "xl">;
 		onChange?: ChangeCallback<number>;
 		onAdd?: ChangeCallback<number>;
 		onRemove?: ChangeCallback<number>;
-		buttonClassName?: string;
-		wrapperClassName?: string;
-		disabled?: boolean;
+		buttonClassName?: Reactive$1<string>;
+		wrapperClassName?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
 	}
 }
 export declare namespace CustomScrollbar {
@@ -1345,145 +1586,145 @@ export declare namespace CustomScrollbar {
 	 */
 	interface Props extends BaseComponentProps {
 		/** Content to render with custom scrollbar */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Maximum height */
-		maxHeight?: string;
+		maxHeight?: Reactive$1<string>;
 		/** Maximum width (for horizontal scrollbars) */
-		maxWidth?: string;
+		maxWidth?: Reactive$1<string>;
 		/** Scrollbar width */
-		width?: "thin" | "normal" | "thick" | string;
+		width?: Reactive$1<"thin" | "normal" | "thick" | string>;
 		/** Scrollbar orientation */
-		orientation?: "vertical" | "horizontal" | "both";
+		orientation?: Reactive$1<"vertical" | "horizontal" | "both">;
 		/** Track background color */
-		trackColor?: string;
+		trackColor?: Reactive$1<string>;
 		/** Thumb (handle) color */
-		thumbColor?: string;
+		thumbColor?: Reactive$1<string>;
 		/** Thumb hover color */
-		thumbHoverColor?: string;
+		thumbHoverColor?: Reactive$1<string>;
 		/** Rounded scrollbar */
-		rounded?: boolean;
+		rounded?: Reactive$1<boolean>;
 		/** Auto-hide scrollbar when not hovering */
-		autoHide?: boolean;
+		autoHide?: Reactive$1<boolean>;
 		/** Custom scrollbar styles */
-		scrollbarStyles?: Record<string, string>;
+		scrollbarStyles?: Reactive$1<Record<string, string>>;
 	}
 }
 /**
  * DatePicker component props
  */
 export declare namespace DatePicker {
-	interface Props {
+	interface Props extends BaseComponentProps {
 		/** Input id */
-		id?: string;
+		id?: Reactive$1<string>;
 		/** Mode: single date, multiple dates, or range */
-		mode?: "single" | "multiple" | "range";
+		mode?: Reactive$1<"single" | "multiple" | "range">;
 		/** Selected date (for single mode) - can be a signal or static value */
-		value?: Date | Signal<Date | null> | null;
+		value?: Reactive$1<Date | null>;
 		/** Start date for range mode - can be a signal or static value */
-		rangeStart?: Date | Signal<Date | null> | null;
+		rangeStart?: Reactive$1<Date | null>;
 		/** End date for range mode - can be a signal or static value */
-		rangeEnd?: Date | Signal<Date | null> | null;
+		rangeEnd?: Reactive$1<Date | null>;
 		/** Placeholder text */
-		placeholder?: string;
+		placeholder?: Reactive$1<string>;
 		/** Minimum selectable date */
-		minDate?: Date;
+		minDate?: Reactive$1<Date>;
 		/** Maximum selectable date */
-		maxDate?: Date;
+		maxDate?: Reactive$1<Date>;
 		/** Show time picker */
-		showTime?: boolean;
+		showTime?: Reactive$1<boolean>;
 		/** Time format (12h or 24h) */
-		timeFormat?: "12h" | "24h";
+		timeFormat?: Reactive$1<"12h" | "24h">;
 		/** Display multiple months (for range mode) */
-		displayMonths?: 1 | 2;
+		displayMonths?: Reactive$1<1 | 2>;
 		/** Date format string */
-		dateFormat?: string;
+		dateFormat?: Reactive$1<string>;
 		/** Callback when date changes (single mode) */
 		onChange?: (date: Date | null) => void;
 		/** Callback when range changes (range mode) */
 		onRangeChange?: (start: Date | null, end: Date | null) => void;
 		/** Callback when multiple dates change */
 		onMultipleChange?: (dates: Date[]) => void;
-		/** Additional CSS classes */
-		className?: string;
-		/** Inline styles */
-		style?: string;
 		/** Disabled state */
-		disabled?: boolean;
-		/** Readonly state */
-		readonly?: boolean;
-		/** Theme override */
-		theme?: "light" | "dark" | "auto";
+		disabled?: Reactive$1<boolean>;
+		/** Read-only state */
+		readOnly?: Reactive$1<boolean>;
+		/** Custom class for input */
+		inputClassName?: Reactive$1<string>;
+		/** Custom class for calendar */
+		calendarClassName?: Reactive$1<string>;
+		/** Theme */
+		theme?: Reactive$1<"light" | "dark" | "auto">;
 	}
 }
 export declare namespace Device {
 	interface Props extends BaseComponentProps {
-		variant: "mobile" | "browser";
-		src?: string;
-		alt?: string;
-		children?: HTMLElement | HTMLElement[] | string;
-		url?: string;
-		showControls?: boolean;
-		maxWidth?: string;
-		align?: "left" | "center" | "right";
-		imageClassName?: string;
-		frameClassName?: string;
+		variant: Reactive$1<"mobile" | "browser">;
+		src?: Reactive$1<string>;
+		alt?: Reactive$1<string>;
+		children?: Pulse.JSX.Child;
+		url?: Reactive$1<string>;
+		showControls?: Reactive$1<boolean>;
+		maxWidth?: Reactive$1<string>;
+		align?: Reactive$1<"left" | "center" | "right">;
+		imageClassName?: Reactive$1<string>;
+		frameClassName?: Reactive$1<string>;
 	}
 }
 export declare namespace Divider {
 	interface Props extends BaseComponentProps {
-		orientation?: "horizontal" | "vertical";
-		label?: string | HTMLElement;
-		labelPosition?: "left" | "center" | "right";
-		color?: "default" | "gray" | "teal" | "blue" | "red" | "yellow" | "white";
-		thickness?: 1 | 2 | 4 | 8;
-		spacing?: Size;
-		responsiveOrientation?: {
+		orientation?: Reactive$1<"horizontal" | "vertical">;
+		label?: Reactive$1<string> | Pulse.JSX.Child;
+		labelPosition?: Reactive$1<"left" | "center" | "right">;
+		color?: Reactive$1<"default" | "gray" | "teal" | "blue" | "red" | "yellow" | "white">;
+		thickness?: Reactive$1<1 | 2 | 4 | 8>;
+		spacing?: Reactive$1<Size>;
+		responsiveOrientation?: Reactive$1<{
 			sm?: "horizontal" | "vertical";
 			md?: "horizontal" | "vertical";
 			lg?: "horizontal" | "vertical";
-		};
+		}>;
 	}
 }
 export declare namespace Dropdown {
 	interface Item {
-		label?: string | HTMLElement;
-		value?: string | number;
-		icon?: HTMLElement | string;
-		href?: string;
-		disabled?: boolean;
-		isDivider?: boolean;
+		label?: Reactive$1<Pulse.JSX.Child>;
+		value?: Reactive$1<string | number>;
+		icon?: Reactive$1<Pulse.JSX.Child>;
+		href?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		isDivider?: Reactive$1<boolean>;
 		onClick?: () => void;
-		className?: string;
+		className?: Reactive$1<string>;
 	}
 	type Placement = "top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | "auto";
 	type Trigger = "click" | "hover" | "contextmenu";
 	type AutoClose = boolean | "inside" | "outside";
 	interface Props extends BaseComponentProps {
-		trigger: HTMLElement | string;
-		triggerClassName?: string;
-		items?: Dropdown.Item[];
-		children?: HTMLElement | HTMLElement[];
-		placement?: Dropdown.Placement;
-		strategy?: "fixed" | "absolute";
-		offset?: number;
-		flip?: boolean;
-		scope?: "parent" | "window";
-		triggerType?: Dropdown.Trigger;
-		autoClose?: Dropdown.AutoClose;
-		closeOnSelect?: boolean;
-		hasAutofocus?: boolean;
-		isOpen?: boolean | Signal$1<boolean>;
-		menuClassName?: string;
+		trigger: Reactive$1<Pulse.JSX.Child>;
+		triggerClassName?: Reactive$1<string>;
+		items?: Reactive$1<Dropdown.Item[]>;
+		children?: Pulse.JSX.Child;
+		placement?: Reactive$1<Dropdown.Placement>;
+		strategy?: Reactive$1<"fixed" | "absolute">;
+		offset?: Reactive$1<number>;
+		flip?: Reactive$1<boolean>;
+		scope?: Reactive$1<"parent" | "window">;
+		triggerType?: Reactive$1<Dropdown.Trigger>;
+		autoClose?: Reactive$1<Dropdown.AutoClose>;
+		closeOnSelect?: Reactive$1<boolean>;
+		hasAutofocus?: Reactive$1<boolean>;
+		isOpen?: Reactive$1<boolean>;
+		menuClassName?: Reactive$1<string>;
 		onOpen?: () => void;
 		onClose?: () => void;
 		onSelect?: (value: string | number) => void;
 	}
 	interface ItemProps extends BaseComponentProps {
-		children: string | HTMLElement;
-		icon?: HTMLElement | string;
-		href?: string;
-		disabled?: boolean;
-		active?: boolean;
+		children: Pulse.JSX.Child;
+		icon?: Reactive$1<Pulse.JSX.Child>;
+		href?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		active?: Reactive$1<boolean>;
 		onClick?: () => void;
 	}
 	interface DividerProps extends BaseComponentProps {
@@ -1491,20 +1732,20 @@ export declare namespace Dropdown {
 }
 export declare namespace FileInput {
 	interface Props extends BaseComponentProps {
-		label?: string;
-		hint?: string;
-		error?: string;
-		accept?: string;
-		multiple?: boolean;
-		required?: boolean;
-		disabled?: boolean;
-		size?: Size;
-		variant?: "default" | "button";
-		buttonText?: string;
-		placeholder?: string;
-		maxSize?: number;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		accept?: Reactive$1<string>;
+		multiple?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
+		size?: Reactive$1<Size>;
+		variant?: Reactive$1<"default" | "button">;
+		buttonText?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		maxSize?: Reactive$1<number>;
 		onChange?: ChangeCallback<FileList>;
-		name?: string;
+		name?: Reactive$1<string>;
 	}
 }
 export declare namespace FileUploadProgress {
@@ -1512,65 +1753,65 @@ export declare namespace FileUploadProgress {
 		id: string;
 		name: string;
 		size: string | number;
-		progress: number | Signal$1<number>;
+		progress: number | Reactive$1<number>;
 		status: "uploading" | "completed" | "error" | "paused";
 		icon?: Pulse.JSX.Element | HTMLElement;
 	}
 	interface Props extends BaseComponentProps {
-		file?: Item;
-		files?: Item[];
-		showPercentage?: boolean;
-		showActions?: boolean;
-		variant?: "inline" | "card";
+		file?: Reactive$1<Item>;
+		files?: Reactive$1<Item[]>;
+		showPercentage?: Reactive$1<boolean>;
+		showActions?: Reactive$1<boolean>;
+		variant?: Reactive$1<"inline" | "card">;
 		onPause?: (fileId: string) => void;
 		onResume?: (fileId: string) => void;
 		onDelete?: (fileId: string) => void;
 		onPauseAll?: () => void;
 		onResumeAll?: () => void;
 		onDeleteAll?: () => void;
-		footerText?: string;
-		footerActions?: Pulse.JSX.Element | HTMLElement;
+		footerText?: Reactive$1<string>;
+		footerActions?: Pulse.JSX.Child;
 	}
 }
 export declare namespace FormGroup {
 	interface Props extends BaseComponentProps {
-		label?: string;
-		description?: string;
-		children?: HTMLElement | HTMLElement[];
-		direction?: "vertical" | "horizontal";
-		gap?: Size;
-		bordered?: boolean;
+		label?: Reactive$1<string>;
+		description?: Reactive$1<string>;
+		children?: Pulse.JSX.Child;
+		direction?: Reactive$1<"vertical" | "horizontal">;
+		gap?: Reactive$1<Size>;
+		bordered?: Reactive$1<boolean>;
 	}
 }
 export declare namespace Icon {
 	interface Props extends BaseComponentProps {
-		name?: string;
-		children?: Pulse.JSX.Element | HTMLElement | HTMLElement[];
-		size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-		width?: number | string;
-		height?: number | string;
-		color?: Color;
-		variant?: "solid" | "outline" | "ghost" | "soft" | "soft-outline";
-		shape?: "square" | "rounded" | "circular";
-		strokeWidth?: number;
-		fill?: boolean;
-		containerClassName?: string;
+		name?: Reactive$1<string>;
+		children?: Pulse.JSX.Child;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg" | "xl" | "2xl">;
+		width?: Reactive$1<number | string>;
+		height?: Reactive$1<number | string>;
+		color?: Reactive$1<Color>;
+		variant?: Reactive$1<"solid" | "outline" | "ghost" | "soft" | "soft-outline">;
+		shape?: Reactive$1<"square" | "rounded" | "circular">;
+		strokeWidth?: Reactive$1<number>;
+		fill?: Reactive$1<boolean>;
+		containerClassName?: Reactive$1<string>;
 	}
 }
 export declare namespace Input {
 	interface Props extends BaseComponentProps {
-		type?: "text" | "email" | "password" | "number" | "tel" | "url" | "search";
-		value?: string | Signal$1<string>;
-		placeholder?: string;
-		disabled?: boolean;
-		readonly?: boolean;
-		required?: boolean;
-		error?: string;
-		label?: string;
-		hint?: string;
-		size?: Size;
-		icon?: string;
-		iconPosition?: "left" | "right";
+		type?: Reactive$1<"text" | "email" | "password" | "number" | "tel" | "url" | "search">;
+		value?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		readonly?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		error?: Reactive$1<string>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		size?: Reactive$1<Size>;
+		icon?: Reactive$1<string>;
+		iconPosition?: Reactive$1<"left" | "right">;
 		onChange?: ChangeCallback<string>;
 		onFocus?: EventCallback;
 		onBlur?: EventCallback;
@@ -1578,37 +1819,37 @@ export declare namespace Input {
 }
 export declare namespace InputGroup {
 	interface Addon {
-		type: "text" | "icon" | "button" | "checkbox" | "radio" | "select";
-		content?: string | Pulse.JSX.Element;
+		type: Reactive$1<"text" | "icon" | "button" | "checkbox" | "radio" | "select">;
+		content?: Reactive$1<string> | Pulse.JSX.Element;
 		buttonProps?: Button.Props;
 		onClick?: () => void;
-		checked?: boolean | Signal$1<boolean>;
+		checked?: Reactive$1<boolean>;
 		onChange?: (checked: boolean) => void;
-		selectOptions?: Select.Option[];
-		selectValue?: string | Signal$1<string>;
+		selectOptions?: Reactive$1<Select.Option[]>;
+		selectValue?: Reactive$1<string>;
 		onSelectChange?: (value: string) => void;
-		className?: string;
+		className?: Reactive$1<string>;
 	}
 	interface Props extends Omit<Input.Props, "icon" | "iconPosition"> {
-		leadingAddon?: InputGroup.Addon | string | Pulse.JSX.Element;
-		trailingAddon?: InputGroup.Addon | string | Pulse.JSX.Element;
-		leadingAddons?: (InputGroup.Addon | string | Pulse.JSX.Element)[];
-		trailingAddons?: (InputGroup.Addon | string | Pulse.JSX.Element)[];
+		leadingAddon?: Reactive$1<InputGroup.Addon | string> | Pulse.JSX.Element;
+		trailingAddon?: Reactive$1<InputGroup.Addon | string> | Pulse.JSX.Element;
+		leadingAddons?: Reactive$1<(InputGroup.Addon | string | Pulse.JSX.Element)[]>;
+		trailingAddons?: Reactive$1<(InputGroup.Addon | string | Pulse.JSX.Element)[]>;
 		leadingIcon?: Pulse.JSX.Element;
 		trailingIcon?: Pulse.JSX.Element;
-		loading?: boolean | Signal$1<boolean>;
-		loadingPosition?: "leading" | "trailing";
+		loading?: Reactive$1<boolean>;
+		loadingPosition?: Reactive$1<"leading" | "trailing">;
 		leadingSelect?: {
-			options: Select.Option[];
-			value?: string | Signal$1<string>;
+			options: Reactive$1<Select.Option[]>;
+			value?: Reactive$1<string>;
 			onChange?: (value: string) => void;
-			label?: string;
+			label?: Reactive$1<string>;
 		};
 		trailingSelect?: {
-			options: Select.Option[];
-			value?: string | Signal$1<string>;
+			options: Reactive$1<Select.Option[]>;
+			value?: Reactive$1<string>;
 			onChange?: (value: string) => void;
-			label?: string;
+			label?: Reactive$1<string>;
 		};
 		containerClassName?: string;
 		containerStyle?: Record<string, any>;
@@ -1616,31 +1857,31 @@ export declare namespace InputGroup {
 }
 export declare namespace InputNumber {
 	interface Props extends BaseComponentProps {
-		value?: number | Signal$1<number>;
-		min?: number;
-		max?: number;
-		step?: number;
-		disabled?: boolean;
-		label?: string;
-		description?: string;
-		error?: string;
-		hint?: string;
-		variant?: "default" | "vertical" | "horizontal" | "mini";
-		size?: Size;
-		buttonShape?: "rounded" | "square";
-		showButtons?: boolean;
+		value?: Reactive$1<number>;
+		min?: Reactive$1<number>;
+		max?: Reactive$1<number>;
+		step?: Reactive$1<number>;
+		disabled?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		description?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		variant?: Reactive$1<"default" | "vertical" | "horizontal" | "mini">;
+		size?: Reactive$1<Size>;
+		buttonShape?: Reactive$1<"rounded" | "square">;
+		showButtons?: Reactive$1<boolean>;
 		onChange?: ChangeCallback<number>;
-		name?: string;
+		name?: Reactive$1<string>;
 	}
 }
 export declare namespace LegendIndicator {
 	interface Props extends BaseComponentProps {
-		label: string | Pulse.JSX.Element;
-		color?: string;
-		size?: LegendIndicatorSize;
-		shape?: LegendIndicatorShape;
-		dotClassName?: string;
-		labelClassName?: string;
+		label: Reactive$1<string> | Pulse.JSX.Element;
+		color?: Reactive$1<string>;
+		size?: Reactive$1<LegendIndicatorSize>;
+		shape?: Reactive$1<LegendIndicatorShape>;
+		dotClassName?: Reactive$1<string>;
+		labelClassName?: Reactive$1<string>;
 	}
 }
 export declare namespace Link {
@@ -1649,31 +1890,31 @@ export declare namespace Link {
 	 */
 	interface Props extends BaseComponentProps {
 		/** Link destination */
-		href: string;
+		href: Reactive$1<string>;
 		/** Link content */
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[] | string;
+		children?: Pulse.JSX.Child;
 		/** Text color */
-		color?: "primary" | "secondary" | "success" | "danger" | "warning" | "dark" | "light" | string;
+		color?: Reactive$1<"primary" | "secondary" | "success" | "danger" | "warning" | "dark" | "light" | string>;
 		/** Underline style */
-		underline?: "none" | "always" | "hover" | "focus";
+		underline?: Reactive$1<"none" | "always" | "hover" | "focus">;
 		/** Underline color (independent from text color) */
-		underlineColor?: string;
+		underlineColor?: Reactive$1<string>;
 		/** Underline thickness */
-		underlineThickness?: "1" | "2" | "4" | "8";
+		underlineThickness?: Reactive$1<"1" | "2" | "4" | "8">;
 		/** Underline offset */
-		underlineOffset?: "1" | "2" | "4" | "8" | "auto";
+		underlineOffset?: Reactive$1<"1" | "2" | "4" | "8" | "auto">;
 		/** Link opacity */
-		opacity?: number;
+		opacity?: Reactive$1<number>;
 		/** Hover opacity */
-		hoverOpacity?: number;
+		hoverOpacity?: Reactive$1<number>;
 		/** Font size */
-		size?: "xs" | "sm" | "base" | "lg" | "xl";
+		size?: Reactive$1<"xs" | "sm" | "base" | "lg" | "xl">;
 		/** Font weight */
-		weight?: "normal" | "medium" | "semibold" | "bold";
+		weight?: Reactive$1<"normal" | "medium" | "semibold" | "bold">;
 		/** Open in new tab */
-		external?: boolean;
+		external?: Reactive$1<boolean>;
 		/** Disabled state */
-		disabled?: boolean;
+		disabled?: Reactive$1<boolean>;
 		/** On click handler */
 		onClick?: (e: Event) => void;
 	}
@@ -1681,130 +1922,132 @@ export declare namespace Link {
 export declare namespace List {
 	interface Item {
 		id?: string;
-		content: string | HTMLElement;
-		icon?: HTMLElement | string;
-		iconColor?: Color | "gray" | "white" | "teal" | "indigo" | "purple" | "pink" | "orange";
-		iconVariant?: "simple" | "soft" | "solid";
+		content: Reactive$1<string> | HTMLElement;
+		icon?: Reactive$1<HTMLElement | string>;
+		iconColor?: Reactive$1<Color | "gray" | "white" | "teal" | "indigo" | "purple" | "pink" | "orange">;
+		iconVariant?: Reactive$1<"simple" | "soft" | "solid">;
 	}
 	interface Props extends BaseComponentProps {
-		items: (string | List.Item)[];
-		type?: "disc" | "decimal" | "none" | "check" | "inline";
-		spacing?: "sm" | "md" | "lg";
-		markerColor?: string;
-		checkColor?: Color | "gray" | "white" | "teal" | "indigo" | "purple" | "pink" | "orange";
-		checkVariant?: "simple" | "soft" | "solid";
-		separator?: "dot" | "pipe" | "slash" | "none";
-		size?: "xs" | "sm" | "md" | "lg";
-		start?: number;
+		items: Reactive$1<(string | List.Item)[]>;
+		type?: Reactive$1<"disc" | "decimal" | "none" | "check" | "inline">;
+		spacing?: Reactive$1<"sm" | "md" | "lg">;
+		markerColor?: Reactive$1<string>;
+		checkColor?: Reactive$1<Color | "gray" | "white" | "teal" | "indigo" | "purple" | "pink" | "orange">;
+		checkVariant?: Reactive$1<"simple" | "soft" | "solid">;
+		separator?: Reactive$1<"dot" | "pipe" | "slash" | "none">;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg">;
+		start?: Reactive$1<number>;
 	}
 }
 export declare namespace ListGroup {
 	interface Item {
 		id?: string;
-		content: string | HTMLElement;
-		icon?: HTMLElement | string;
-		badge?: string | number;
-		badgeColor?: Color;
-		href?: string;
-		active?: boolean;
-		disabled?: boolean;
+		content: Reactive$1<string> | HTMLElement;
+		icon?: Reactive$1<HTMLElement | string>;
+		badge?: Reactive$1<string | number>;
+		badgeColor?: Reactive$1<Color>;
+		href?: Reactive$1<string>;
+		active?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
 		onClick?: ClickCallback;
 	}
 	interface Props extends BaseComponentProps {
-		items: (string | ListGroup.Item)[];
-		variant?: "default" | "flush" | "horizontal";
-		as?: "li" | "button" | "a";
-		striped?: boolean;
-		noGutters?: boolean;
-		size?: "sm" | "md" | "lg";
-		activeIndex?: number | Signal$1<number>;
+		items: Reactive$1<(string | ListGroup.Item)[]>;
+		variant?: Reactive$1<"default" | "flush" | "horizontal">;
+		as?: Reactive$1<"li" | "button" | "a">;
+		striped?: Reactive$1<boolean>;
+		noGutters?: Reactive$1<boolean>;
+		size?: Reactive$1<"sm" | "md" | "lg">;
+		activeIndex?: Reactive$1<number>;
 		onItemClick?: (item: ListGroup.Item | string, index: number) => void;
 	}
 }
 export declare namespace Modal {
 	interface Props extends BaseComponentProps {
-		isOpen?: boolean | Signal$1<boolean>;
-		title?: string | HTMLElement;
-		children?: string | HTMLElement | HTMLElement[];
-		footer?: HTMLElement | HTMLElement[];
-		size?: "sm" | "md" | "lg" | "xl" | "2xl";
-		centered?: boolean;
-		staticBackdrop?: boolean;
-		fullscreen?: boolean;
-		showCloseButton?: boolean;
-		closeOnEscape?: boolean;
-		animation?: "scale" | "slideDown" | "slideUp" | "fade";
+		isOpen?: Reactive$1<boolean>;
+		title?: Reactive$1<Pulse.JSX.Child>;
+		children?: Pulse.JSX.Child;
+		footer?: Reactive$1<Pulse.JSX.Child>;
+		size?: Reactive$1<"sm" | "md" | "lg" | "xl" | "2xl">;
+		centered?: Reactive$1<boolean>;
+		staticBackdrop?: Reactive$1<boolean>;
+		fullscreen?: Reactive$1<boolean>;
+		showCloseButton?: Reactive$1<boolean>;
+		closeOnEscape?: Reactive$1<boolean>;
+		animation?: Reactive$1<"scale" | "slideDown" | "slideUp" | "fade">;
 		onClose?: EventCallback;
+		parentSelector?: string;
+		parentRef?: Pulse.Ref<HTMLElement>;
 	}
 }
 export declare namespace Navbar {
 	interface Item {
-		id?: string;
-		label: string | HTMLElement;
-		href?: string;
-		active?: boolean;
-		disabled?: boolean;
+		id?: Reactive$1<string>;
+		label: Reactive$1<Pulse.JSX.Child>;
+		href?: Reactive$1<string>;
+		active?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
 		onClick?: ClickCallback;
-		dropdown?: Dropdown.Item[];
-		badge?: string | number;
-		icon?: HTMLElement | string;
+		dropdown?: Reactive$1<Dropdown.Item[]>;
+		badge?: Reactive$1<string | number>;
+		icon?: Reactive$1<Pulse.JSX.Child>;
 	}
 	interface Brand {
-		content: string | HTMLElement;
-		href?: string;
-		logo?: HTMLElement | string;
-		logoAlt?: string;
+		content: Reactive$1<Pulse.JSX.Child>;
+		href?: Reactive$1<string>;
+		logo?: Reactive$1<Pulse.JSX.Child>;
+		logoAlt?: Reactive$1<string>;
 		onClick?: ClickCallback;
-		className?: string;
+		className?: Reactive$1<string>;
 	}
 	type Variant = "default" | "dark" | "primary" | "transparent";
 	type Alignment = "left" | "center" | "right";
 	interface Props extends BaseComponentProps {
-		brand?: Navbar.Brand | string;
-		items?: Navbar.Item[];
-		children?: HTMLElement | HTMLElement[];
-		variant?: Navbar.Variant;
-		alignment?: Navbar.Alignment;
-		collapsible?: boolean;
-		collapseBreakpoint?: "sm" | "md" | "lg" | "xl";
-		horizontalScroll?: boolean;
-		sticky?: boolean;
-		stickyOffset?: string;
-		maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "full" | string;
-		centered?: boolean;
-		padding?: "sm" | "md" | "lg";
-		navClassName?: string;
-		containerClassName?: string;
-		brandClassName?: string;
-		itemsClassName?: string;
-		toggleClassName?: string;
+		brand?: Reactive$1<Navbar.Brand | string>;
+		items?: Reactive$1<Navbar.Item[]>;
+		children?: Pulse.JSX.Child;
+		variant?: Reactive$1<Navbar.Variant>;
+		alignment?: Reactive$1<Navbar.Alignment>;
+		collapsible?: Reactive$1<boolean>;
+		collapseBreakpoint?: Reactive$1<"sm" | "md" | "lg" | "xl">;
+		horizontalScroll?: Reactive$1<boolean>;
+		sticky?: Reactive$1<boolean>;
+		stickyOffset?: Reactive$1<string>;
+		maxWidth?: Reactive$1<"sm" | "md" | "lg" | "xl" | "2xl" | "full" | string>;
+		centered?: Reactive$1<boolean>;
+		padding?: Reactive$1<"sm" | "md" | "lg">;
+		navClassName?: Reactive$1<string>;
+		containerClassName?: Reactive$1<string>;
+		brandClassName?: Reactive$1<string>;
+		itemsClassName?: Reactive$1<string>;
+		toggleClassName?: Reactive$1<string>;
 		onBrandClick?: ClickCallback;
 		onItemClick?: (item: Navbar.Item, index: number) => void;
 		onToggle?: (isOpen: boolean) => void;
 	}
 	interface LinkProps extends BaseComponentProps {
-		href?: string;
-		active?: boolean;
-		disabled?: boolean;
+		href?: Reactive$1<string>;
+		active?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
 		onClick?: ClickCallback;
-		children?: string | HTMLElement | HTMLElement[];
+		children?: Pulse.JSX.Child;
 	}
 }
 export declare namespace Offcanvas {
 	type Placement = "left" | "right" | "top" | "bottom";
 	interface Props extends BaseComponentProps {
-		isOpen?: boolean | Signal$1<boolean>;
-		placement?: Offcanvas.Placement;
-		size?: "xs" | "sm" | "md" | "lg" | "xl" | "full";
-		title?: string | HTMLElement;
-		children?: string | HTMLElement | HTMLElement[];
-		footer?: HTMLElement | HTMLElement[];
-		showCloseButton?: boolean;
-		staticBackdrop?: boolean;
-		closeOnEscape?: boolean;
-		backdrop?: boolean;
-		backdropColor?: string;
-		bodyScroll?: boolean;
+		isOpen?: Reactive$1<boolean>;
+		placement?: Reactive$1<Offcanvas.Placement>;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg" | "xl" | "full">;
+		title?: Reactive$1<Pulse.JSX.Child>;
+		children?: Pulse.JSX.Child;
+		footer?: Reactive$1<Pulse.JSX.Child>;
+		showCloseButton?: Reactive$1<boolean>;
+		staticBackdrop?: Reactive$1<boolean>;
+		closeOnEscape?: Reactive$1<boolean>;
+		backdrop?: Reactive$1<boolean>;
+		backdropColor?: Reactive$1<string>;
+		bodyScroll?: Reactive$1<boolean>;
 		onClose?: EventCallback;
 	}
 }
@@ -1814,101 +2057,108 @@ export declare namespace Pagination {
 	type Alignment = "start" | "center" | "end";
 	type Size = "sm" | "md" | "lg";
 	interface Props extends BaseComponentProps {
-		currentPage: number | Signal$1<number>;
-		totalPages: number;
-		variant?: Pagination.Variant;
-		shape?: Pagination.Shape;
-		size?: Pagination.Size;
-		alignment?: Pagination.Alignment;
-		showPrevNext?: boolean;
-		showPrevNextText?: boolean;
-		prevText?: string;
-		nextText?: string;
-		showEllipsis?: boolean;
-		siblingCount?: number;
-		showBoundaries?: boolean;
-		mini?: boolean;
-		showJumper?: boolean;
-		jumperText?: string;
-		showItemsPerPage?: boolean;
-		itemsPerPageOptions?: number[];
-		itemsPerPage?: number;
-		stretched?: boolean;
-		disabled?: boolean;
+		currentPage: Reactive$1<number>;
+		totalPages: Reactive$1<number>;
+		variant?: Reactive$1<Pagination.Variant>;
+		shape?: Reactive$1<Pagination.Shape>;
+		size?: Reactive$1<Pagination.Size>;
+		alignment?: Reactive$1<Pagination.Alignment>;
+		showPrevNext?: Reactive$1<boolean>;
+		showPrevNextText?: Reactive$1<boolean>;
+		prevText?: Reactive$1<string>;
+		nextText?: Reactive$1<string>;
+		showEllipsis?: Reactive$1<boolean>;
+		siblingCount?: Reactive$1<number>;
+		showBoundaries?: Reactive$1<boolean>;
+		mini?: Reactive$1<boolean>;
+		showJumper?: Reactive$1<boolean>;
+		jumperText?: Reactive$1<string>;
+		showItemsPerPage?: Reactive$1<boolean>;
+		itemsPerPageOptions?: Reactive$1<number[]>;
+		itemsPerPage?: Reactive$1<number>;
+		stretched?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
 		onPageChange?: (page: number) => void;
 		onItemsPerPageChange?: (itemsPerPage: number) => void;
 	}
 }
 export declare namespace PinInput {
 	interface Props extends BaseComponentProps {
-		length?: number;
-		value?: string | Signal$1<string>;
-		placeholder?: string;
-		disabled?: boolean;
-		readonly?: boolean;
-		required?: boolean;
-		masked?: boolean;
-		type?: "alphanumeric" | "numeric";
-		pattern?: string;
-		variant?: "default" | "gray" | "underline";
-		size?: "sm" | "md" | "lg";
-		focusEffect?: "scale" | "none";
-		error?: string;
-		label?: string;
-		hint?: string;
+		length?: Reactive$1<number>;
+		value?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		readonly?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		masked?: Reactive$1<boolean>;
+		type?: Reactive$1<"alphanumeric" | "numeric">;
+		pattern?: Reactive$1<string>;
+		variant?: Reactive$1<"default" | "gray" | "underline">;
+		size?: Reactive$1<"sm" | "md" | "lg">;
+		focusEffect?: Reactive$1<"scale" | "none">;
+		error?: Reactive$1<string>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
 		onChange?: ChangeCallback<string>;
 		onComplete?: ChangeCallback<string>;
 		onFocus?: EventCallback;
 		onBlur?: EventCallback;
-		autoComplete?: string;
+		autoComplete?: Reactive$1<string>;
 	}
 }
 export declare namespace Popover {
 	interface Props extends Omit<Tooltip.Props, "content"> {
-		header?: string | Pulse.JSX.Element;
-		body?: string | Pulse.JSX.Element;
-		footer?: Pulse.JSX.Element;
-		content?: string | Pulse.JSX.Element;
-		maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-		trigger?: "hover";
+		header?: Reactive$1<Pulse.JSX.Child>;
+		body?: Reactive$1<Pulse.JSX.Child>;
+		footer?: Reactive$1<Pulse.JSX.Child>;
+		content?: Reactive$1<Pulse.JSX.Child>;
+		maxWidth?: Reactive$1<"xs" | "sm" | "md" | "lg" | "xl" | "2xl">;
+		trigger?: Reactive$1<"hover">;
 	}
 }
 export declare namespace Progress {
 	interface Props extends BaseComponentProps {
-		value: number | Signal$1<number>;
-		max?: number;
-		min?: number;
-		label?: string;
-		showValue?: boolean;
-		valuePosition?: "inside" | "end" | "top" | "floating";
+		value: Reactive$1<number>;
+		max?: Reactive$1<number>;
+		min?: Reactive$1<number>;
+		label?: Reactive$1<string>;
+		showValue?: Reactive$1<boolean>;
+		valuePosition?: Reactive$1<"inside" | "end" | "top" | "floating">;
 		valueFormat?: (value: number, max: number) => string;
-		size?: "xs" | "sm" | "md" | "lg" | "xl";
-		color?: Color;
-		variant?: "default" | "striped" | "gradient";
-		rounded?: boolean;
-		vertical?: boolean;
-		height?: string;
-		segments?: number;
-		segmentGap?: string;
-		type?: "linear" | "circular" | "gauge" | "gauge-half";
-		circularSize?: number;
-		strokeWidth?: number;
-		animated?: boolean;
-		transition?: boolean;
-		showStatus?: boolean;
-		statusIcon?: HTMLElement | string;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg" | "xl">;
+		color?: Reactive$1<Color>;
+		variant?: Reactive$1<"default" | "striped" | "gradient">;
+		rounded?: Reactive$1<boolean>;
+		vertical?: Reactive$1<boolean>;
+		height?: Reactive$1<string>;
+		segments?: Reactive$1<number>;
+		segmentGap?: Reactive$1<string>;
+		type?: Reactive$1<"linear" | "circular" | "gauge" | "gauge-half">;
+		circularSize?: Reactive$1<number>;
+		strokeWidth?: Reactive$1<number>;
+		animated?: Reactive$1<boolean>;
+		transition?: Reactive$1<boolean>;
+		showStatus?: Reactive$1<boolean>;
+		statusIcon?: Reactive$1<HTMLElement | string>;
 	}
 }
 export declare namespace Pulse {
-	type Fn<PROPS extends Record<string, any> = Record<string, any>> = (props: PROPS) => Pulse.JSX.Element | null;
+	type Signal<T> = Signal<T>;
+	type Computed<T> = Computed<T>;
+	type Effect = Effect;
+	type Ref<T extends HTMLElement = HTMLElement> = Ref<T>;
+	type Reactive<T> = Reactive<T>;
 	namespace JSX {
-		type Element = {
+		type ElementObject = {
 			tag: string;
 			attributes?: Record<string, any>;
 			properties?: Record<string, any>;
 			events?: Record<string, any>;
-			children?: any[];
-		} | globalThis.Node | globalThis.DocumentFragment;
+			children?: Child[];
+		};
+		type Node = ElementObject | globalThis.Node | globalThis.DocumentFragment | Computed<ElementObject | globalThis.Node | globalThis.DocumentFragment> | string | number | boolean | null | Signal<any> | Computed<any> | Node[] | undefined;
+		type Element = Node;
+		type Child = Node;
 		interface IntrinsicElements {
 			a: any;
 			abbr: any;
@@ -2042,21 +2292,23 @@ export declare namespace Pulse {
 		interface ElementChildrenAttribute {
 			children: {};
 		}
+		type LibraryManagedAttributes<C, P> = P;
 	}
+	type Fn<PROPS extends Record<string, any> = Record<string, any>> = (props: PROPS) => JSX.Node;
 }
 export declare namespace Radio {
 	interface Props extends BaseComponentProps {
-		name?: string;
-		value?: string | number;
-		checked?: boolean | Signal$1<boolean>;
-		disabled?: boolean;
-		required?: boolean;
-		label?: string;
-		description?: string;
-		error?: string | boolean;
-		success?: string | boolean;
-		size?: Size;
-		labelPosition?: "left" | "right";
+		checked?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		description?: Reactive$1<string>;
+		error?: Reactive$1<string | boolean>;
+		success?: Reactive$1<string | boolean>;
+		size?: Reactive$1<Size>;
+		labelPosition?: Reactive$1<"left" | "right">;
+		name?: Reactive$1<string>;
+		value?: Reactive$1<string | number>;
 		onChange?: ChangeCallback<string | number>;
 	}
 }
@@ -2068,51 +2320,51 @@ export declare namespace RadioGroup {
 		disabled?: boolean;
 	}
 	interface Props extends BaseComponentProps {
-		name?: string;
-		value?: string | number | Signal$1<string | number>;
-		options: RadioGroup.Option[];
-		label?: string;
-		hint?: string;
-		error?: string;
-		required?: boolean;
-		disabled?: boolean;
-		size?: Size;
-		direction?: "vertical" | "horizontal";
+		name?: Signal$1<string>;
+		value?: Signal$1<string | number>;
+		options: Signal$1<RadioGroup.Option[]>;
+		label?: Signal$1<string>;
+		hint?: Signal$1<string>;
+		error?: Signal$1<string>;
+		required?: Signal$1<boolean>;
+		disabled?: Signal$1<boolean>;
+		size?: Signal$1<Size>;
+		direction?: Signal$1<"vertical" | "horizontal">;
 		onChange?: ChangeCallback<string | number>;
 	}
 }
 export declare namespace RangeSlider {
 	interface Props extends BaseComponentProps {
-		value?: number | Signal$1<number>;
-		min?: number;
-		max?: number;
-		step?: number;
-		label?: string;
-		hint?: string;
-		error?: string;
-		disabled?: boolean;
-		showValue?: boolean;
+		value?: Reactive$1<number>;
+		min?: Reactive$1<number>;
+		max?: Reactive$1<number>;
+		step?: Reactive$1<number>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		showValue?: Reactive$1<boolean>;
 		valueFormat?: (value: number) => string;
 		onChange?: ChangeCallback<number>;
-		name?: string;
+		name?: Reactive$1<string>;
 	}
 }
 export declare namespace Rating {
 	interface Props extends BaseComponentProps {
-		value?: number | Signal$1<number>;
-		max?: number;
-		mode?: RatingMode;
+		value?: Reactive$1<number>;
+		max?: Reactive$1<number>;
+		mode?: Reactive$1<RatingMode>;
 		onChange?: (value: number) => void;
-		symbol?: RatingSymbol;
-		customSymbol?: Pulse.JSX.Element | Pulse.JSX.Element[] | string[];
-		size?: RatingSize;
-		color?: string;
-		inactiveColor?: string;
-		showLabel?: boolean;
-		label?: string;
-		name?: string;
-		disabled?: boolean;
-		required?: boolean;
+		symbol?: Reactive$1<RatingSymbol>;
+		customSymbol?: Pulse.JSX.Child;
+		size?: Reactive$1<RatingSize>;
+		color?: Reactive$1<string>;
+		inactiveColor?: Reactive$1<string>;
+		showLabel?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		name?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
 	}
 }
 export declare namespace SearchBox {
@@ -2120,34 +2372,34 @@ export declare namespace SearchBox {
 		[key: string]: any;
 	}
 	interface Props extends BaseComponentProps {
-		options?: SearchBox.Option[];
-		value?: string | Signal$1<string>;
-		placeholder?: string;
-		disabled?: boolean;
-		readonly?: boolean;
-		required?: boolean;
-		label?: string;
-		hint?: string;
-		error?: string;
-		size?: Size;
-		displayField?: string;
-		valueField?: string;
-		searchFields?: string[];
-		groupBy?: string;
-		showGroupTitles?: boolean;
-		minSearchLength?: number;
-		isOpenOnFocus?: boolean;
-		preventSelection?: boolean;
-		preserveSelectionOnEmpty?: boolean;
-		maxHeight?: string;
-		apiUrl?: string;
-		apiSearchQuery?: string;
-		loading?: boolean | Signal$1<boolean>;
+		options?: Reactive$1<SearchBox.Option[]>;
+		value?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		readonly?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		size?: Reactive$1<Size>;
+		displayField?: Reactive$1<string>;
+		valueField?: Reactive$1<string>;
+		searchFields?: Reactive$1<string[]>;
+		groupBy?: Reactive$1<string>;
+		showGroupTitles?: Reactive$1<boolean>;
+		minSearchLength?: Reactive$1<number>;
+		isOpenOnFocus?: Reactive$1<boolean>;
+		preventSelection?: Reactive$1<boolean>;
+		preserveSelectionOnEmpty?: Reactive$1<boolean>;
+		maxHeight?: Reactive$1<string>;
+		apiUrl?: Reactive$1<string>;
+		apiSearchQuery?: Reactive$1<string>;
+		loading?: Reactive$1<boolean>;
 		onSelect?: (item: SearchBox.Option) => void;
 		onSearch?: ChangeCallback<string>;
 		onFocus?: EventCallback;
 		onBlur?: EventCallback;
-		dropdownClassName?: string;
+		dropdownClassName?: Reactive$1<string>;
 		name?: string;
 		renderItem?: (item: SearchBox.Option) => Pulse.JSX.Element;
 		renderGroupTitle?: (title: string) => Pulse.JSX.Element;
@@ -2161,42 +2413,42 @@ export declare namespace Select {
 		group?: string;
 	}
 	interface Props extends BaseComponentProps {
-		value?: string | number | Signal$1<string | number>;
-		options: Select.Option[];
-		placeholder?: string;
-		disabled?: boolean;
-		required?: boolean;
-		error?: string;
-		label?: string;
-		hint?: string;
-		size?: Size;
-		multiple?: boolean;
-		searchable?: boolean;
+		value?: Reactive$1<string | number>;
+		options: Reactive$1<Select.Option[]>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		error?: Reactive$1<string>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		size?: Reactive$1<Size>;
+		multiple?: Reactive$1<boolean>;
+		searchable?: Reactive$1<boolean>;
 		onChange?: ChangeCallback<string | number | (string | number)[]>;
 	}
 }
 export declare namespace Spinner {
 	interface Props extends BaseComponentProps {
-		size?: "xs" | "sm" | "md" | "lg" | "xl";
-		color?: "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "gray" | "white" | "indigo" | "purple" | "pink" | "orange";
-		thickness?: 2 | 3 | 4;
-		label?: string;
-		showLabel?: boolean;
-		centered?: boolean;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg" | "xl">;
+		color?: Reactive$1<"primary" | "secondary" | "success" | "danger" | "warning" | "info" | "gray" | "white" | "indigo" | "purple" | "pink" | "orange">;
+		thickness?: Reactive$1<2 | 3 | 4>;
+		label?: Reactive$1<string>;
+		showLabel?: Reactive$1<boolean>;
+		centered?: Reactive$1<boolean>;
 	}
 }
 export declare namespace StepIndicator {
 	type Status = "pending" | "active" | "success" | "completed" | "error" | "processed";
 	type Variant = "default" | "white" | "solid";
 	interface Props extends BaseComponentProps {
-		index: number;
-		status: StepIndicator.Status;
-		variant?: StepIndicator.Variant;
+		store: StepperStore;
+		stepIndex: number;
+		variant?: Reactive$1<StepIndicator.Variant>;
 		icon?: Pulse.JSX.Element;
 		avatar?: string;
-		showCheckmark?: boolean;
-		showError?: boolean;
-		showSpinner?: boolean;
+		showCheckmark?: Reactive$1<boolean>;
+		showError?: Reactive$1<boolean>;
+		showSpinner?: Reactive$1<boolean>;
 	}
 }
 export declare namespace Stepper {
@@ -2206,97 +2458,96 @@ export declare namespace Stepper {
 	type Alignment = "start" | "center" | "end";
 	type Status = "pending" | "active" | "success" | "completed" | "error" | "processed";
 	interface StepItemData {
-		index: number;
-		label: string;
-		description?: string;
-		icon?: Pulse.JSX.Element;
-		avatar?: string;
-		content?: Pulse.JSX.Element | (() => Pulse.JSX.Element);
-		isOptional?: boolean;
-		isCompleted?: boolean;
-		hasError?: boolean;
+		index: Reactive$1<number>;
+		label: Reactive$1<string>;
+		description?: Reactive$1<string>;
+		icon?: Reactive$1<Pulse.JSX.Element>;
+		avatar?: Reactive$1<string>;
+		content?: Reactive$1<Pulse.JSX.Element | (() => Pulse.JSX.Element)>;
+		isOptional?: Reactive$1<boolean>;
+		isCompleted?: Reactive$1<boolean>;
+		hasError?: Reactive$1<boolean>;
 	}
 	interface ItemProps extends BaseComponentProps {
-		index: number;
+		store: StepperStore;
+		stepIndex: number;
 		label: string;
 		description?: string;
-		status: Stepper.Status;
-		variant?: Stepper.Variant;
-		orientation?: Stepper.Orientation;
+		variant?: Reactive$1<Stepper.Variant>;
+		orientation?: Reactive$1<Stepper.Orientation>;
 		isLast?: boolean;
-		isClickable?: boolean;
 		icon?: Pulse.JSX.Element;
 		avatar?: string;
 		onClick?: (index: number) => void;
-		children?: Pulse.JSX.Element;
+		children?: Reactive$1<Pulse.JSX.Child>;
 	}
 	interface Props extends BaseComponentProps {
-		steps?: Stepper.StepItemData[];
-		currentStep: number | Signal$1<number>;
-		mode?: Stepper.Mode;
-		orientation?: Stepper.Orientation;
-		variant?: Stepper.Variant;
-		alignment?: Stepper.Alignment;
-		showControls?: boolean;
-		backText?: string;
-		nextText?: string;
-		finishText?: string;
-		resetText?: string;
-		skipText?: string;
-		completeStepText?: string;
+		steps?: Reactive$1<Stepper.StepItemData[]>;
+		currentStep: Reactive$1<number>;
+		mode?: Reactive$1<Stepper.Mode>;
+		orientation?: Reactive$1<Stepper.Orientation>;
+		variant?: Reactive$1<Stepper.Variant>;
+		alignment?: Reactive$1<Stepper.Alignment>;
+		showControls?: Reactive$1<boolean>;
+		backText?: Reactive$1<string>;
+		nextText?: Reactive$1<string>;
+		finishText?: Reactive$1<string>;
+		resetText?: Reactive$1<string>;
+		skipText?: Reactive$1<string>;
+		completeStepText?: Reactive$1<string>;
 		onStepChange?: (step: number) => void;
 		onComplete?: () => void;
 		onSkip?: (step: number) => void;
 		onReset?: () => void;
 		onBack?: () => void;
 		onNext?: () => void;
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[];
+		children?: Pulse.JSX.Child;
 	}
 }
 export declare namespace StrongPassword {
 	interface Props extends BaseComponentProps {
-		value?: string | Signal$1<string>;
-		placeholder?: string;
-		disabled?: boolean;
-		readonly?: boolean;
-		required?: boolean;
-		label?: string;
-		hint?: string;
-		error?: string;
-		size?: Size;
-		minLength?: number;
-		requireLowercase?: boolean;
-		requireUppercase?: boolean;
-		requireNumbers?: boolean;
-		requireSpecialChars?: boolean;
-		specialCharsSet?: string;
-		strengthLevels?: string[];
-		showHints?: boolean;
-		hintsMode?: "inline" | "popover";
-		showToggleButton?: boolean;
-		checksExclude?: string[];
-		stripCount?: number;
+		value?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		readonly?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		size?: Reactive$1<Size>;
+		minLength?: Reactive$1<number>;
+		requireLowercase?: Reactive$1<boolean>;
+		requireUppercase?: Reactive$1<boolean>;
+		requireNumbers?: Reactive$1<boolean>;
+		requireSpecialChars?: Reactive$1<boolean>;
+		specialCharsSet?: Reactive$1<string>;
+		strengthLevels?: Reactive$1<string[]>;
+		showHints?: Reactive$1<boolean>;
+		hintsMode?: Reactive$1<"inline" | "popover">;
+		showToggleButton?: Reactive$1<boolean>;
+		checksExclude?: Reactive$1<string[]>;
+		stripCount?: Reactive$1<number>;
 		onChange?: (value: string, strength: number, strengthLevel: string) => void;
 		onStrengthChange?: (strength: number, strengthLevel: string) => void;
 		onFocus?: EventCallback;
 		onBlur?: EventCallback;
-		name?: string;
+		name?: Reactive$1<string>;
 	}
 }
 export declare namespace Table {
 	interface Column<T = any> {
-		key: string;
-		label: string;
-		width?: string;
-		align?: "start" | "center" | "end";
-		sortable?: boolean;
+		key: Reactive$1<string>;
+		label: Reactive$1<string>;
+		width?: Reactive$1<string>;
+		align?: Reactive$1<"start" | "center" | "end">;
+		sortable?: Reactive$1<boolean>;
 		render?: (value: any, row: T, index: number) => Pulse.JSX.Element | string;
 		headerRender?: () => Pulse.JSX.Element | string;
-		className?: string;
-		headerClassName?: string;
+		className?: Reactive$1<string>;
+		headerClassName?: Reactive$1<string>;
 	}
 	interface Row {
-		id?: string | number;
+		id?: Reactive$1<string | number>;
 		[key: string]: any;
 	}
 	type Variant = "default" | "striped" | "bordered" | "rounded" | "shadow";
@@ -2304,260 +2555,257 @@ export declare namespace Table {
 	type Size = "sm" | "md" | "lg";
 	type SortDirection = "asc" | "desc" | null;
 	interface Props<T = Table.Row> extends BaseComponentProps {
-		columns: Table.Column<T>[];
-		data: T[];
-		variant?: Table.Variant;
-		theadVariant?: Table.TheadVariant;
-		size?: Table.Size;
-		hoverable?: boolean;
-		selectable?: boolean;
-		selectedRows?: Signal$1<(string | number)[]> | (string | number)[];
+		columns: Reactive$1<Table.Column<T>[]>;
+		data: Reactive$1<T[]>;
+		variant?: Reactive$1<Table.Variant>;
+		theadVariant?: Reactive$1<Table.TheadVariant>;
+		size?: Reactive$1<Table.Size>;
+		hoverable?: Reactive$1<boolean>;
+		selectable?: Reactive$1<boolean>;
+		selectedRows?: Reactive$1<(string | number)[]>;
 		onSelectionChange?: (selected: (string | number)[]) => void;
-		sortable?: boolean;
-		sortBy?: Signal$1<string | null> | string | null;
-		sortDirection?: Signal$1<Table.SortDirection> | Table.SortDirection;
+		sortable?: Reactive$1<boolean>;
+		sortBy?: Reactive$1<string | null>;
+		sortDirection?: Reactive$1<Table.SortDirection>;
 		onSort?: (column: string, direction: Table.SortDirection) => void;
-		searchable?: boolean;
-		searchValue?: Signal$1<string> | string;
-		searchPlaceholder?: string;
+		searchable?: Reactive$1<boolean>;
+		searchValue?: Reactive$1<string>;
+		searchPlaceholder?: Reactive$1<string>;
 		onSearch?: (value: string) => void;
-		paginated?: boolean;
-		currentPage?: Signal$1<number> | number;
-		pageSize?: number;
-		totalPages?: number;
+		paginated?: Reactive$1<boolean>;
+		currentPage?: Reactive$1<number>;
+		pageSize?: Reactive$1<number>;
+		totalPages?: Reactive$1<number>;
 		onPageChange?: (page: number) => void;
-		caption?: string;
-		showFooter?: boolean;
-		footerContent?: Pulse.JSX.Element;
-		headless?: boolean;
-		loading?: boolean | Signal$1<boolean>;
-		loadingRows?: number;
-		emptyMessage?: string | Pulse.JSX.Element;
+		caption?: Reactive$1<string>;
+		showFooter?: Reactive$1<boolean>;
+		footerContent?: Reactive$1<Pulse.JSX.Child>;
+		headless?: Reactive$1<boolean>;
+		loading?: Reactive$1<boolean>;
+		loadingRows?: Reactive$1<number>;
+		emptyMessage?: Reactive$1<Pulse.JSX.Child>;
 		onRowClick?: (row: T, index: number) => void;
 		rowClassName?: (row: T, index: number) => string;
-		rowKey?: keyof T;
+		rowKey?: Reactive$1<keyof T>;
 	}
 }
 export declare namespace Tabs {
 	interface Item {
-		id: string;
-		label: string | HTMLElement;
-		content: string | HTMLElement | HTMLElement[];
-		icon?: HTMLElement | string;
-		disabled?: boolean;
-		badge?: string | number;
+		id: Reactive$1<string>;
+		label: Reactive$1<Pulse.JSX.Child>;
+		content: Reactive$1<Pulse.JSX.Child>;
+		icon?: Reactive$1<Pulse.JSX.Child>;
+		disabled?: Reactive$1<boolean>;
+		badge?: Reactive$1<string | number>;
 	}
 	type EventType = "click" | "hover";
 	type Variant = "underline" | "pills" | "enclosed" | "vertical";
 	interface PanelProps extends BaseComponentProps {
-		id: string;
-		label: string | HTMLElement;
-		children: string | HTMLElement | HTMLElement[];
-		icon?: HTMLElement | string;
-		disabled?: boolean;
-		badge?: string | number;
+		id: Reactive$1<string>;
+		label: Reactive$1<Pulse.JSX.Child>;
+		children: Pulse.JSX.Child;
+		icon?: Reactive$1<Pulse.JSX.Child>;
+		disabled?: Reactive$1<boolean>;
+		badge?: Reactive$1<string | number>;
 	}
 	interface Props extends BaseComponentProps {
-		items?: Tabs.Item[];
-		children?: HTMLElement | HTMLElement[];
-		activeTab?: string | Signal$1<string>;
-		variant?: Tabs.Variant;
-		eventType?: Tabs.EventType;
-		bordered?: boolean;
-		fullWidth?: boolean;
-		size?: "sm" | "md" | "lg";
-		tablistClassName?: string;
-		contentClassName?: string;
+		items?: Reactive$1<Tabs.Item[]>;
+		children?: Pulse.JSX.Child;
+		activeTab?: Reactive$1<string>;
+		variant?: Reactive$1<Tabs.Variant>;
+		eventType?: Reactive$1<Tabs.EventType>;
+		bordered?: Reactive$1<boolean>;
+		fullWidth?: Reactive$1<boolean>;
+		size?: Reactive$1<"sm" | "md" | "lg">;
+		tablistClassName?: Reactive$1<string>;
+		contentClassName?: Reactive$1<string>;
 		onChange?: (tabId: string, prevTabId: string) => void;
 	}
 }
 export declare namespace Textarea {
 	interface Props extends BaseComponentProps {
-		value?: string | Signal$1<string>;
-		placeholder?: string;
-		disabled?: boolean;
-		readonly?: boolean;
-		required?: boolean;
-		error?: string;
-		label?: string;
-		hint?: string;
-		size?: Size;
-		rows?: number;
-		maxLength?: number;
-		showCount?: boolean;
-		autoResize?: boolean;
-		minRows?: number;
-		maxRows?: number;
+		value?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		readonly?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		error?: Reactive$1<string>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		rows?: Reactive$1<number>;
+		size?: Reactive$1<Size>;
+		resize?: Reactive$1<"none" | "vertical" | "horizontal" | "both">;
+		maxLength?: Reactive$1<number>;
+		showCount?: Reactive$1<boolean>;
+		autoGrow?: Reactive$1<boolean>;
 		onChange?: ChangeCallback<string>;
 		onFocus?: EventCallback;
 		onBlur?: EventCallback;
-		name?: string;
-		autocomplete?: string;
 	}
 }
 export declare namespace TimePicker {
 	interface Props extends BaseComponentProps {
-		value?: string | Signal$1<string>;
-		format?: "12h" | "24h";
-		label?: string;
-		hint?: string;
-		error?: string;
-		placeholder?: string;
-		disabled?: boolean;
-		required?: boolean;
-		size?: Size;
-		minuteStep?: number;
-		showNowButton?: boolean;
+		value?: Reactive$1<string>;
+		format?: Reactive$1<"12h" | "24h">;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		error?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		size?: Reactive$1<Size>;
+		minuteStep?: Reactive$1<number>;
+		showNowButton?: Reactive$1<boolean>;
 		onChange?: ChangeCallback<string>;
-		name?: string;
+		name?: Reactive$1<string>;
 	}
 }
 export declare namespace Toast {
 	interface Action {
-		label: string;
+		label: Reactive$1<string>;
 		onClick: (e: Event) => void;
-		variant?: "default" | "primary";
+		variant?: Reactive$1<"default" | "primary">;
 	}
 	interface Props extends BaseComponentProps {
-		type?: ToastType;
-		variant?: ToastVariant;
-		title?: string;
-		message: string | Pulse.JSX.Element;
+		type?: Reactive$1<ToastType>;
+		variant?: Reactive$1<ToastVariant>;
+		title?: Reactive$1<string>;
+		message: Reactive$1<string> | Pulse.JSX.Element;
 		icon?: Pulse.JSX.Element;
-		avatar?: string;
-		duration?: number;
-		dismissible?: boolean;
-		actions?: Action[];
-		progress?: number;
-		progressLabel?: string;
-		loading?: boolean;
-		visible?: boolean | Signal$1<boolean>;
+		avatar?: Reactive$1<string>;
+		duration?: Reactive$1<number>;
+		dismissible?: Reactive$1<boolean>;
+		actions?: Reactive$1<Action[]>;
+		progress?: Reactive$1<number>;
+		progressLabel?: Reactive$1<string>;
+		loading?: Reactive$1<boolean>;
+		visible?: boolean | Reactive$1<boolean>;
 		onClose?: () => void;
 		animated?: boolean;
 	}
 }
 export declare namespace ToastContainer {
 	interface Props extends BaseComponentProps {
-		position?: ToastPosition;
-		maxToasts?: number;
-		offset?: number;
-		gap?: number;
-		children?: Pulse.JSX.Element | Pulse.JSX.Element[];
+		position?: Reactive$1<ToastPosition>;
+		maxToasts?: Reactive$1<number>;
+		offset?: Reactive$1<number>;
+		gap?: Reactive$1<number>;
+		children?: Pulse.JSX.Child;
 	}
 }
 export declare namespace Toggle {
 	interface Props extends BaseComponentProps {
-		checked?: boolean | Signal$1<boolean>;
-		disabled?: boolean;
-		required?: boolean;
-		label?: string;
-		labelBefore?: string;
-		description?: string;
-		error?: string | boolean;
-		success?: string | boolean;
-		size?: "xs" | "sm" | "md" | "lg";
-		variant?: "default" | "soft";
-		showIcons?: boolean;
-		labelPosition?: "left" | "right";
-		name?: string;
+		checked?: Reactive$1<boolean>;
+		disabled?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		label?: Reactive$1<string>;
+		labelBefore?: Reactive$1<string>;
+		description?: Reactive$1<string>;
+		error?: Reactive$1<string | boolean>;
+		success?: Reactive$1<string | boolean>;
+		size?: Reactive$1<"xs" | "sm" | "md" | "lg">;
+		variant?: Reactive$1<"default" | "soft">;
+		showIcons?: Reactive$1<boolean>;
+		labelPosition?: Reactive$1<"left" | "right">;
+		name?: Reactive$1<string>;
 		onChange?: ChangeCallback<boolean>;
 	}
 }
 export declare namespace ToggleCount {
 	interface Props extends BaseComponentProps {
-		type?: "radio" | "switch";
-		variant?: "default" | "pills";
-		options: [
+		type?: Reactive$1<"radio" | "switch">;
+		variant?: Reactive$1<"default" | "pills">;
+		options: Reactive$1<[
 			string,
 			string
-		];
-		value?: 0 | 1 | Signal$1<0 | 1>;
-		defaultValue?: 0 | 1;
-		disabled?: boolean;
+		]>;
+		value?: Reactive$1<0 | 1>;
+		defaultValue?: Reactive$1<0 | 1>;
+		disabled?: Reactive$1<boolean>;
 		onChange?: (index: number, label: string) => void;
 	}
 	interface ValueProps extends BaseComponentProps {
-		target: string;
-		min: number;
-		max: number;
-		duration?: number;
-		prefix?: string;
-		suffix?: string;
-		decimals?: number;
+		target: Reactive$1<string>;
+		min: Reactive$1<number>;
+		max: Reactive$1<number>;
+		duration?: Reactive$1<number>;
+		prefix?: Reactive$1<string>;
+		suffix?: Reactive$1<string>;
+		decimals?: Reactive$1<number>;
 		formatter?: (value: number) => string;
 	}
 }
 export declare namespace TogglePassword {
 	interface Props extends BaseComponentProps {
-		value?: string | Signal$1<string>;
-		placeholder?: string;
-		disabled?: boolean;
-		readonly?: boolean;
-		required?: boolean;
-		error?: string;
-		label?: string;
-		hint?: string;
-		size?: Size;
-		defaultVisible?: boolean;
-		showToggleButton?: boolean;
+		value?: Reactive$1<string>;
+		placeholder?: Reactive$1<string>;
+		disabled?: Reactive$1<boolean>;
+		readonly?: Reactive$1<boolean>;
+		required?: Reactive$1<boolean>;
+		error?: Reactive$1<string>;
+		label?: Reactive$1<string>;
+		hint?: Reactive$1<string>;
+		size?: Reactive$1<Size>;
+		defaultVisible?: Reactive$1<boolean>;
+		showToggleButton?: Reactive$1<boolean>;
 		onChange?: ChangeCallback<string>;
 		onFocus?: EventCallback;
 		onBlur?: EventCallback;
-		name?: string;
+		name?: Reactive$1<string>;
 	}
 }
 export declare namespace Tooltip {
 	interface Props extends BaseComponentProps {
-		content: string | HTMLElement;
-		placement?: "top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | "auto";
-		trigger?: "hover";
-		children?: HTMLElement | HTMLElement[] | string;
-		showDelay?: number;
-		hideDelay?: number;
-		variant?: "dark" | "light";
-		arrow?: boolean;
+		content: Reactive$1<Pulse.JSX.Child>;
+		placement?: Reactive$1<"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end" | "auto">;
+		trigger?: Reactive$1<"hover">;
+		children?: Pulse.JSX.Child;
+		showDelay?: Reactive$1<number>;
+		hideDelay?: Reactive$1<number>;
+		variant?: Reactive$1<"dark" | "light">;
+		arrow?: Reactive$1<boolean>;
 	}
 }
 export declare namespace TreeView {
 	interface Node {
-		value: string;
-		label: string;
-		isDir?: boolean;
-		icon?: Pulse.JSX.Element | string;
-		disabled?: boolean;
-		children?: TreeView.Node[];
+		value: Reactive$1<string>;
+		label: Reactive$1<string>;
+		isDir?: Reactive$1<boolean>;
+		icon?: Reactive$1<Pulse.JSX.Element | string>;
+		disabled?: Reactive$1<boolean>;
+		children?: Reactive$1<TreeView.Node[]>;
 	}
 	interface Props extends BaseComponentProps {
-		nodes: TreeView.Node[];
-		selectable?: boolean;
-		multiSelect?: boolean;
-		selected?: string[] | Signal$1<string[]>;
+		nodes: Reactive$1<TreeView.Node[]>;
+		selectable?: Reactive$1<boolean>;
+		multiSelect?: Reactive$1<boolean>;
+		selected?: Reactive$1<string[]>;
 		onSelect?: (selected: string[]) => void;
-		expanded?: string[] | Signal$1<string[]>;
+		expanded?: Reactive$1<string[]>;
 		onExpand?: (expanded: string[]) => void;
-		alwaysOpen?: boolean;
-		showCheckboxes?: boolean;
-		checked?: string[] | Signal$1<string[]>;
+		alwaysOpen?: Reactive$1<boolean>;
+		showCheckboxes?: Reactive$1<boolean>;
+		checked?: Reactive$1<string[]>;
 		onCheck?: (checked: string[]) => void;
-		draggable?: boolean;
+		draggable?: Reactive$1<boolean>;
 		onDragEnd?: (nodes: TreeView.Node[]) => void;
-		showLines?: boolean;
-		iconPosition?: "left" | "right";
-		ariaLabel?: string;
-		ariaLabelledBy?: string;
+		showLines?: Reactive$1<boolean>;
+		iconPosition?: Reactive$1<"left" | "right">;
+		ariaLabel?: Reactive$1<string>;
+		ariaLabelledBy?: Reactive$1<string>;
 	}
 	interface NodeProps {
-		node: TreeView.Node;
-		level: number;
-		treeId: string;
-		selectable?: boolean;
-		multiSelect?: boolean;
-		showCheckboxes?: boolean;
-		showLines?: boolean;
-		iconPosition?: "left" | "right";
-		selected: string[];
-		expanded: string[];
-		checked: string[];
+		node: Reactive$1<TreeView.Node>;
+		level: Reactive$1<number>;
+		treeId: Reactive$1<string>;
+		selectable?: Reactive$1<boolean>;
+		multiSelect?: Reactive$1<boolean>;
+		showCheckboxes?: Reactive$1<boolean>;
+		showLines?: Reactive$1<boolean>;
+		iconPosition?: Reactive$1<"left" | "right">;
+		selected: Reactive$1<string[]>;
+		expanded: Reactive$1<string[]>;
+		checked: Reactive$1<string[]>;
 		onToggleExpand: (value: string) => void;
 		onSelectNode: (value: string, event: MouseEvent) => void;
 		onCheckNode: (value: string, isChecked: boolean) => void;
@@ -2565,24 +2813,36 @@ export declare namespace TreeView {
 }
 /**
  * Base component props extended by all components
+ * All props support reactive values (Signal/Computed)
  */
 export interface BaseComponentProps {
-	id?: string;
-	className?: string;
-	style?: Partial<CSSStyleDeclaration> | string;
+	/** HTML id attribute (reactive) */
+	id?: string | Signal$1<string> | Computed$1<string>;
+	/** CSS class name (reactive) */
+	className?: string | Signal$1<string> | Computed$1<string>;
+	/** Inline styles (reactive) */
+	style?: Partial<CSSStyleDeclaration> | string | Signal$1<Partial<CSSStyleDeclaration> | string> | Computed$1<Partial<CSSStyleDeclaration> | string>;
+	/** Key for reconciliation (helps Pulse identify and cleanup components) */
+	key?: string | number;
+	/** Additional props */
 	[key: string]: any;
 }
 export interface Computed<T = any> {
 	(): T;
 	readonly value: T;
 	subscribe(subscriber: Subscriber<T>): Unsubscribe;
+	readonly isComputed: true;
+}
+export interface Effect {
+	destroy(): void;
+	readonly isActive: boolean;
 }
 /**
  * Nested Accordion Support
  */
 export interface NestedAccordionProps {
-	items: Accordion.Item[];
-	variant?: "default" | "bordered" | "active-bordered" | "no-arrow" | "arrow" | "stretched";
+	items: Reactive$1<Accordion.Item[]>;
+	variant?: Reactive$1<"default" | "bordered" | "active-bordered" | "no-arrow" | "arrow" | "stretched">;
 }
 export interface ReactiveNode {
 	__id?: number;
@@ -2595,6 +2855,13 @@ export interface ReactiveNode {
 	isSignal?: boolean;
 	isComputed?: boolean;
 	fn?: Function;
+}
+/**
+ * Interface pour les refs d'éléments DOM
+ */
+export interface Ref<T extends HTMLElement = HTMLElement> {
+	current: T | null;
+	callback: (el: T | null) => void;
 }
 export interface RenderTemplate {
 	tag: string;
@@ -2631,6 +2898,7 @@ export interface Signal<T = any> {
 	(value: T): void;
 	readonly value: T;
 	subscribe(subscriber: Subscriber<T>): Unsubscribe;
+	readonly isSignal: true;
 }
 export interface TimelineItemUser {
 	name: string;
@@ -2656,6 +2924,11 @@ export type ClickCallback = EventCallback<void>;
  */
 export type Color = "primary" | "secondary" | "success" | "danger" | "warning" | "info" | "light" | "dark";
 /**
+ * Valid child types that can be passed to components
+ * Supports DOM nodes, strings, signals, computed values, and arrays
+ */
+export type ComponentChild = Pulse.JSX.Child;
+/**
  * Direction types (used for layout components)
  */
 export type Direction = "horizontal" | "vertical";
@@ -2676,6 +2949,11 @@ export type Position = "top" | "top-start" | "top-end" | "bottom" | "bottom-star
 export type RatingMode = "interactive" | "readonly";
 export type RatingSize = "sm" | "md" | "lg";
 export type RatingSymbol = "star" | "heart" | "emoji" | "thumbs" | "custom";
+/**
+ * Reactive type - accepts static value, Signal, or Computed
+ * Use this for props that should support reactive values
+ */
+export type Reactive<T> = T | Signal<T> | Computed<T>;
 /**
  * Component size variants (used across multiple components)
  */
@@ -2698,6 +2976,11 @@ export type Variant = "solid" | "outline" | "ghost" | "soft" | "link";
  */
 type Computed$1<T> = ReturnType<typeof Pulse.computed<T>>;
 /**
+ * Reactive type - accepts static value, Signal, or Computed
+ * Use this for props that should support reactive values
+ */
+type Reactive$1<T> = T | Signal$1<T> | Computed$1<T>;
+/**
  * Pulse signal type
  */
 type Signal$1<T> = ReturnType<typeof Pulse.signal<T>>;
@@ -2715,10 +2998,14 @@ export {
 	Image$1 as Image,
 	Kbd$1 as Kbd,
 	LayoutSplitter$1 as LayoutSplitter,
+	Reactive$1 as Reactive,
 	Signal$1 as Signal,
 	Skeleton$1 as Skeleton,
 	Text$1 as Text,
 	Timeline$1 as Timeline,
+	isComputed$1 as isComputed,
+	isReactive$1 as isReactive,
+	isSignal$1 as isSignal,
 };
 
 export {};
