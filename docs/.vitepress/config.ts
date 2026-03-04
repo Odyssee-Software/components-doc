@@ -258,6 +258,7 @@ export default defineConfig({
         "@odyssee-software/components",
         "@odyssee-software/pulse-framework",
       ],
+      external: ["monaco-editor"],
     },
     optimizeDeps: {
       include: ["@odyssee-software/pulse-framework"],

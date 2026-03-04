@@ -6,12 +6,14 @@
         </div>
 
         <div class="editor-container">
-            <MonacoEditor
-                v-model="currentCode"
-                language="typescript"
-                theme="vs-dark"
-                @change="handleCodeChange"
-            />
+            <ClientOnly>
+                <MonacoEditor
+                    v-model="currentCode"
+                    language="typescript"
+                    theme="vs-dark"
+                    @change="handleCodeChange"
+                />
+            </ClientOnly>
         </div>
 
         <div class="preview-header">
@@ -34,8 +36,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from "vue";
-import MonacoEditor from "./monaco/MonacoEditor.vue";
+import { ref, watch, onMounted, onUnmounted, defineAsyncComponent } from "vue";
+
+// Import MonacoEditor dynamically to avoid SSR issues
+const MonacoEditor = defineAsyncComponent(
+    () => import("./monaco/MonacoEditor.vue"),
+);
 
 interface Props {
     code?: string;
