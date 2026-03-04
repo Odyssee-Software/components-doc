@@ -77,6 +77,10 @@ export default defineConfig({
               link: "/components/layouts/image",
             },
             {
+              text: "Link",
+              link: "/components/layouts/link",
+            },
+            {
               text: "Layout Splitter",
               link: "/components/layouts/layout-splitter",
             },

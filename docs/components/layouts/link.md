@@ -16,10 +16,7 @@ import { IconLink, ExternalLink, NavLink, ButtonLink, BackLink, NextLink } from 
 
 ## Basic Usage
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <Link href='#'>Default link</Link>
   );
@@ -30,10 +27,7 @@ export default function Demo() {
 
 ## Underline Variants
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <>
       <Link href='#' underline='always'>Always underlined</Link>
@@ -50,19 +44,16 @@ export default function Demo() {
 
 ## Colors
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <div style={{ display: 'flex', gap: 16 }}>
+    <>
       <Link href='#' color='primary' underline='hover'>Primary</Link>
       <Link href='#' color='secondary' underline='hover'>Secondary</Link>
       <Link href='#' color='success' underline='hover'>Success</Link>
       <Link href='#' color='danger' underline='hover'>Danger</Link>
       <Link href='#' color='warning' underline='hover'>Warning</Link>
       <Link href='#' color='dark' underline='hover'>Dark</Link>
-    </div>
+    </>
   );
 }
 `" />
@@ -71,18 +62,15 @@ export default function Demo() {
 
 ## Sizes
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'flex-end' }}>
+    <>
       <Link href='#' size='xs' underline='hover'>XS</Link>
       <Link href='#' size='sm' underline='hover'>Small</Link>
       <Link href='#' size='base' underline='hover'>Base</Link>
       <Link href='#' size='lg' underline='hover'>Large</Link>
       <Link href='#' size='xl' underline='hover'>XL</Link>
-    </div>
+    </>
   );
 }
 `" />
@@ -91,17 +79,14 @@ export default function Demo() {
 
 ## Font Weights
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
-    <div style={{ display: 'flex', gap: 16 }}>
+    <>
       <Link href='#' weight='normal' underline='hover'>Normal</Link>
       <Link href='#' weight='medium' underline='hover'>Medium</Link>
       <Link href='#' weight='semibold' underline='hover'>Semibold</Link>
       <Link href='#' weight='bold' underline='hover'>Bold</Link>
-    </div>
+    </>
   );
 }
 `" />
@@ -110,10 +95,7 @@ export default function Demo() {
 
 ## Underline Customization
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <>
       <Link href='#' underline='always' underlineThickness='1'>Thin underline</Link>
@@ -132,10 +114,7 @@ export default function Demo() {
 
 ## Opacity
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <>
       <Link href='#' opacity={80}>80% opacity</Link>
@@ -150,10 +129,7 @@ export default function Demo() {
 
 ## Disabled Link
 
-<LiveCodeEditor :defaultCode="`
-import { Link } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <Link href='#' disabled>Disabled link</Link>
   );
@@ -164,15 +140,12 @@ export default function Demo() {
 
 ## Link with Icon
 
-<LiveCodeEditor :defaultCode="`
-import { IconLink } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <>
-      <IconLink href='#' icon='→' iconPosition='right'>Learn more</IconLink>
+      <Icon.Link href='#' icon='→' iconPosition='right'>Learn more</Icon.Link>
       <br />
-      <IconLink href='#' icon='★' iconPosition='left'>Starred</IconLink>
+      <Icon.Link href='#' icon='★' iconPosition='left'>Starred</Icon.Link>
     </>
   );
 }
@@ -182,10 +155,7 @@ export default function Demo() {
 
 ## External Link
 
-<LiveCodeEditor :defaultCode="`
-import { ExternalLink } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <ExternalLink href='https://example.com'>External Site</ExternalLink>
   );
@@ -196,10 +166,7 @@ export default function Demo() {
 
 ## Navigation Link (Active State)
 
-<LiveCodeEditor :defaultCode="`
-import { NavLink } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <>
       <NavLink href='#' active>Active NavLink</NavLink>
@@ -214,10 +181,7 @@ export default function Demo() {
 
 ## Button Link
 
-<LiveCodeEditor :defaultCode="`
-import { ButtonLink } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <>
       <ButtonLink href='#' variant='solid' color='primary'>Solid Button Link</ButtonLink>
@@ -236,10 +200,7 @@ export default function Demo() {
 
 ## Back/Next Links
 
-<LiveCodeEditor :defaultCode="`
-import { BackLink, NextLink } from '@odyssee/components';
-
-export default function Demo() {
+<LiveCodeEditor :defaultCode="`export default function Demo() {
   return (
     <>
       <BackLink href='#'>Back</BackLink>
